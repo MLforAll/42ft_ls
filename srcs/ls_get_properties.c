@@ -6,11 +6,10 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/17 05:38:58 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/19 22:11:01 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <dirent.h>
@@ -19,53 +18,88 @@
 #include <pwd.h>
 #include "ft_ls.h"
 
-/*
-** printf is later to be replaced by ft_printf
-*/
+static char		get_ifmt_char(mode_t st_mode)
+{
+	if ((st_mode & S_IFMT) == S_IFDIR)
+		return ('d');
+	if ((st_mode & S_IFMT) == S_IFLNK)
+		return ('l');
+	if ((st_mode & S_IFMT) == S_IFBLK)
+		return ('b');
+	if ((st_mode & S_IFMT) == S_IFCHR) /* Not sure about that one */
+		return ('c');
+	if ((st_mode & S_IFMT) == S_IFIFO) /* Not sure about that one */
+		return ('f');
+	return ('-');
+}
 
 static int		fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats)
 {
 	t_stat		sstat;
-	char		*fp;
-	char		*timec;
+	t_pw		*pw;
+	t_group		*grp;
+	int			staterr;
 
-	fstats->fname = dird->d_name;
-	if (!(fp = ft_strnew(ft_strlen(path) + ft_strlen(dird->d_name) + 1)))
+	if (!(fstats->fname = ft_strdup(dird->d_name)))
 		return (0);
-	ft_strcat(fp, path);
-	ft_strcat(fp, "/");
-	ft_strcat(fp, fstats->fname);
-	stat(fp, &sstat);
-	timec = ctime(&sstat.st_atimespec.tv_sec);
-	fstats->timec = ft_strsub(timec, 0, ft_strlen(timec) - 1);
+	if (!(fstats->fpath = ft_strnew(ft_strlen(path) + ft_strlen(dird->d_name) + 1)))
+		return (0);
+	ft_strcat(fstats->fpath, path);
+	ft_strcat(fstats->fpath, "/");
+	ft_strcat(fstats->fpath, fstats->fname);
+	if ((staterr = stat(fstats->fpath, &sstat)) == -1)
+		return (staterr);
+	fstats->ftype = get_ifmt_char(sstat.st_mode);
+	fstats->timec = ft_strsub(ctime(&sstat.st_atimespec.tv_sec), 4, 12);
 	fstats->size = sstat.st_size;
 	fstats->nblink = sstat.st_nlink;
-	fstats->grname = getgrgid(sstat.st_gid)->gr_name;
-	fstats->usrname = getpwuid(sstat.st_uid)->pw_name;
-	ft_strdel(&fp);
+	grp = getgrgid(sstat.st_gid);
+	pw = getpwuid(sstat.st_uid);
+	fstats->grname = (grp != NULL) ? grp->gr_name : NULL;
+	fstats->usrname = (pw != NULL) ? pw->pw_name : NULL;
 	return (1);
 }
 
-static void		print_file(const char *path, t_dirent *dird)
-{
-	t_fstats	fstats;
-	
-	if (!fill_fstats(path, dird, &fstats))
-		exit(1);
-	printf("perms %i %s %s %lli %s %s\n", fstats.nblink, fstats.usrname, fstats.grname, fstats.size, fstats.timec, dird->d_name);
-	ft_strdel(&fstats.timec);
-	
-}
-
-void			get_dir_content(const char *path)
+int				get_dir_content(const char *path, t_fstats **alst)
 {
 	DIR			*dirp;
 	t_dirent	*dird;
+	t_fstats	**tmp;
+	int			ret;
 	
 	if (!(dirp = opendir(path)))
-		return ;
+		return (-1);
+	ret = 0;
+	tmp = NULL;
 	while ((dird = readdir(dirp)))
-		print_file(path, dird);
+	{
+		if (!tmp)
+			tmp = alst;
+		else
+			tmp = &(*tmp)->next;
+		*tmp = (t_fstats*)malloc(sizeof(t_fstats));
+		ret += fill_fstats(path, dird, *tmp);
+		(*tmp)->next = NULL;
+	}
 	free(dird);
 	closedir(dirp);
+	return (ret);
+}
+
+void			free_dir_content(t_fstats **alst)
+{
+	t_fstats	*curr;
+	t_fstats	*tmp;
+
+	curr = *alst;
+	while (curr)
+	{
+		tmp = curr->next;
+		ft_strdel(&curr->fname);
+		ft_strdel(&curr->fpath);
+		ft_strdel(&curr->timec);
+		free(curr);
+		curr = tmp;
+	}
+	*alst = NULL;
 }
