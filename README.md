@@ -5,13 +5,12 @@
 
 Currently Implemented:
 
-- Basics for argument parsing
-- Crude listings
+- Options recognized but only -a -t and -R active
 - Crude recursive listing
 
 TODO:
 
 - Protect everything against crashes
 - Error messages
-- Sorting
+- -r and -l Options
 - Fix for -R (recursive)

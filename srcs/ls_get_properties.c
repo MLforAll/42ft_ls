@@ -6,12 +6,11 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/19 22:11:01 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/20 19:16:50 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <time.h>
 #include <dirent.h>
 #include <sys/stat.h>
 #include <grp.h>
@@ -50,7 +49,7 @@ static int		fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats)
 	if ((staterr = stat(fstats->fpath, &sstat)) == -1)
 		return (staterr);
 	fstats->ftype = get_ifmt_char(sstat.st_mode);
-	fstats->timec = ft_strsub(ctime(&sstat.st_atimespec.tv_sec), 4, 12);
+	fstats->mtime = sstat.st_mtimespec.tv_sec;
 	fstats->size = sstat.st_size;
 	fstats->nblink = sstat.st_nlink;
 	grp = getgrgid(sstat.st_gid);
@@ -95,9 +94,10 @@ void			free_dir_content(t_fstats **alst)
 	while (curr)
 	{
 		tmp = curr->next;
-		ft_strdel(&curr->fname);
-		ft_strdel(&curr->fpath);
-		ft_strdel(&curr->timec);
+		if (curr->fname)
+			ft_strdel(&curr->fname);
+		if (curr->fpath)
+			ft_strdel(&curr->fpath);
 		free(curr);
 		curr = tmp;
 	}

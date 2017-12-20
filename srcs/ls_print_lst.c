@@ -6,11 +6,12 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/19 21:57:36 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/20 19:23:22 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/stat.h>
+#include <time.h>
 #include "ft_ls.h"
 
 #include <stdio.h>
@@ -19,7 +20,22 @@
 ** printf is later to be replaced by ft_printf
 */
 
-static t_list		*show_directory_files(const char *path, int recursive)
+static void			print_out(t_fstats *dc, int optsb)
+{
+	char	*mtime_str;
+
+	if ((optsb & 0x2) == 0 && *dc->fname == '.')
+		return ;
+	mtime_str = ft_strsub(ctime(&dc->mtime), 4, 12);
+	printf("%c--------- %2i %s %11s %6lli %s %s", dc->ftype, dc->nblink, \
+		dc->usrname, dc->grname, dc->size, mtime_str, dc->fname);
+	if (dc->ftype == 'd')
+		printf("/");
+	printf("\n");
+	ft_strdel(&mtime_str);
+}
+
+static t_list		*show_directory_files(const char *path, int optsb)
 {
 	t_list		*reclst;
 	t_fstats	*dc;
@@ -28,13 +44,15 @@ static t_list		*show_directory_files(const char *path, int recursive)
 
 	if ((total = get_dir_content(path, &dc)) == -1)
 		return (NULL);
+	if ((optsb & 0x8) != 0)
+		sort_ls_lst(&dc, &sort_mtime);
 	printf("total %i\n", total);
 	reclst = NULL;
 	tmp = dc;
 	while (dc)
 	{
-		printf("%c--------- %2i %s %11s %6lli %s %s\n", dc->ftype, dc->nblink, dc->usrname, dc->grname, dc->size, dc->timec, dc->fname);
-		if (recursive && dc->ftype == 'd' && ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, ".."))
+		print_out(dc, optsb);
+		if ((optsb & 0x10) != 0 && dc->ftype == 'd' && ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, ".."))
 			ft_lstadd(&reclst, ft_lstnew(dc->fpath, ft_strlen(dc->fpath) + 1));
 		dc = dc->next;
 	}
@@ -60,7 +78,7 @@ void				list_dirs(t_list **targets, int optsb, int add_nl)
 			cts = ".";
 		else
 			cts = tmp->content;
-		reclst = show_directory_files(cts, (optsb & 0x10) != 0);
+		reclst = show_directory_files(cts, optsb);
 		if (!*targets)
 			break ;
 		if (reclst)
