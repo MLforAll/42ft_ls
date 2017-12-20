@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/20 19:23:22 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/20 21:40:37 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ static t_list		*show_directory_files(const char *path, int optsb)
 		return (NULL);
 	if ((optsb & 0x8) != 0)
 		sort_ls_lst(&dc, &sort_mtime);
+	else
+		sort_ls_lst(&dc, &sort_alpha);
 	printf("total %i\n", total);
 	reclst = NULL;
 	tmp = dc;

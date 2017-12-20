@@ -6,11 +6,16 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:23:13 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/20 19:19:08 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/20 21:45:22 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+int		sort_alpha(t_fstats *a, t_fstats *b)
+{
+	return (ft_strcmp(a->fname, b->fname) > 0);
+}
 
 int		sort_revalpha(t_fstats *a, t_fstats *b)
 {
