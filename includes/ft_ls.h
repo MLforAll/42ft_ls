@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/21 19:55:55 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/21 20:10:39 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int		detect_options(int ac, char **av);
 */
 
 void	ft_lstdelf(void *data, size_t data_size);
-void	ft_lstpushback(t_list **alst, t_list *new);
+void	ft_lstpushback(t_list **alst, void *data, size_t data_content);
 t_list	*ft_lstpushback_edit(t_list **alst, t_list *new);
 
 #endif

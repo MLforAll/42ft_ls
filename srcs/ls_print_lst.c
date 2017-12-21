@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/21 19:50:15 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/21 20:12:44 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@
 ** printf is later to be replaced by ft_printf
 */
 
-static char		get_ifmt_char(mode_t st_mode)
+/*
+** Not sure about c and f
+*/
+
+static char			get_ifmt_char(mode_t st_mode)
 {
 	if ((st_mode & S_IFMT) == S_IFDIR)
 		return ('d');
@@ -28,16 +32,16 @@ static char		get_ifmt_char(mode_t st_mode)
 		return ('l');
 	if ((st_mode & S_IFMT) == S_IFBLK)
 		return ('b');
-	if ((st_mode & S_IFMT) == S_IFCHR) /* Not sure about that one */
+	if ((st_mode & S_IFMT) == S_IFCHR)
 		return ('c');
-	if ((st_mode & S_IFMT) == S_IFIFO) /* Not sure about that one */
+	if ((st_mode & S_IFMT) == S_IFIFO)
 		return ('f');
 	return ('-');
 }
 
 static char			get_perm_char(mode_t fmode, mode_t mask)
 {
-	char	pchr;
+	char		pchr;
 
 	if (mask == 256 || mask == 32 || mask == 4)
 		pchr = 'r';
@@ -52,9 +56,9 @@ static char			get_perm_char(mode_t fmode, mode_t mask)
 
 static void			print_out(t_fstats *dc, int optsb)
 {
-	char	ftype;
-	char	*mtime_str;
-	mode_t	getp;
+	char		ftype;
+	char		*mtime_str;
+	mode_t		getp;
 
 	if ((optsb & 0x2) == 0 && *dc->fname == '.')
 		return ;
@@ -96,7 +100,7 @@ static t_list		*show_directory_files(const char *path, int optsb)
 		if ((optsb & 0x10) != 0 && get_ifmt_char(dc->fmode) == 'd'
 			&& ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, "..")
 			&& (*dc->fname != '.' || (optsb & 0x2) != 0))
-				ft_lstpushback(&reclst, ft_lstnew(dc->fpath, ft_strlen(dc->fpath) + 1));
+			ft_lstpushback(&reclst, dc->fpath, ft_strlen(dc->fpath) + 1);
 		dc = dc->next;
 	}
 	free_dir_content(&tmp);
@@ -105,9 +109,9 @@ static t_list		*show_directory_files(const char *path, int optsb)
 
 void				list_dirs(t_list **targets, int optsb, int add_nl)
 {
-	t_list			*tmp;
-	t_list			*reclst;
-	char			*cts;
+	t_list		*tmp;
+	t_list		*reclst;
+	char		*cts;
 
 	tmp = *targets;
 	cts = NULL;

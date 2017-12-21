@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:23:13 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/21 19:41:53 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/21 20:12:45 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** SORT FUNCTIONS RETURN:
 **	1 if swapping is needed
 **	0 otherwise
-**/
+*/
 
 int		sort_alpha(t_fstats *a, t_fstats *b, int rev)
 {

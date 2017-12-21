@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/21 19:52:50 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/21 20:05:18 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static int		fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats)
 
 	if (!(fstats->fname = ft_strdup(dird->d_name)))
 		return (0);
-	if (!(fstats->fpath = ft_strnew(ft_strlen(path) + ft_strlen(dird->d_name) + 1)))
+	fstats->fpath = ft_strnew(ft_strlen(path) + ft_strlen(dird->d_name) + 1);
+	if (!fstats->fpath)
 		return (0);
 	ft_strcat(fstats->fpath, path);
 	ft_strcat(fstats->fpath, "/");
@@ -49,7 +50,7 @@ int				get_dir_content(const char *path, t_fstats **alst)
 	t_dirent	*dird;
 	t_fstats	**tmp;
 	int			ret;
-	
+
 	if (!(dirp = opendir(path)))
 		return (-1);
 	ret = 0;
