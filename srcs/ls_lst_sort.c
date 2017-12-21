@@ -6,28 +6,36 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:23:13 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/20 21:45:22 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/21 18:20:38 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int		sort_alpha(t_fstats *a, t_fstats *b)
+/*
+** SORT FUNCTIONS RETURN:
+**	1 if swapping is needed
+**	0 otherwise
+**/
+
+int		sort_alpha(t_fstats *a, t_fstats *b, int rev)
 {
-	return (ft_strcmp(a->fname, b->fname) > 0);
+	int		diff;
+
+	diff = ft_strcmp(a->fname, b->fname);
+	if (diff == 0)
+		return (0);
+	return (diff > 0 == !rev);
 }
 
-int		sort_revalpha(t_fstats *a, t_fstats *b)
+int		sort_mtime(t_fstats *a, t_fstats *b, int rev)
 {
-	return (ft_strcmp(a->fname, b->fname) < 0);
+	if (a->mtime == b->mtime)
+		return (0);
+	return (a->mtime < b->mtime == !rev);
 }
 
-int		sort_mtime(t_fstats *a, t_fstats *b)
-{
-	return (a->mtime < b->mtime);
-}
-
-void		sort_ls_lst(t_fstats **alst, int (*cmp)(t_fstats*, t_fstats*))
+void	sort_ls_lst(t_fstats **alst, int (*f)(t_fstats*, t_fstats*, int), int rev)
 {
 	t_fstats	*curr;
 	t_fstats	*prev;
@@ -37,7 +45,7 @@ void		sort_ls_lst(t_fstats **alst, int (*cmp)(t_fstats*, t_fstats*))
 	while (curr->next)
 	{
 		prev = (curr == *alst) ? NULL : prev;
-		if (cmp(curr, curr->next))
+		if (f(curr, curr->next, rev))
 		{
 			if (prev)
 				prev->next = curr->next;

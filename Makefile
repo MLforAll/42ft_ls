@@ -6,7 +6,7 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2017/12/20 21:45:18 by kdumarai         ###   ########.fr        #
+#    Updated: 2017/12/21 18:12:51 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ OBJS = $(SRCS:%.c=%.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	gcc -o $(NAME) $(LIB) $?
+	gcc -o $(NAME) $(LIB) $(OBJS)
 
 %.o: %.c
 	gcc $(CFLAGS) -c $< $(INCLUDES) -o $@

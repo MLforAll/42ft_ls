@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/20 21:40:37 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/21 18:20:36 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void			print_out(t_fstats *dc, int optsb)
 	if ((optsb & 0x2) == 0 && *dc->fname == '.')
 		return ;
 	mtime_str = ft_strsub(ctime(&dc->mtime), 4, 12);
-	printf("%c--------- %2i %s %11s %6lli %s %s", dc->ftype, dc->nblink, \
+	printf("%c--------- %2i %s  %s %6lli %s %s", dc->ftype, dc->nblink, \
 		dc->usrname, dc->grname, dc->size, mtime_str, dc->fname);
 	if (dc->ftype == 'd')
 		printf("/");
@@ -41,13 +41,12 @@ static t_list		*show_directory_files(const char *path, int optsb)
 	t_fstats	*dc;
 	t_fstats	*tmp;
 	int			total;
+	int			rev;
 
 	if ((total = get_dir_content(path, &dc)) == -1)
 		return (NULL);
-	if ((optsb & 0x8) != 0)
-		sort_ls_lst(&dc, &sort_mtime);
-	else
-		sort_ls_lst(&dc, &sort_alpha);
+	rev = (optsb & 0x4) != 0;
+	sort_ls_lst(&dc, ((optsb & 0x8) != 0) ? &sort_mtime : &sort_alpha, rev);
 	printf("total %i\n", total);
 	reclst = NULL;
 	tmp = dc;

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/20 21:41:00 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/21 18:20:45 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,9 @@ void	free_dir_content(t_fstats **alst);
 ** DB SORTING
 */
 
-int		sort_alpha(t_fstats *a, t_fstats *b);
-int		sort_revalpha(t_fstats *a, t_fstats *b);
-int		sort_mtime(t_fstats *a, t_fstats *b);
-void	sort_ls_lst(t_fstats **alst, int (*cmp)(t_fstats*, t_fstats*));
+int		sort_alpha(t_fstats *a, t_fstats *b, int rev);
+int		sort_mtime(t_fstats *a, t_fstats *b, int rev);
+void	sort_ls_lst(t_fstats **alst, int (*f)(t_fstats*, t_fstats*, int), int rev);
 
 /*
 ** ARGUMENTS
