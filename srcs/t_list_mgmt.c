@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 14:32:09 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/21 18:20:34 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/21 19:42:01 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,26 @@ void	ft_lstpushback(t_list **alst, t_list *new)
 	while (bw->next)
 		bw = bw->next;
 	bw->next = new;
+}
+
+t_list	*ft_lstpushback_edit(t_list **alst, t_list *new)
+{
+	t_list	*bak;
+	t_list	**toedit;
+
+	if (!alst)
+		return (NULL);
+	if (*alst)
+	{
+		bak = *alst;
+		toedit = alst;
+	}
+	else
+	{
+		bak = NULL;
+		toedit = &(*alst)->next;
+	}
+	*toedit = new;
+	*toedit = (*toedit)->next;
+	return (bak);
 }

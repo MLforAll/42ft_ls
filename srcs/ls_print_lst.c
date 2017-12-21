@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/21 18:20:36 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/21 19:50:15 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,56 @@
 ** printf is later to be replaced by ft_printf
 */
 
+static char		get_ifmt_char(mode_t st_mode)
+{
+	if ((st_mode & S_IFMT) == S_IFDIR)
+		return ('d');
+	if ((st_mode & S_IFMT) == S_IFLNK)
+		return ('l');
+	if ((st_mode & S_IFMT) == S_IFBLK)
+		return ('b');
+	if ((st_mode & S_IFMT) == S_IFCHR) /* Not sure about that one */
+		return ('c');
+	if ((st_mode & S_IFMT) == S_IFIFO) /* Not sure about that one */
+		return ('f');
+	return ('-');
+}
+
+static char			get_perm_char(mode_t fmode, mode_t mask)
+{
+	char	pchr;
+
+	if (mask == 256 || mask == 32 || mask == 4)
+		pchr = 'r';
+	else if (mask == 128 || mask == 16 || mask == 2)
+		pchr = 'w';
+	else if (mask == 64 || mask == 8 || mask == 1)
+		pchr = 'x';
+	if ((fmode & mask) != 0)
+		return (pchr);
+	return ('-');
+}
+
 static void			print_out(t_fstats *dc, int optsb)
 {
+	char	ftype;
 	char	*mtime_str;
+	mode_t	getp;
 
 	if ((optsb & 0x2) == 0 && *dc->fname == '.')
 		return ;
+	ftype = get_ifmt_char(dc->fmode);
 	mtime_str = ft_strsub(ctime(&dc->mtime), 4, 12);
-	printf("%c--------- %2i %s  %s %6lli %s %s", dc->ftype, dc->nblink, \
+	printf("%c", ftype);
+	getp = S_IRUSR;
+	while (getp)
+	{
+		printf("%c", get_perm_char(dc->fmode, getp));
+		getp /= 2;
+	}
+	printf("  %2i %s  %s %6lli %s %s", dc->nblink, \
 		dc->usrname, dc->grname, dc->size, mtime_str, dc->fname);
-	if (dc->ftype == 'd')
+	if (ftype == 'd')
 		printf("/");
 	printf("\n");
 	ft_strdel(&mtime_str);
@@ -53,8 +93,10 @@ static t_list		*show_directory_files(const char *path, int optsb)
 	while (dc)
 	{
 		print_out(dc, optsb);
-		if ((optsb & 0x10) != 0 && dc->ftype == 'd' && ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, ".."))
-			ft_lstadd(&reclst, ft_lstnew(dc->fpath, ft_strlen(dc->fpath) + 1));
+		if ((optsb & 0x10) != 0 && get_ifmt_char(dc->fmode) == 'd'
+			&& ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, "..")
+			&& (*dc->fname != '.' || (optsb & 0x2) != 0))
+				ft_lstpushback(&reclst, ft_lstnew(dc->fpath, ft_strlen(dc->fpath) + 1));
 		dc = dc->next;
 	}
 	free_dir_content(&tmp);
@@ -80,10 +122,10 @@ void				list_dirs(t_list **targets, int optsb, int add_nl)
 		else
 			cts = tmp->content;
 		reclst = show_directory_files(cts, optsb);
-		if (!*targets)
-			break ;
 		if (reclst)
 			list_dirs(&reclst, optsb, 1);
+		if (!*targets)
+			break ;
 		tmp = tmp->next;
 	}
 	ft_lstdel(targets, &ft_lstdelf);

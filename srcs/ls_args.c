@@ -6,33 +6,29 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:43:21 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/21 18:20:37 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/21 19:57:59 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ls_args.h"
 #include "libft.h"
 
 /*
-** OPTIONS BINARY VALUES:
-** 0000 0001: -l (0x1)
-** 0000 0010: -a (0x2)
-** 0000 0100: -r (0x4)
-** 0000 1000: -t (0x8)
-** 0001 0000: -R (0x10)
+** OPTIONS BINARY VALUES: SEE LS_ARGS.H
 */
 
 int		is_option_valid(char c)
 {
 	if (c == 'l')
-		return (1);
+		return (A_LOPT);
 	if (c == 'a')
-		return (2);
+		return (A_AOPT);
 	if (c == 'r')
-		return (4);
+		return (A_ROPT);
 	if (c == 't')
-		return (8);
+		return (A_TOPT);
 	if (c == 'R')
-		return (16);
+		return (A_RROPT);
 	return (0);
 }
 

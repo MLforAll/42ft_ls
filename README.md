@@ -5,12 +5,18 @@
 
 Currently Implemented:
 
-- Options recognized but only -a -t and -R active
-- Crude recursive listing
+- Option parsing
+- Permissions
+- User/Group
+- Date
+- Size (in bytes only)
+- Recursiveness
 
 TODO:
 
 - Protect everything against crashes
 - Error messages
-- -r and -l Options
-- Fix for -R (recursive)
+- -l option
+- Fix padding
+- Color
+- Proper total count
