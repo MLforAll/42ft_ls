@@ -5,7 +5,7 @@
 
 Currently Implemented:
 
-- Option parsing
+- Option parsing (i.e: -laR || -l -a -R)
 - Permissions
 - User/Group
 - Date
