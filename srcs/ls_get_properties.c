@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/23 00:08:50 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/23 00:33:40 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int		get_num_bytes(off_t size)
 
 	ret = 0;
 	nlen = size / 512;
-	nlen += (size % 512 != 0 && size > 0);
+	nlen += (size % 512 != 0);
 	while (ret < nlen)
 		ret += 8;
 	return (ret);
