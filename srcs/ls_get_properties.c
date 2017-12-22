@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/21 20:05:18 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/23 00:08:50 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,31 +17,49 @@
 #include <pwd.h>
 #include "ft_ls.h"
 
+#include <stdio.h>
+
+static int		get_num_bytes(off_t size)
+{
+	int			nlen;
+	int			ret;
+
+	ret = 0;
+	nlen = size / 512;
+	nlen += (size % 512 != 0 && size > 0);
+	while (ret < nlen)
+		ret += 8;
+	return (ret);
+}
+
 static int		fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats)
 {
 	t_stat		sstat;
 	t_pw		*pw;
 	t_group		*grp;
+	off_t		size;
 
 	if (!(fstats->fname = ft_strdup(dird->d_name)))
-		return (0);
+		return (-1);
 	fstats->fpath = ft_strnew(ft_strlen(path) + ft_strlen(dird->d_name) + 1);
 	if (!fstats->fpath)
-		return (0);
+		return (-1);
 	ft_strcat(fstats->fpath, path);
 	ft_strcat(fstats->fpath, "/");
 	ft_strcat(fstats->fpath, fstats->fname);
 	if (stat(fstats->fpath, &sstat) == -1)
 		return (-1);
 	fstats->fmode = sstat.st_mode;
-	fstats->mtime = sstat.st_mtimespec.tv_sec;
-	fstats->size = sstat.st_size;
+	//fstats->mtime = sstat.st_mtimespec.tv_sec;
+	fstats->mtime = sstat.st_mtime; /* compatibility with Linux */
+	size = sstat.st_size;
+	fstats->size = size;
 	fstats->nblink = sstat.st_nlink;
 	grp = getgrgid(sstat.st_gid);
 	pw = getpwuid(sstat.st_uid);
 	fstats->grname = (grp != NULL) ? grp->gr_name : NULL;
 	fstats->usrname = (pw != NULL) ? pw->pw_name : NULL;
-	return (1);
+	return (((fstats->fmode & S_IFMT) == S_IFREG) ? get_num_bytes(size) : 0);
 }
 
 int				get_dir_content(const char *path, t_fstats **alst)

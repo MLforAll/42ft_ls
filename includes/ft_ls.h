@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/21 21:58:04 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/22 21:25:16 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ void	free_dir_content(t_fstats **alst);
 
 int		sort_alpha(t_fstats *a, t_fstats *b, int rev);
 int		sort_mtime(t_fstats *a, t_fstats *b, int rev);
-void	sort_ls_lst(t_fstats **alst, int (*f)(t_fstats*, t_fstats*, int), int rev);
+void	sort_ls(t_fstats **lst, int (*f)(t_fstats*, t_fstats*, int), int rev);
 
 /*
 ** ARGUMENTS
 */
 
 int		is_option_valid(char c);
-int		detect_options(int ac, char **av);
+int		detect_options(int ac, char **av, int *idx);
 
 /*
 ** t_list UTILITIES

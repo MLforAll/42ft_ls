@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/21 21:59:15 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/22 23:48:18 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,6 @@
 ** printf is later to be replaced by ft_printf
 */
 
-/*
-** Not sure about c and f
-*/
-
 static char			get_ifmt_char(mode_t st_mode)
 {
 	if ((st_mode & S_IFMT) == S_IFDIR)
@@ -35,7 +31,7 @@ static char			get_ifmt_char(mode_t st_mode)
 	if ((st_mode & S_IFMT) == S_IFCHR)
 		return ('c');
 	if ((st_mode & S_IFMT) == S_IFIFO)
-		return ('f');
+		return ('p');
 	return ('-');
 }
 
@@ -90,7 +86,7 @@ static t_list		*show_directory_files(const char *path, int optsb)
 	if ((total = get_dir_content(path, &dc)) == -1)
 		return (NULL);
 	rev = (optsb & 0x4) != 0;
-	sort_ls_lst(&dc, ((optsb & 0x8) != 0) ? &sort_mtime : &sort_alpha, rev);
+	sort_ls(&dc, ((optsb & 0x8) != 0) ? &sort_mtime : &sort_alpha, rev);
 	printf("total %i\n", total);
 	reclst = NULL;
 	tmp = dc;
