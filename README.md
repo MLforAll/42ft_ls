@@ -11,12 +11,12 @@ Currently Implemented:
 - Date
 - Size (in bytes only)
 - Recursiveness
+- Proper Makefile
 
 TODO:
 
 - Protect everything against crashes
-- Error messages
 - -l option
 - Fix padding
 - Color
-- Proper total count
+- Fix total count

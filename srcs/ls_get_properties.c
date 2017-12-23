@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/23 18:40:13 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/23 21:41:27 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@ static int		get_num_bytes(off_t size)
 	return (ret);
 }
 
+/*
+** COMPATIBILITY CONCERNS:
+** fstats->mtime = sstat.st_mtimespec.tv_sec;
+** sstat.st_mtime; ==> compatibility with Linux
+*/
+
 static int		fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats)
 {
 	t_stat		sstat;
@@ -52,8 +58,7 @@ static int		fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats)
 	if (stat(fstats->fpath, &sstat) == -1)
 		return (-1);
 	fstats->fmode = sstat.st_mode;
-	//fstats->mtime = sstat.st_mtimespec.tv_sec;
-	fstats->mtime = sstat.st_mtime; /* compatibility with Linux */
+	fstats->mtime = sstat.st_mtime;
 	size = sstat.st_size;
 	fstats->size = size;
 	fstats->nblink = sstat.st_nlink;

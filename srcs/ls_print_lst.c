@@ -6,11 +6,10 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/23 19:08:55 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/23 21:41:26 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <errno.h>
 #include <sys/stat.h>
 #include <time.h>
 #include "ft_ls.h"
@@ -100,35 +99,25 @@ static void		show_directory_elements(t_fstats *dc, int total, int optsb, t_list 
 	free_dir_content(&tmp);
 }
 
-int				list_dirs(t_list **targets, int optsb, int add_nl)
+void			print_dcs(t_lsqueue *dcs, int optsb, int add_nl)
 {
-	t_list		*tmp;
+	t_lsqueue	*tmp;
 	t_list		*reclst;
-	t_fstats	*dc;
-	int			total;
 
-	total = 0;
 	reclst = NULL;
-	tmp = *targets;
+	tmp = dcs;
 	while (tmp)
 	{
-		if (total != -1 && (tmp != *targets || add_nl))
+		if (tmp != dcs || add_nl)
 			printf("\n");
-		if ((total = get_dir_content(tmp->content, &dc)) == -1)
-			printf("ft_ls: %s: %s\n", tmp->content, strerror(errno));
-		else
+		if ((dcs->next) || add_nl)
+			printf("%s:\n", tmp->dname);
+		show_directory_elements(tmp->dc, tmp->total, optsb, &reclst);
+		if (reclst)
 		{
-			if (((*targets)->next) || add_nl)
-				printf("%s:\n", tmp->content);
-			show_directory_elements(dc, total, optsb, &reclst);
-			if (reclst)
-			{
-				list_dirs(&reclst, optsb, 1);
-				ft_lstdel(&reclst, &ft_lstdelf);
-			}
+			list_dirs(reclst, optsb, 1);
+			ft_lstdel(&reclst, &ft_lstdelf);
 		}
 		tmp = tmp->next;
 	}
-	ft_lstdel(targets, &ft_lstdelf);
-	return (total == -1 ? 1 : 0);
 }

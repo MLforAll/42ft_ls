@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/23 19:07:58 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/23 21:41:31 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,27 @@ typedef struct group		t_group;
 
 typedef struct				s_fstats
 {
-	char			*fname;
-	char			*fpath;
-	mode_t			fmode;
-	time_t			mtime;
-	off_t			size;
-	nlink_t			nblink;
-	char			*grname;
-	char			*usrname;
-	struct s_fstats	*next;
+	char				*fname;
+	char				*fpath;
+	mode_t				fmode;
+	time_t				mtime;
+	off_t				size;
+	nlink_t				nblink;
+	char				*grname;
+	char				*usrname;
+	struct s_fstats		*next;
 }							t_fstats;
+
+/*
+** QUEUE (ERR MGMT)
+*/
+
+typedef struct				s_lsqueue
+{
+	char				*dname;
+	t_fstats			*dc;
+	int					total;
+	struct s_lsqueue	*next;
+}							t_lsqueue;
 
 #endif
