@@ -6,10 +6,11 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/22 23:48:18 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/23 19:08:55 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <errno.h>
 #include <sys/stat.h>
 #include <time.h>
 #include "ft_ls.h"
@@ -20,7 +21,7 @@
 ** printf is later to be replaced by ft_printf
 */
 
-static char			get_ifmt_char(mode_t st_mode)
+static char		get_ifmt_char(mode_t st_mode)
 {
 	if ((st_mode & S_IFMT) == S_IFDIR)
 		return ('d');
@@ -35,7 +36,7 @@ static char			get_ifmt_char(mode_t st_mode)
 	return ('-');
 }
 
-static char			get_perm_char(mode_t fmode, mode_t mask)
+static char		get_perm_char(mode_t fmode, mode_t mask)
 {
 	char		pchr;
 
@@ -50,7 +51,7 @@ static char			get_perm_char(mode_t fmode, mode_t mask)
 	return ('-');
 }
 
-static void			print_out(t_fstats *dc, int optsb)
+static void		show_element(t_fstats *dc, int optsb)
 {
 	char		ftype;
 	char		*mtime_str;
@@ -75,58 +76,59 @@ static void			print_out(t_fstats *dc, int optsb)
 	ft_strdel(&mtime_str);
 }
 
-static t_list		*show_directory_files(const char *path, int optsb)
+static void		show_directory_elements(t_fstats *dc, int total, int optsb, t_list **reclst)
 {
-	t_list		*reclst;
-	t_fstats	*dc;
 	t_fstats	*tmp;
-	int			total;
 	int			rev;
 
-	if ((total = get_dir_content(path, &dc)) == -1)
-		return (NULL);
+	if (total == -1 || !dc)
+		return ;
 	rev = (optsb & 0x4) != 0;
 	sort_ls(&dc, ((optsb & 0x8) != 0) ? &sort_mtime : &sort_alpha, rev);
 	printf("total %i\n", total);
-	reclst = NULL;
+	*reclst = NULL;
 	tmp = dc;
 	while (dc)
 	{
-		print_out(dc, optsb);
+		show_element(dc, optsb);
 		if ((optsb & 0x10) != 0 && get_ifmt_char(dc->fmode) == 'd'
 			&& ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, "..")
 			&& (*dc->fname != '.' || (optsb & 0x2) != 0))
-			ft_lstpushback(&reclst, dc->fpath, ft_strlen(dc->fpath) + 1);
+			ft_lstpushback(reclst, dc->fpath, ft_strlen(dc->fpath) + 1);
 		dc = dc->next;
 	}
 	free_dir_content(&tmp);
-	return (reclst);
 }
 
-void				list_dirs(t_list **targets, int optsb, int add_nl)
+int				list_dirs(t_list **targets, int optsb, int add_nl)
 {
 	t_list		*tmp;
 	t_list		*reclst;
-	char		*cts;
+	t_fstats	*dc;
+	int			total;
 
+	total = 0;
+	reclst = NULL;
 	tmp = *targets;
-	cts = NULL;
-	while (tmp || !cts)
+	while (tmp)
 	{
-		if (tmp != *targets || add_nl)
+		if (total != -1 && (tmp != *targets || add_nl))
 			printf("\n");
-		if ((tmp && (*targets)->next) || add_nl)
-			printf("%s:\n", tmp->content);
-		if (!tmp)
-			cts = ".";
+		if ((total = get_dir_content(tmp->content, &dc)) == -1)
+			printf("ft_ls: %s: %s\n", tmp->content, strerror(errno));
 		else
-			cts = tmp->content;
-		reclst = show_directory_files(cts, optsb);
-		if (reclst)
-			list_dirs(&reclst, optsb, 1);
-		if (!*targets)
-			break ;
+		{
+			if (((*targets)->next) || add_nl)
+				printf("%s:\n", tmp->content);
+			show_directory_elements(dc, total, optsb, &reclst);
+			if (reclst)
+			{
+				list_dirs(&reclst, optsb, 1);
+				ft_lstdel(&reclst, &ft_lstdelf);
+			}
+		}
 		tmp = tmp->next;
 	}
 	ft_lstdel(targets, &ft_lstdelf);
+	return (total == -1 ? 1 : 0);
 }

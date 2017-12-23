@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/23 00:33:40 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/23 18:40:13 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@ static int		get_num_bytes(off_t size)
 	int			nlen;
 	int			ret;
 
+	if (size == 0)
+		return (0);
 	ret = 0;
 	nlen = size / 512;
-	nlen += (size % 512 != 0);
+	nlen += (nlen == 0);
 	while (ret < nlen)
 		ret += 8;
 	return (ret);
@@ -68,6 +70,7 @@ int				get_dir_content(const char *path, t_fstats **alst)
 	t_dirent	*dird;
 	t_fstats	**tmp;
 	int			ret;
+	int			fillf_ret;
 
 	if (!(dirp = opendir(path)))
 		return (-1);
@@ -80,7 +83,9 @@ int				get_dir_content(const char *path, t_fstats **alst)
 		else
 			tmp = &(*tmp)->next;
 		*tmp = (t_fstats*)malloc(sizeof(t_fstats));
-		ret += fill_fstats(path, dird, *tmp);
+		if ((fillf_ret = fill_fstats(path, dird, *tmp)) == -1)
+			return (-1);
+		ret += fillf_ret;
 		(*tmp)->next = NULL;
 	}
 	free(dird);

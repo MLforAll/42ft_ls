@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/22 21:25:16 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/23 18:47:53 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 ** ACTUAL PRINTING STUFF
 */
 
-void	list_dirs(t_list **targets, int optsb, int add_nl);
+int		list_dirs(t_list **targets, int optsb, int add_nl);
 
 /*
 ** DB MGMT

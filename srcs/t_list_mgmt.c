@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 14:32:09 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/21 20:10:50 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/23 18:23:02 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_lstdelf(void *data, size_t data_size)
 	ft_strdel((char**)&data);
 }
 
-void	ft_lstpushback(t_list **alst, void *data, size_t data_content)
+void	ft_lstpushback(t_list **alst, void *data, size_t data_size)
 {
 	t_list	*bw;
 
@@ -26,13 +26,13 @@ void	ft_lstpushback(t_list **alst, void *data, size_t data_content)
 		return ;
 	if (!*alst)
 	{
-		*alst = ft_lstnew(data, data_content);
+		*alst = ft_lstnew(data, data_size);
 		return ;
 	}
 	bw = *alst;
 	while (bw->next)
 		bw = bw->next;
-	bw->next = ft_lstnew(data, data_content);
+	bw->next = ft_lstnew(data, data_size);
 }
 
 t_list	*ft_lstpushback_edit(t_list **alst, t_list *new)

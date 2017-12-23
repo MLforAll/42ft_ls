@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 02:04:52 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/22 21:29:33 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/23 18:58:51 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int			main(int ac, char **av)
 		*tmp = ft_lstnew(av[i], ft_strlen(av[i]) + 1);
 		i++;
 	}
-	list_dirs(&targets, optsb, 0);
-	return (0);
+	if (!targets)
+		targets = ft_lstnew(".", 2);
+	return (list_dirs(&targets, optsb, 0));
 }
