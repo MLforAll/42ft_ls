@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/26 11:52:10 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/26 18:36:48 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 
-static int			get_dcs(t_lsqueue **dcs, t_list *paths)
+static int			get_dcs(t_queue **dcs, t_list *paths)
 {
 	t_fstats	*dc;
 	int			total;
@@ -33,7 +33,7 @@ static int			get_dcs(t_lsqueue **dcs, t_list *paths)
 			err += (err == 0);
 		}
 		else
-			ft_lsqueue_pb(dcs, paths->content, dc, total);
+			ft_queue_pb(dcs, paths->content, dc, total);
 		paths = paths->next;
 	}
 	return (err);
@@ -42,10 +42,10 @@ static int			get_dcs(t_lsqueue **dcs, t_list *paths)
 int		list_dirs(t_list *paths, int optsb, int add_nl)
 {
 	int			err;
-	t_lsqueue	*dcs;
+	t_queue	*dcs;
 
 	err = get_dcs(&dcs, paths);
 	print_dcs(dcs, optsb, add_nl);
-	ft_lsqueue_del(&dcs);
+	ft_queue_del(&dcs);
 	return (err);
 }

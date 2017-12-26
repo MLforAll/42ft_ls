@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/26 12:04:02 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/26 18:37:29 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct				s_queue
 	char				*dname;
 	t_fstats			*dc;
 	int					total;
-	struct s_lsqueue	*next;
+	struct s_queue		*next;
 }							t_queue;
 
 #endif

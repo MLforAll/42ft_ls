@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/26 12:05:21 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/26 18:37:14 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,9 @@ static void		show_directory_elements(t_fstats *dc, int total, int optsb, t_list 
 	free_dir_content(&tmp);
 }
 
-void			print_dcs(t_lsqueue *dcs, int optsb, int add_nl)
+void			print_dcs(t_queue *dcs, int optsb, int add_nl)
 {
-	t_lsqueue	*tmp;
+	t_queue	*tmp;
 	t_list		*reclst;
 
 	reclst = NULL;
