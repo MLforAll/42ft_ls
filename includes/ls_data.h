@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/23 21:41:31 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/26 12:04:02 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ typedef struct				s_fstats
 ** QUEUE (ERR MGMT)
 */
 
-typedef struct				s_lsqueue
+typedef struct				s_queue
 {
 	char				*dname;
 	t_fstats			*dc;
 	int					total;
 	struct s_lsqueue	*next;
-}							t_lsqueue;
+}							t_queue;
 
 #endif

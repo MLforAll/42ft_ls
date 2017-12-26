@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_lsqueue_fts.c                                    :+:      :+:    :+:   */
+/*   t_queue_mgmt.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 20:45:45 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/23 21:41:35 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/26 12:07:26 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 #include "libft.h"
 #include "ls_data.h"
 
-t_lsqueue	*ft_lsqueue_new(char *dname, t_fstats *dc, int total)
+t_queue		*ft_queue_new(char *dname, t_fstats *dc, int total)
 {
-	t_lsqueue	*new;
+	t_queue		*new;
 
-	if (!(new = (t_lsqueue*)malloc(sizeof(t_lsqueue))))
+	if (!(new = (t_queue*)malloc(sizeof(t_queue))))
 		return (NULL);
 	new->dname = ft_strdup(dname);
 	new->dc = dc;
@@ -27,29 +27,29 @@ t_lsqueue	*ft_lsqueue_new(char *dname, t_fstats *dc, int total)
 	return (new);
 }
 
-void		ft_lsqueue_pb(t_lsqueue **aqueue, char *dname, t_fstats *dc, int total)
+void		ft_queue_pb(t_queue **aq, char *dname, t_fstats *dc, int total)
 {
-	t_lsqueue	*bw;
+	t_queue		*bw;
 
-	if (!aqueue)
+	if (!aq)
 		return ;
-	if (!*aqueue)
+	if (!*aq)
 	{
-		*aqueue = ft_lsqueue_new(dname, dc, total);
+		*aq = ft_queue_new(dname, dc, total);
 		return ;
 	}
-	bw = *aqueue;
+	bw = *aq;
 	while (bw->next)
 		bw = bw->next;
-	bw->next = ft_lsqueue_new(dname, dc, total);
+	bw->next = ft_queue_new(dname, dc, total);
 }
 
-void	ft_lsqueue_del(t_lsqueue **aqueue)
+void		ft_queue_del(t_queue **aq)
 {
-	t_lsqueue	**tmp;
-	t_lsqueue	*bak;
+	t_queue		**tmp;
+	t_queue		*bak;
 
-	tmp = aqueue;
+	tmp = aq;
 	while (*tmp)
 	{
 		bak = (*tmp)->next;

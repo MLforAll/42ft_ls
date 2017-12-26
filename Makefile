@@ -6,7 +6,7 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2017/12/23 21:36:51 by kdumarai         ###   ########.fr        #
+#    Updated: 2017/12/26 11:59:39 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,14 +20,14 @@ LIBFT = ../Libft/libft.a
 LIB = -L ../Libft -lft
 
 SRCDIR = srcs
-SRCS = srcs/ft_ls.c \
-	srcs/ls_args.c \
-	srcs/ls_get_properties.c \
-	srcs/ls_lst_sort.c \
-	srcs/ls_queuing.c \
-	srcs/ls_print_lst.c \
-	srcs/t_list_mgmt.c \
-	srcs/t_lsqueue_fts.c
+SRCS = $(SRCDIR)/ft_ls.c \
+	$(SRCDIR)/ls_args.c \
+	$(SRCDIR)/info/ls_get_properties.c \
+	$(SRCDIR)/info/ls_lst_sort.c \
+	$(SRCDIR)/info/ls_queuing.c \
+	$(SRCDIR)/display/ls_print_lst.c \
+	$(SRCDIR)/lists/t_list_mgmt.c \
+	$(SRCDIR)/lists/t_lsqueue_fts.c
 
 OBJDIR = objs
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
