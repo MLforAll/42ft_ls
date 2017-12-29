@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/29 20:08:23 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/29 20:11:41 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ static void		print_elems(t_fstats *dc, int total, int optsb, t_list **reclst)
 		return ;
 	rev = (optsb & 0x4) != 0;
 	sort_ls(&dc, ((optsb & A_TOPT) != 0) ? &sort_mtime : &sort_alpha, rev);
-	if (OPTEXISTS(optsb, A_LOPT))
+	if (OPTEXISTS(optsb, A_LOPT) && total > 0)
 		printf("total %i\n", total);
 	*reclst = NULL;
 	tmp = dc;
