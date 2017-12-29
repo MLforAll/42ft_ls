@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/23 21:41:27 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/29 18:02:58 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <grp.h>
 #include <pwd.h>
 #include "ft_ls.h"
-
-#include <stdio.h>
 
 static int		get_num_bytes(off_t size)
 {

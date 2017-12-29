@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 02:04:52 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/26 12:06:19 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/29 18:04:53 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 #include "ft_ls.h"
 
 #include <stdio.h>
+
+/*
+** printf is later to be replaced by ft_printf
+** or perhaps maybe some putstrs..
+*/
 
 static void	ls_usage(char illopt)
 {

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/26 11:51:56 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/29 18:14:15 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "libft.h"
 
 # define PRGM_NAME	"ft_ls"
+# define OPTEXISTS(b, opt)	(b & opt) != 0
 
 /*
 ** QUEUING

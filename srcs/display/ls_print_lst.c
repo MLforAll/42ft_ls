@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/26 18:37:14 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/29 18:15:12 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 /*
 ** printf is later to be replaced by ft_printf
+** or perhaps maybe some putstrs..
 */
 
 static char		get_ifmt_char(mode_t st_mode)
@@ -50,32 +51,36 @@ static char		get_perm_char(mode_t fmode, mode_t mask)
 	return ('-');
 }
 
-static void		show_element(t_fstats *dc, int optsb)
+static void		print_elem_props(t_fstats *dc, int optsb)
 {
 	char		ftype;
 	char		*mtime_str;
 	mode_t		getp;
 
-	if ((optsb & 0x2) == 0 && *dc->fname == '.')
+	if ((optsb & A_AOPT) == 0 && *dc->fname == '.')
 		return ;
 	ftype = get_ifmt_char(dc->fmode);
 	mtime_str = ft_strsub(ctime(&dc->mtime), 4, 12);
-	printf("%c", ftype);
-	getp = S_IRUSR;
-	while (getp)
+	if (OPTEXISTS(optsb, A_LOPT))
 	{
-		printf("%c", get_perm_char(dc->fmode, getp));
-		getp /= 2;
+		printf("%c", ftype);
+		getp = S_IRUSR;
+		while (getp)
+		{
+			printf("%c", get_perm_char(dc->fmode, getp));
+			getp /= 2;
+		}
+		printf("  %2i %s  %s %6lli %s ", dc->nblink, \
+			dc->usrname, dc->grname, dc->size, mtime_str);
 	}
-	printf("  %2i %s  %s %6lli %s %s", dc->nblink, \
-		dc->usrname, dc->grname, dc->size, mtime_str, dc->fname);
+	printf("%s", dc->fname);
 	if (ftype == 'd')
 		printf("/");
 	printf("\n");
 	ft_strdel(&mtime_str);
 }
 
-static void		show_directory_elements(t_fstats *dc, int total, int optsb, t_list **reclst)
+static void		print_elems(t_fstats *dc, int total, int optsb, t_list **reclst)
 {
 	t_fstats	*tmp;
 	int			rev;
@@ -83,14 +88,15 @@ static void		show_directory_elements(t_fstats *dc, int total, int optsb, t_list 
 	if (total == -1 || !dc)
 		return ;
 	rev = (optsb & 0x4) != 0;
-	sort_ls(&dc, ((optsb & 0x8) != 0) ? &sort_mtime : &sort_alpha, rev);
-	printf("total %i\n", total);
+	sort_ls(&dc, ((optsb & A_TOPT) != 0) ? &sort_mtime : &sort_alpha, rev);
+	if (OPTEXISTS(optsb, A_LOPT))
+		printf("total %i\n", total);
 	*reclst = NULL;
 	tmp = dc;
 	while (dc)
 	{
-		show_element(dc, optsb);
-		if ((optsb & 0x10) != 0 && get_ifmt_char(dc->fmode) == 'd'
+		print_elem_props(dc, optsb);
+		if ((optsb & A_RROPT) != 0 && get_ifmt_char(dc->fmode) == 'd'
 			&& ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, "..")
 			&& (*dc->fname != '.' || (optsb & 0x2) != 0))
 			ft_lstpushback(reclst, dc->fpath, ft_strlen(dc->fpath) + 1);
@@ -101,7 +107,7 @@ static void		show_directory_elements(t_fstats *dc, int total, int optsb, t_list 
 
 void			print_dcs(t_queue *dcs, int optsb, int add_nl)
 {
-	t_queue	*tmp;
+	t_queue		*tmp;
 	t_list		*reclst;
 
 	reclst = NULL;
@@ -112,7 +118,7 @@ void			print_dcs(t_queue *dcs, int optsb, int add_nl)
 			printf("\n");
 		if ((dcs->next) || add_nl)
 			printf("%s:\n", tmp->dname);
-		show_directory_elements(tmp->dc, tmp->total, optsb, &reclst);
+		print_elems(tmp->dc, tmp->total, optsb, &reclst);
 		if (reclst)
 		{
 			list_dirs(reclst, optsb, 1);
