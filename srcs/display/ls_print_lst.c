@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/29 20:19:08 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/29 20:42:08 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,12 @@ static void		print_elem_props(t_fstats *dc, int optsb)
 	mtime_str = ft_strsub(ctime(&dc->mtime), 4, 12);
 	if (OPTEXISTS(optsb, A_LOPT))
 	{
+		if (OPTEXISTS(optsb, A_SOPT))
+			printf("%i ", dc->nbblk);
 		printf("%c", ftype);
-		getp = S_IRUSR;
-		while (getp)
-		{
+		getp = S_IRUSR * 2;
+		while (getp /= 2)
 			printf("%c", get_perm_char(dc->fmode, getp));
-			getp /= 2;
-		}
 		printf("  %2i %s  %s %6lli %s ", dc->nblink, \
 			dc->usrname, dc->grname, dc->size, mtime_str);
 	}
@@ -97,7 +96,7 @@ static void		print_elems(t_fstats *dc, int total, int optsb, t_list **reclst)
 
 	if (total == -1 || !dc)
 		return ;
-	rev = (optsb & 0x4) != 0;
+	rev = OPTEXISTS(optsb, A_ROPT);
 	sort_ls(&dc, ((optsb & A_TOPT) != 0) ? &sort_mtime : &sort_alpha, rev);
 	if (OPTEXISTS(optsb, A_LOPT) && dclen(dc) > 2)
 		printf("total %i\n", total);
@@ -108,7 +107,7 @@ static void		print_elems(t_fstats *dc, int total, int optsb, t_list **reclst)
 		print_elem_props(dc, optsb);
 		if ((optsb & A_RROPT) != 0 && get_ifmt_char(dc->fmode) == 'd'
 			&& ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, "..")
-			&& (*dc->fname != '.' || (optsb & 0x2) != 0))
+			&& (*dc->fname != '.' || OPTEXISTS(optsb, A_AOPT)))
 			ft_lstpushback(reclst, dc->fpath, ft_strlen(dc->fpath) + 1);
 		dc = dc->next;
 	}

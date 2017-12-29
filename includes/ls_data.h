@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/26 18:37:29 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/29 20:35:51 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct				s_fstats
 {
 	char				*fname;
 	char				*fpath;
+	int					nbblk;
 	mode_t				fmode;
 	time_t				mtime;
 	off_t				size;
