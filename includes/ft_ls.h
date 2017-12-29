@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/29 18:14:15 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/29 20:17:15 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int		detect_options(int ac, char **av, int *idx);
 
 int		get_dir_content(const char *path, t_fstats **alst);
 void	free_dir_content(t_fstats **alst);
+size_t	dclen(t_fstats *dc);
 
 /*
 ** DB SORTING

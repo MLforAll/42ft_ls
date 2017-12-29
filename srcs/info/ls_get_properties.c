@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/29 19:22:54 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/29 20:16:20 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,4 +113,17 @@ void			free_dir_content(t_fstats **alst)
 		curr = tmp;
 	}
 	*alst = NULL;
+}
+
+size_t			dclen(t_fstats *dc)
+{
+	size_t		ret;
+
+	ret = 0;
+	while (dc)
+	{
+		ret++;
+		dc = dc->next;
+	}
+	return (ret);
 }
