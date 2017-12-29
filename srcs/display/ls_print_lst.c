@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/29 19:38:44 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/29 20:08:23 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ static char		get_perm_char(mode_t fmode, mode_t mask)
 		if ((mask == 64 && (fmode & S_ISUID) != 0)
 			|| (mask == 8 && (fmode & S_ISGID) != 0))
 			pchr = 's';
+		else if (mask == 1 && (fmode & S_ISVTX) != 0)
+			pchr = 't';
 		else
 			pchr = 'x';
 	}
@@ -56,7 +58,7 @@ static char		get_perm_char(mode_t fmode, mode_t mask)
 		return ('-');
 	if ((fmode & mask) != 0)
 		return (pchr);
-	return (pchr == 's' ? ft_toupper(pchr) : '-');
+	return (pchr == 's' || pchr == 't' ? ft_toupper(pchr) : '-');
 }
 
 static void		print_elem_props(t_fstats *dc, int optsb)
