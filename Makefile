@@ -6,7 +6,7 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2017/12/29 18:06:22 by kdumarai         ###   ########.fr        #
+#    Updated: 2017/12/30 18:13:59 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRCDIR = srcs
 SRCS = $(SRCDIR)/ft_ls.c \
 	$(SRCDIR)/ls_args.c \
 	$(SRCDIR)/info/ls_get_properties.c \
+	$(SRCDIR)/info/ls_fill_properties.c \
 	$(SRCDIR)/info/ls_lst_sort.c \
 	$(SRCDIR)/info/ls_queuing.c \
 	$(SRCDIR)/display/ls_print_lst.c \

@@ -6,74 +6,13 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/30 15:31:14 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/30 18:17:49 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <dirent.h>
-#include <sys/stat.h>
-#include <grp.h>
-#include <pwd.h>
 #include "ft_ls.h"
-
-static int		get_num_bytes(off_t size)
-{
-	int			nlen;
-	int			ret;
-
-	if (size == 0)
-		return (0);
-	ret = 0;
-	nlen = 0;
-	while (size)
-	{
-		nlen++;
-		size /= 2;
-	}
-	nlen += (nlen == 0);
-	while (ret < nlen)
-		ret += 8;
-	return (ret);
-}
-
-/*
-** COMPATIBILITY CONCERNS:
-** fstats->mtime = sstat.st_mtimespec.tv_sec;
-** sstat.st_mtime; ==> compatibility with Linux
-*/
-
-static int		fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats)
-{
-	t_stat		sstat;
-	t_pw		*pw;
-	t_group		*grp;
-	off_t		size;
-	int			is_root;
-
-	if (!(fstats->fname = ft_strdup(dird->d_name)))
-		return (-1);
-	is_root = ft_strcmp(path, "/") == 0 ? 1 : 2;
-	fstats->fpath = ft_strnew(ft_strlen(path) + ft_strlen(dird->d_name) + is_root);
-	if (!fstats->fpath)
-		return (-1);
-	ft_strcat(fstats->fpath, path);
-	if (is_root == 2)
-		ft_strcat(fstats->fpath, "/");
-	ft_strcat(fstats->fpath, fstats->fname);
-	if (stat(fstats->fpath, &sstat) == -1)
-		return (-1);
-	fstats->fmode = sstat.st_mode;
-	fstats->mtime = sstat.st_mtime;
-	size = sstat.st_size;
-	fstats->size = size;
-	fstats->nblink = sstat.st_nlink;
-	grp = getgrgid(sstat.st_gid);
-	pw = getpwuid(sstat.st_uid);
-	fstats->grname = (grp != NULL) ? grp->gr_name : NULL;
-	fstats->usrname = (pw != NULL) ? pw->pw_name : NULL;
-	return (((fstats->fmode & S_IFMT) == S_IFREG) ? get_num_bytes(size) : 0);
-}
 
 int				get_dir_content(const char *path, t_fstats **alst)
 {
