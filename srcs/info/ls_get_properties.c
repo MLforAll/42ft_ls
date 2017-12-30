@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/29 20:40:24 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/30 15:31:14 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,17 @@ static int		fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats)
 	t_pw		*pw;
 	t_group		*grp;
 	off_t		size;
+	int			is_root;
 
 	if (!(fstats->fname = ft_strdup(dird->d_name)))
 		return (-1);
-	fstats->fpath = ft_strnew(ft_strlen(path) + ft_strlen(dird->d_name) + 1);
+	is_root = ft_strcmp(path, "/") == 0 ? 1 : 2;
+	fstats->fpath = ft_strnew(ft_strlen(path) + ft_strlen(dird->d_name) + is_root);
 	if (!fstats->fpath)
 		return (-1);
 	ft_strcat(fstats->fpath, path);
-	ft_strcat(fstats->fpath, "/");
+	if (is_root == 2)
+		ft_strcat(fstats->fpath, "/");
 	ft_strcat(fstats->fpath, fstats->fname);
 	if (stat(fstats->fpath, &sstat) == -1)
 		return (-1);
