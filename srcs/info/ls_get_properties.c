@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/30 18:17:49 by kdumarai         ###   ########.fr       */
+/*   Updated: 2017/12/31 23:55:42 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,10 @@ void			free_dir_content(t_fstats **alst)
 			ft_strdel(&curr->fname);
 		if (curr->fpath)
 			ft_strdel(&curr->fpath);
+		if (curr->usrname)
+			ft_strdel(&curr->usrname);
+		if (curr->grname)
+			ft_strdel(&curr->grname);
 		free(curr);
 		curr = tmp;
 	}
