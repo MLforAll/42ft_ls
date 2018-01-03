@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/31 23:54:22 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/03 20:26:25 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static void		print_elem_props(t_fstats *dc, int optsb)
 			dc->usrname, dc->grname, dc->size, mtime_str);
 	}
 	printf("%s", dc->fname);
-	if (ftype == 'd')
+	if (ftype == 'd' && OPTEXISTS(optsb, A_FOPT))
 		printf("/");
 	printf("\n");
 	ft_strdel(&mtime_str);

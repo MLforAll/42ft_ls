@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/30 18:17:25 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/03 21:47:45 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int		detect_options(int ac, char **av, int *idx);
 ** DB MGMT
 */
 
-int		get_dir_content(const char *path, t_fstats **alst);
+int		get_dir_content(const char *path, t_queue *alst);
 void	free_dir_content(t_fstats **alst);
 size_t	dclen(t_fstats *dc);
 
@@ -45,7 +45,7 @@ size_t	dclen(t_fstats *dc);
 ** DB Filling/Freeing
 **/
 
-int		fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats);
+int		fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats, t_queue queue);
 
 /*
 ** DB SORTING
@@ -73,8 +73,8 @@ t_list	*ft_lstpushback_edit(t_list **alst, t_list *new);
 ** t_queue UTILITIES
 */
 
-t_queue	*ft_queue_new(char *dname, t_fstats *dc, int total);
-void	ft_queue_pb(t_queue **aqueue, char *dname, t_fstats *dc, int total);
+t_queue	*ft_queue_new(char *dname);
+void	ft_queue_pb(t_queue **aq, t_queue *new);
 void	ft_queue_del(t_queue **aqueue);
 
 #endif

@@ -1,0 +1,35 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf830
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs32 \cf0 \ul \ulc0 ft_ls padding:
+\b0\fs26 \ulnone \
+\
+
+\fs30 - 5 values
+\b \
+
+\b0 - GREAT solution is to use the t_queue list\
+	- Each member corresponds to a folder\
+	- I\'92m free to put 5 size_ts corresponding to 5 max lengths of cols\
+	- Even better! Use a static size_t array!\
+	- Idx 0 is 1st col etc\
+\
+Getting those datas:\
+\
+ls_fill_properties.c:\
+	-> in fill_fstats:\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 		- get len of nbblocks (maxlens[0])\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 		- get len of nblink (maxlens[1])\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 		- get len of usrname (maxlens[2])\
+		- get len of grpname (maxlens[3])\
+		- get len of size var (maxlens[4])\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 	\
+}

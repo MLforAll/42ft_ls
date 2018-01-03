@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/30 18:16:22 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/03 19:34:57 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct				s_queue
 	char				*dname;
 	t_fstats			*dc;
 	int					total;
+	size_t				maxlens[5];
 	struct s_queue		*next;
 }							t_queue;
 

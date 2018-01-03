@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/30 18:21:46 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/03 21:53:51 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,11 @@ static int		fill_usr_grp(t_stat *sstat, t_fstats *fstats)
 ** sstat.st_mtime; ==> compatibility with Linux
 */
 
-int				fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats)
+int				fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats, t_queue queue)
 {
 	t_stat		sstat;
 	off_t		size;
+	size_t		tmp;
 
 	if (!(fstats->fname = ft_strdup(dird->d_name)))
 		return (-1);
@@ -96,5 +97,10 @@ int				fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats)
 	fstats->nblink = sstat.st_nlink;
 	if (!fill_usr_grp(&sstat, fstats))
 		return (-1);
+	tmp = ft_nbrlen(fstats->nblink);
+	queue->maxlens[1] = queue->maxlens[1] < tmp ? tmp : queue->maxlens[1];
+	queue->maxlens[2] = ft_strlen(fstats->usrname);
+	queue->maxlens[3] = ft_strlen(fstats->grname);
+	queue->maxlens[4] = ft_nbrlen(size);
 	return (((fstats->fmode & S_IFMT) == S_IFREG) ? get_num_bytes(size) : 0);
 }

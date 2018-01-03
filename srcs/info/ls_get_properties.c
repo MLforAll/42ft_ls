@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2017/12/31 23:55:42 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/03 19:39:39 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 #include <dirent.h>
 #include "ft_ls.h"
 
-int				get_dir_content(const char *path, t_fstats **alst)
+int				get_dir_content(const char *path, t_queue *alst)
 {
 	DIR			*dirp;
 	t_dirent	*dird;
 	t_fstats	**tmp;
-	int			ret;
 
 	if (!(dirp = opendir(path)))
 		return (-1);
@@ -28,18 +27,19 @@ int				get_dir_content(const char *path, t_fstats **alst)
 	while ((dird = readdir(dirp)))
 	{
 		if (!tmp)
-			tmp = alst;
+			tmp = &alst->dc;
 		else
 			tmp = &(*tmp)->next;
 		*tmp = (t_fstats*)malloc(sizeof(t_fstats));
-		if (((*tmp)->nbblk = fill_fstats(path, dird, *tmp)) == -1)
+		if (((*tmp)->nbblk = fill_fstats(path, dird, *tmp, alst)) == -1)
 			return (-1);
+		alst->maxlens[0] = (*tmp)->nbblk;
 		ret += (*tmp)->nbblk;
 		(*tmp)->next = NULL;
 	}
 	free(dird);
 	closedir(dirp);
-	return (ret);
+	return (1);
 }
 
 void			free_dir_content(t_fstats **alst)

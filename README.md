@@ -16,7 +16,6 @@ Currently Implemented:
 TODO:
 
 - Protect everything against crashes
-- -l option
 - Fix padding
 - Color
 - Fix total count
