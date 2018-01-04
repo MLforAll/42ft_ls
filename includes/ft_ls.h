@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 06:15:08 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 22:59:56 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,10 @@
 int		list_dirs(t_list *paths, int optsb, int add_nl);
 
 /*
-** ARGUMENTS
-*/
-
-int		option_valid(char c);
-int		detect_options(int ac, char **av, int *idx);
-
-/*
 ** DB MGMT
 */
 
-int		get_dir_content(t_queue *alst, int show_all);
+quad_t	get_dir_content(t_queue *alst, int show_all);
 void	free_dir_content(t_fstats **alst);
 size_t	dclen(t_fstats *dc);
 
@@ -45,7 +38,7 @@ size_t	dclen(t_fstats *dc);
 ** DB Filling/Freeing
 */
 
-int		fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue);
+quad_t	fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue);
 
 /*
 ** DB SORTING

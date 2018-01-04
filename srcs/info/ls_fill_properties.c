@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 05:53:45 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 23:02:58 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,6 @@
 #include <grp.h>
 #include <pwd.h>
 #include "ft_ls.h"
-
-static int		get_num_bytes(off_t size)
-{
-	int			nlen;
-	int			ret;
-
-	if (size == 0)
-		return (0);
-	ret = 0;
-	nlen = 0;
-	while (size)
-	{
-		nlen++;
-		size /= 2;
-	}
-	nlen += (nlen == 0);
-	while (ret < nlen)
-		ret += 8;
-	return (ret);
-}
 
 static char		*get_elem_path(char *path, char *fname, char *d_name)
 {
@@ -81,7 +61,7 @@ static void		fill_if_smaller(size_t *dest, size_t new)
 ** sstat.st_mtime; ==> compatibility with Linux
 */
 
-int				fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue)
+quad_t			fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue)
 {
 	t_stat		sstat;
 	off_t		size;
@@ -91,7 +71,7 @@ int				fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue)
 		return (-1);
 	if (!(fstats->fpath = get_elem_path(queue->dname, fstats->fname, d_name)))
 		ft_strdel(&fstats->fname);
-	if (!fstats->fname || stat(fstats->fpath, &sstat) == -1)
+	if (!fstats->fname || lstat(fstats->fpath, &sstat) == -1)
 		return (-1);
 	fstats->fmode = sstat.st_mode;
 	fstats->mtime = sstat.st_mtime;
@@ -100,7 +80,7 @@ int				fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue)
 	fstats->nblink = sstat.st_nlink;
 	if (!fill_usr_grp(&sstat, fstats))
 		return (-1);
-	nbblocks = get_num_bytes(size);
+	nbblocks = sstat.st_blocks;
 	fill_if_smaller(&queue->maxlens[0], ft_nbrlen(nbblocks));
 	fill_if_smaller(&queue->maxlens[1], ft_nbrlen(fstats->nblink));
 	fill_if_smaller(&queue->maxlens[2], ft_strlen(fstats->usrname));

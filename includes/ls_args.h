@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 19:55:06 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 06:14:49 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 22:59:48 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,12 @@
 # define A_RROPT	0x10
 # define A_SOPT		0x20
 # define A_FOPT		0x40
+
+/*
+** ARGUMENTS
+*/
+
+int		option_valid(char c);
+int		detect_options(int ac, char **av, int *idx);
 
 #endif

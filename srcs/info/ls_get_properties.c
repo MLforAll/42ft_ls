@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 06:04:03 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 22:58:30 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 ** before leaving...
 */
 
-int				get_dir_content(t_queue *alst, int show_all)
+quad_t			get_dir_content(t_queue *alst, int show_all)
 {
 	DIR			*dirp;
 	t_dirent	*dird;

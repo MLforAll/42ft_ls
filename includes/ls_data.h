@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 06:14:51 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 23:01:08 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ typedef struct				s_fstats
 {
 	char				*fname;
 	char				*fpath;
-	int					nbblk;
 	mode_t				fmode;
 	time_t				mtime;
 	off_t				size;
+	quad_t				nbblk;
 	nlink_t				nblink;
 	char				*grname;
 	char				*usrname;
@@ -50,7 +50,7 @@ typedef struct				s_queue
 {
 	char				*dname;
 	t_fstats			*dc;
-	int					total;
+	quad_t				total;
 	size_t				maxlens[5];
 	struct s_queue		*next;
 }							t_queue;
