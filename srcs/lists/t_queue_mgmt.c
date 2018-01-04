@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 20:45:45 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/03 17:37:22 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/03 23:41:10 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_queue		*ft_queue_new(char *dname)
 	if (!(new = (t_queue*)malloc(sizeof(t_queue))))
 		return (NULL);
 	new->dname = ft_strdup(dname);
+	ft_bzero(new->maxlens, 5);
 	new->next = NULL;
 	return (new);
 }

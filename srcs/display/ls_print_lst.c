@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/03 20:26:25 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 04:37:42 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,50 +61,64 @@ static char		get_perm_char(mode_t fmode, mode_t mask)
 	return (pchr == 's' || pchr == 't' ? ft_toupper(pchr) : '-');
 }
 
-static void		print_elem_props(t_fstats *dc, int optsb)
+static void		print_elem_props(t_fstats *dc, t_queue *queue, int optsb)
 {
 	char		ftype;
 	char		*mtime_str;
 	mode_t		getp;
 
-	if ((optsb & A_AOPT) == 0 && *dc->fname == '.')
-		return ;
+	/*if ((optsb & A_AOPT) == 0 && *dc->fname == '.')
+		return ;*/
 	ftype = get_ifmt_char(dc->fmode);
 	mtime_str = ft_strsub(ctime(&dc->mtime), 4, 12);
+	if (OPTEXISTS(optsb, A_SOPT))
+	{
+		print_int_width(dc->nbblk, queue->maxlens[0]);
+		ft_putchar(' ');
+	}
 	if (OPTEXISTS(optsb, A_LOPT))
 	{
-		if (OPTEXISTS(optsb, A_SOPT))
-			printf("%i ", dc->nbblk);
-		printf("%c", ftype);
+		ft_putchar(ftype);
 		getp = S_IRUSR * 2;
 		while (getp /= 2)
-			printf("%c", get_perm_char(dc->fmode, getp));
-		printf("  %2i %s  %s %6lli %s ", dc->nblink, \
-			dc->usrname, dc->grname, dc->size, mtime_str);
+			ft_putchar(get_perm_char(dc->fmode, getp));
+		ft_putstr("  ");
+		print_int_width(dc->nblink, queue->maxlens[1]);
+		ft_putchar(' ');
+		print_str_width(dc->usrname, queue->maxlens[2]);
+		ft_putstr("  ");
+		print_str_width(dc->grname, queue->maxlens[3]);
+		ft_putstr("  ");
+		print_offt_width(dc->size, queue->maxlens[4]);
+		ft_putchar(' ');
+		ft_putstr(mtime_str);
+		ft_putchar(' ');
 	}
-	printf("%s", dc->fname);
+	ft_putstr(dc->fname);
 	if (ftype == 'd' && OPTEXISTS(optsb, A_FOPT))
-		printf("/");
-	printf("\n");
+		ft_putchar('/');
+	ft_putchar('\n');
 	ft_strdel(&mtime_str);
 }
 
-static void		print_elems(t_fstats *dc, int total, int optsb, t_list **reclst)
+static void		print_elems(t_queue *queue, int optsb, t_list **reclst)
 {
 	t_fstats	*tmp;
 	int			rev;
+	t_fstats	*dc;
 
-	if (total == -1 || !dc)
+	dc = queue->dc;
+	if (queue->total == -1 || !dc)
 		return ;
 	rev = OPTEXISTS(optsb, A_ROPT);
 	sort_ls(&dc, ((optsb & A_TOPT) != 0) ? &sort_mtime : &sort_alpha, rev);
 	if (OPTEXISTS(optsb, A_LOPT) && dclen(dc) > 2)
-		printf("total %i\n", total);
+		printf("total %i\n", queue->total);
 	*reclst = NULL;
 	tmp = dc;
 	while (dc)
 	{
-		print_elem_props(dc, optsb);
+		print_elem_props(dc, queue, optsb);
 		if ((optsb & A_RROPT) != 0 && get_ifmt_char(dc->fmode) == 'd'
 			&& ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, "..")
 			&& (*dc->fname != '.' || OPTEXISTS(optsb, A_AOPT)))
@@ -127,7 +141,7 @@ void			print_dcs(t_queue *dcs, int optsb, int add_nl)
 			printf("\n");
 		if ((dcs->next) || add_nl)
 			printf("%s:\n", tmp->dname);
-		print_elems(tmp->dc, tmp->total, optsb, &reclst);
+		print_elems(tmp, optsb, &reclst);
 		if (reclst)
 		{
 			list_dirs(reclst, optsb, 1);

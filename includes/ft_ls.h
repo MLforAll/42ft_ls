@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/03 21:47:45 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 04:36:06 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int		detect_options(int ac, char **av, int *idx);
 ** DB MGMT
 */
 
-int		get_dir_content(const char *path, t_queue *alst);
+int		get_dir_content(t_queue *alst, int show_all);
 void	free_dir_content(t_fstats **alst);
 size_t	dclen(t_fstats *dc);
 
@@ -45,7 +45,7 @@ size_t	dclen(t_fstats *dc);
 ** DB Filling/Freeing
 **/
 
-int		fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats, t_queue queue);
+int		fill_fstats(t_dirent *dird, t_fstats *fstats, t_queue *queue);
 
 /*
 ** DB SORTING
@@ -60,6 +60,16 @@ void	sort_ls(t_fstats **lst, int (*f)(t_fstats*, t_fstats*, int), int rev);
 */
 
 void	print_dcs(t_queue *dcs, int optsb, int add_nl);
+
+/*
+** PRINTING UTILITIES
+*/
+
+void	ft_miniprintf(char *format, ...);
+void	ft_putnbr_longlong(long long n);
+void	print_int_width(int n, size_t width);
+void	print_offt_width(off_t size, size_t width);
+void	print_str_width(char *s, size_t width);
 
 /*
 ** t_list UTILITIES

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/03 21:48:43 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 04:38:04 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 ** or perhaps maybe some putstrs..
 */
 
-static int			get_dcs(t_queue **dcs, t_list *paths)
+static int			get_dcs(t_queue **dcs, t_list *paths, int optsb)
 {
 	t_queue		*new;
 	int			total;
@@ -34,7 +34,7 @@ static int			get_dcs(t_queue **dcs, t_list *paths)
 	while (paths)
 	{
 		new = ft_queue_new(paths->content);
-		if ((total = get_dir_content(paths->content, new)) == -1)
+		if ((total = get_dir_content(new, OPTEXISTS(optsb, A_AOPT))) == -1)
 		{
 			ft_strdel(&new->dname);
 			free(new);
@@ -53,7 +53,7 @@ int					list_dirs(t_list *paths, int optsb, int add_nl)
 	int			err;
 	t_queue		*dcs;
 
-	err = get_dcs(&dcs, paths);
+	err = get_dcs(&dcs, paths, optsb);
 	print_dcs(dcs, optsb, add_nl);
 	ft_queue_del(&dcs);
 	return (err);

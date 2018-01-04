@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/03 19:39:39 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 04:37:08 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,35 @@
 #include <dirent.h>
 #include "ft_ls.h"
 
-int				get_dir_content(const char *path, t_queue *alst)
+int				get_dir_content(t_queue *alst, int show_all)
 {
 	DIR			*dirp;
 	t_dirent	*dird;
 	t_fstats	**tmp;
+	int			ret;
 
-	if (!(dirp = opendir(path)))
+	if (!(dirp = opendir(alst->dname)))
 		return (-1);
 	ret = 0;
 	tmp = NULL;
 	while ((dird = readdir(dirp)))
 	{
-		if (!tmp)
-			tmp = &alst->dc;
-		else
-			tmp = &(*tmp)->next;
-		*tmp = (t_fstats*)malloc(sizeof(t_fstats));
-		if (((*tmp)->nbblk = fill_fstats(path, dird, *tmp, alst)) == -1)
-			return (-1);
-		alst->maxlens[0] = (*tmp)->nbblk;
-		ret += (*tmp)->nbblk;
-		(*tmp)->next = NULL;
+		if (*dird->d_name != '.' || show_all)
+		{
+			if (!tmp)
+				tmp = &alst->dc;
+			else
+				tmp = &(*tmp)->next;
+			*tmp = (t_fstats*)malloc(sizeof(t_fstats));
+			if (((*tmp)->nbblk = fill_fstats(dird, *tmp, alst)) == -1)
+				return (-1);
+			ret += (*tmp)->nbblk;
+			(*tmp)->next = NULL;
+		}
 	}
 	free(dird);
 	closedir(dirp);
-	return (1);
+	return (ret);
 }
 
 void			free_dir_content(t_fstats **alst)

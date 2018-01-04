@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/03 21:53:51 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 04:37:22 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,26 +69,29 @@ static int		fill_usr_grp(t_stat *sstat, t_fstats *fstats)
 	return (1);
 }
 
+static void		fill_if_smaller(size_t *dest, size_t new)
+{
+	if (*dest < new)
+		*dest = new;
+}
+
 /*
 ** COMPATIBILITY CONCERNS:
 ** fstats->mtime = sstat.st_mtimespec.tv_sec;
 ** sstat.st_mtime; ==> compatibility with Linux
 */
 
-int				fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats, t_queue queue)
+int				fill_fstats(t_dirent *dird, t_fstats *fstats, t_queue *queue)
 {
 	t_stat		sstat;
 	off_t		size;
-	size_t		tmp;
+	int			nbblocks;
 
 	if (!(fstats->fname = ft_strdup(dird->d_name)))
 		return (-1);
-	if (!(fstats->fpath = get_elem_path(path, fstats->fname, dird->d_name)))
-	{
+	if (!(fstats->fpath = get_elem_path(queue->dname, fstats->fname, dird->d_name)))
 		ft_strdel(&fstats->fname);
-		return (-1);
-	}
-	if (stat(fstats->fpath, &sstat) == -1)
+	if (!fstats->fname || stat(fstats->fpath, &sstat) == -1)
 		return (-1);
 	fstats->fmode = sstat.st_mode;
 	fstats->mtime = sstat.st_mtime;
@@ -97,10 +100,11 @@ int				fill_fstats(const char *path, t_dirent *dird, t_fstats *fstats, t_queue q
 	fstats->nblink = sstat.st_nlink;
 	if (!fill_usr_grp(&sstat, fstats))
 		return (-1);
-	tmp = ft_nbrlen(fstats->nblink);
-	queue->maxlens[1] = queue->maxlens[1] < tmp ? tmp : queue->maxlens[1];
-	queue->maxlens[2] = ft_strlen(fstats->usrname);
-	queue->maxlens[3] = ft_strlen(fstats->grname);
-	queue->maxlens[4] = ft_nbrlen(size);
-	return (((fstats->fmode & S_IFMT) == S_IFREG) ? get_num_bytes(size) : 0);
+	nbblocks = get_num_bytes(size);
+	fill_if_smaller(&queue->maxlens[0], ft_nbrlen(nbblocks));
+	fill_if_smaller(&queue->maxlens[1], ft_nbrlen(fstats->nblink));
+	fill_if_smaller(&queue->maxlens[2], ft_strlen(fstats->usrname));
+	fill_if_smaller(&queue->maxlens[3], ft_strlen(fstats->grname));
+	fill_if_smaller(&queue->maxlens[4], ft_nbrlen(size));
+	return (((fstats->fmode & S_IFMT) == S_IFREG) ? nbblocks : 0);
 }
