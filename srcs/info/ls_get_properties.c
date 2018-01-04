@@ -6,13 +6,18 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 04:37:08 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 06:04:03 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <dirent.h>
 #include "ft_ls.h"
+
+/*
+** Improvements: In case of err, it'd be nice to free stuff
+** before leaving...
+*/
 
 int				get_dir_content(t_queue *alst, int show_all)
 {
@@ -29,12 +34,10 @@ int				get_dir_content(t_queue *alst, int show_all)
 	{
 		if (*dird->d_name != '.' || show_all)
 		{
-			if (!tmp)
-				tmp = &alst->dc;
-			else
-				tmp = &(*tmp)->next;
-			*tmp = (t_fstats*)malloc(sizeof(t_fstats));
-			if (((*tmp)->nbblk = fill_fstats(dird, *tmp, alst)) == -1)
+			tmp = (!tmp) ? &alst->dc : &(*tmp)->next;
+			if (!(*tmp = (t_fstats*)malloc(sizeof(t_fstats))))
+				return (-1);
+			if (((*tmp)->nbblk = fill_fstats(dird->d_name, *tmp, alst)) == -1)
 				return (-1);
 			ret += (*tmp)->nbblk;
 			(*tmp)->next = NULL;

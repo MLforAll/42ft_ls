@@ -11,11 +11,13 @@ Currently Implemented:
 - Date
 - Size (in bytes only)
 - Recursiveness
+- Proper columns alignment (-l)
 - Proper Makefile
 
 TODO:
 
+- Add symlink support
+- Fix size for blockdev
 - Protect everything against crashes
-- Fix padding
 - Color
 - Fix total count

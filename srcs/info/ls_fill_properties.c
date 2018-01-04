@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 04:37:22 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 05:53:45 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int		get_num_bytes(off_t size)
 	return (ret);
 }
 
-static char		*get_elem_path(const char *path, char *fname, char *d_name)
+static char		*get_elem_path(char *path, char *fname, char *d_name)
 {
 	int			is_root;
 	char		*ret;
@@ -81,15 +81,15 @@ static void		fill_if_smaller(size_t *dest, size_t new)
 ** sstat.st_mtime; ==> compatibility with Linux
 */
 
-int				fill_fstats(t_dirent *dird, t_fstats *fstats, t_queue *queue)
+int				fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue)
 {
 	t_stat		sstat;
 	off_t		size;
 	int			nbblocks;
 
-	if (!(fstats->fname = ft_strdup(dird->d_name)))
+	if (!(fstats->fname = ft_strdup(d_name)))
 		return (-1);
-	if (!(fstats->fpath = get_elem_path(queue->dname, fstats->fname, dird->d_name)))
+	if (!(fstats->fpath = get_elem_path(queue->dname, fstats->fname, d_name)))
 		ft_strdel(&fstats->fname);
 	if (!fstats->fname || stat(fstats->fpath, &sstat) == -1)
 		return (-1);

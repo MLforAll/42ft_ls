@@ -6,24 +6,17 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 02:04:52 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/03 21:48:40 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 05:34:22 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "ft_ls.h"
 
-#include <stdio.h>
-
-/*
-** printf is later to be replaced by ft_printf
-** or perhaps maybe some putstrs..
-*/
-
 static void	ls_usage(char illopt)
 {
-	printf("%s: illegal option -- %c\n", PRGM_NAME, illopt);
-	printf("usage: %s [-Ralrt] [file ...]\n", PRGM_NAME);
+	ft_miniprintf("%s: illegal option -- %c\n", PRGM_NAME, illopt);
+	ft_miniprintf("usage: %s [-Ralrt] [file ...]\n", PRGM_NAME);
 	exit(1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 04:36:06 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 06:15:08 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ size_t	dclen(t_fstats *dc);
 
 /*
 ** DB Filling/Freeing
-**/
+*/
 
-int		fill_fstats(t_dirent *dird, t_fstats *fstats, t_queue *queue);
+int		fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue);
 
 /*
 ** DB SORTING
@@ -76,6 +76,7 @@ void	print_str_width(char *s, size_t width);
 */
 
 void	ft_lstdelf(void *data, size_t data_size);
+int		ft_lst_sortalpha(t_list *a, t_list *b);
 void	ft_lstpushback(t_list **alst, void *data, size_t data_content);
 t_list	*ft_lstpushback_edit(t_list **alst, t_list *new);
 

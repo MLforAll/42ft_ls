@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 01:44:07 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 02:04:13 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 05:35:50 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,11 @@ void		ft_miniprintf(char *format, ...)
 		if (*format == '%')
 		{
 			print_arg(*(format + 1), vlst);
-			format += 2;
+			format++;
 		}
 		else
 			ft_putchar(*format);
+		format++;
 	}
 	va_end(vlst);
 }

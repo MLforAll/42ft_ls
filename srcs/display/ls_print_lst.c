@@ -6,20 +6,13 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 04:37:42 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/04 05:51:01 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/stat.h>
 #include <time.h>
 #include "ft_ls.h"
-
-#include <stdio.h>
-
-/*
-** printf is later to be replaced by ft_printf
-** or perhaps maybe some putstrs..
-*/
 
 static char		get_ifmt_char(mode_t st_mode)
 {
@@ -67,8 +60,6 @@ static void		print_elem_props(t_fstats *dc, t_queue *queue, int optsb)
 	char		*mtime_str;
 	mode_t		getp;
 
-	/*if ((optsb & A_AOPT) == 0 && *dc->fname == '.')
-		return ;*/
 	ftype = get_ifmt_char(dc->fmode);
 	mtime_str = ft_strsub(ctime(&dc->mtime), 4, 12);
 	if (OPTEXISTS(optsb, A_SOPT))
@@ -113,13 +104,13 @@ static void		print_elems(t_queue *queue, int optsb, t_list **reclst)
 	rev = OPTEXISTS(optsb, A_ROPT);
 	sort_ls(&dc, ((optsb & A_TOPT) != 0) ? &sort_mtime : &sort_alpha, rev);
 	if (OPTEXISTS(optsb, A_LOPT) && dclen(dc) > 2)
-		printf("total %i\n", queue->total);
+		ft_miniprintf("total %i\n", queue->total);
 	*reclst = NULL;
 	tmp = dc;
 	while (dc)
 	{
 		print_elem_props(dc, queue, optsb);
-		if ((optsb & A_RROPT) != 0 && get_ifmt_char(dc->fmode) == 'd'
+		if (OPTEXISTS(optsb, A_RROPT) && get_ifmt_char(dc->fmode) == 'd'
 			&& ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, "..")
 			&& (*dc->fname != '.' || OPTEXISTS(optsb, A_AOPT)))
 			ft_lstpushback(reclst, dc->fpath, ft_strlen(dc->fpath) + 1);
@@ -138,9 +129,9 @@ void			print_dcs(t_queue *dcs, int optsb, int add_nl)
 	while (tmp)
 	{
 		if (tmp != dcs || add_nl)
-			printf("\n");
+			ft_putchar('\n');
 		if ((dcs->next) || add_nl)
-			printf("%s:\n", tmp->dname);
+			ft_miniprintf("%s:\n", tmp->dname);
 		print_elems(tmp, optsb, &reclst);
 		if (reclst)
 		{
