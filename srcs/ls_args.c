@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:43:21 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/03 16:03:42 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/05 19:46:32 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int		is_option_valid(char c)
 	if (c == 's')
 		return (A_SOPT);
 	if (c == 'F')
-		return (A_FOPT);
+		return (A_FFOPT);
 	return (0);
 }
 
@@ -44,14 +44,14 @@ int		detect_options(int ac, char **av, int *idx)
 	int					validret;
 
 	retb = 0;
-	if (ac == 1)
-		return (0);
 	while (*idx < ac)
 	{
 		if (*av[*idx] != '-')
 			break ;
 		i = 1;
 		alen = ft_strlen(av[*idx]);
+		if (alen == 1)
+			break ;
 		while (i < alen)
 		{
 			if (!(validret = is_option_valid(av[*idx][i])))

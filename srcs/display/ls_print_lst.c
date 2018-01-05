@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 05:51:01 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/05 20:47:43 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,23 @@
 #include <time.h>
 #include "ft_ls.h"
 
-static char		get_ifmt_char(mode_t st_mode)
+static char		get_ifmt_char(mode_t st_mode, int bigf)
 {
 	if ((st_mode & S_IFMT) == S_IFDIR)
-		return ('d');
+		return (bigf ? '/' : 'd');
 	if ((st_mode & S_IFMT) == S_IFLNK)
-		return ('l');
+		return (bigf ? '@' : 'l');
 	if ((st_mode & S_IFMT) == S_IFBLK)
-		return ('b');
+		return (bigf ? '=' : 'b');
 	if ((st_mode & S_IFMT) == S_IFCHR)
 		return ('c');
 	if ((st_mode & S_IFMT) == S_IFIFO)
-		return ('p');
-	return ('-');
+		return (bigf ? '|' : 'p');
+	if ((st_mode & S_IFMT) == S_IFWHT)
+		return (bigf ? '%' : 'w');
+	if (bigf && ((st_mode & 64) || (st_mode & 8) || (st_mode & 1)))
+		return ('*');
+	return (!bigf ? '-' : '\0');
 }
 
 static char		get_perm_char(mode_t fmode, mode_t mask)
@@ -56,38 +60,27 @@ static char		get_perm_char(mode_t fmode, mode_t mask)
 
 static void		print_elem_props(t_fstats *dc, t_queue *queue, int optsb)
 {
-	char		ftype;
 	char		*mtime_str;
 	mode_t		getp;
 
-	ftype = get_ifmt_char(dc->fmode);
 	mtime_str = ft_strsub(ctime(&dc->mtime), 4, 12);
 	if (OPTEXISTS(optsb, A_SOPT))
-	{
-		print_int_width(dc->nbblk, queue->maxlens[0]);
-		ft_putchar(' ');
-	}
+		ft_lsprint("%$i ", queue->maxlens[0], dc->nbblk);
 	if (OPTEXISTS(optsb, A_LOPT))
 	{
-		ft_putchar(ftype);
+		ft_putchar(get_ifmt_char(dc->fmode, 0));
 		getp = S_IRUSR * 2;
 		while (getp /= 2)
 			ft_putchar(get_perm_char(dc->fmode, getp));
-		ft_putstr("  ");
-		print_int_width(dc->nblink, queue->maxlens[1]);
-		ft_putchar(' ');
-		print_str_width(dc->usrname, queue->maxlens[2]);
-		ft_putstr("  ");
-		print_str_width(dc->grname, queue->maxlens[3]);
-		ft_putstr("  ");
-		print_offt_width(dc->size, queue->maxlens[4]);
-		ft_putchar(' ');
-		ft_putstr(mtime_str);
-		ft_putchar(' ');
+		ft_lsprint("  %$i %$-s  %$-s  %$l %s ", queue->maxlens[1], dc->nblink, \
+			queue->maxlens[2], dc->usrname, queue->maxlens[3], dc->grname, \
+			queue->maxlens[4], dc->size, mtime_str);
 	}
 	ft_putstr(dc->fname);
-	if (ftype == 'd' && OPTEXISTS(optsb, A_FOPT))
-		ft_putchar('/');
+	if (OPTEXISTS(optsb, A_FFOPT))
+		ft_putchar(get_ifmt_char(dc->fmode, 1));
+	if (dc->sympath && OPTEXISTS(optsb, A_LOPT))
+		ft_lsprint(" -> %s", dc->sympath);
 	ft_putchar('\n');
 	ft_strdel(&mtime_str);
 }
@@ -102,17 +95,16 @@ static void		print_elems(t_queue *queue, int optsb, t_list **reclst)
 	if (queue->total == -1 || !dc)
 		return ;
 	rev = OPTEXISTS(optsb, A_ROPT);
-	sort_ls(&dc, ((optsb & A_TOPT) != 0) ? &sort_mtime : &sort_alpha, rev);
-	if (OPTEXISTS(optsb, A_LOPT) && dclen(dc) > 2)
-		ft_miniprintf("total %i\n", queue->total);
+	sort_ls(&dc, OPTEXISTS(optsb, A_TOPT) ? &sort_mtime : &sort_alpha, rev);
+	if (OPTEXISTS(optsb, A_LOPT) || OPTEXISTS(optsb, A_SOPT))
+		ft_lsprint("total %l\n", queue->total);
 	*reclst = NULL;
 	tmp = dc;
 	while (dc)
 	{
 		print_elem_props(dc, queue, optsb);
-		if (OPTEXISTS(optsb, A_RROPT) && get_ifmt_char(dc->fmode) == 'd'
-			&& ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, "..")
-			&& (*dc->fname != '.' || OPTEXISTS(optsb, A_AOPT)))
+		if (OPTEXISTS(optsb, A_RROPT) && get_ifmt_char(dc->fmode, 0) == 'd'
+			&& ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, ".."))
 			ft_lstpushback(reclst, dc->fpath, ft_strlen(dc->fpath) + 1);
 		dc = dc->next;
 	}
@@ -131,7 +123,7 @@ void			print_dcs(t_queue *dcs, int optsb, int add_nl)
 		if (tmp != dcs || add_nl)
 			ft_putchar('\n');
 		if ((dcs->next) || add_nl)
-			ft_miniprintf("%s:\n", tmp->dname);
+			ft_lsprint("%s:\n", tmp->dname);
 		print_elems(tmp, optsb, &reclst);
 		if (reclst)
 		{

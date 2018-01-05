@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 22:58:30 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/05 20:47:43 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ quad_t			get_dir_content(t_queue *alst, int show_all)
 	DIR			*dirp;
 	t_dirent	*dird;
 	t_fstats	**tmp;
-	int			ret;
+	quad_t		ret;
 
 	if (!(dirp = opendir(alst->dname)))
 		return (-1);
@@ -37,7 +37,7 @@ quad_t			get_dir_content(t_queue *alst, int show_all)
 			tmp = (!tmp) ? &alst->dc : &(*tmp)->next;
 			if (!(*tmp = (t_fstats*)malloc(sizeof(t_fstats))))
 				return (-1);
-			if (((*tmp)->nbblk = fill_fstats(dird->d_name, *tmp, alst)) == -1)
+			if (!fill_fstats(dird->d_name, *tmp, alst))
 				return (-1);
 			ret += (*tmp)->nbblk;
 			(*tmp)->next = NULL;
@@ -61,6 +61,8 @@ void			free_dir_content(t_fstats **alst)
 			ft_strdel(&curr->fname);
 		if (curr->fpath)
 			ft_strdel(&curr->fpath);
+		if (curr->sympath)
+			ft_strdel(&curr->sympath);
 		if (curr->usrname)
 			ft_strdel(&curr->usrname);
 		if (curr->grname)
@@ -69,17 +71,4 @@ void			free_dir_content(t_fstats **alst)
 		curr = tmp;
 	}
 	*alst = NULL;
-}
-
-size_t			dclen(t_fstats *dc)
-{
-	size_t		ret;
-
-	ret = 0;
-	while (dc)
-	{
-		ret++;
-		dc = dc->next;
-	}
-	return (ret);
 }

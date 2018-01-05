@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 22:59:56 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/05 20:47:40 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,24 @@
 int		list_dirs(t_list *paths, int optsb, int add_nl);
 
 /*
+** ARGUMENTS
+*/
+
+int		option_valid(char c);
+int		detect_options(int ac, char **av, int *idx);
+
+/*
 ** DB MGMT
 */
 
 quad_t	get_dir_content(t_queue *alst, int show_all);
 void	free_dir_content(t_fstats **alst);
-size_t	dclen(t_fstats *dc);
 
 /*
 ** DB Filling/Freeing
 */
 
-quad_t	fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue);
+int		fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue);
 
 /*
 ** DB SORTING
@@ -58,11 +64,11 @@ void	print_dcs(t_queue *dcs, int optsb, int add_nl);
 ** PRINTING UTILITIES
 */
 
-void	ft_miniprintf(char *format, ...);
-void	ft_putnbr_longlong(long long n);
-void	print_int_width(int n, size_t width);
-void	print_offt_width(off_t size, size_t width);
-void	print_str_width(char *s, size_t width);
+void	ft_lsprint(char *format, ...);
+void	print_int_width(int n, size_t width, int justify);
+void	print_ll_width(long long size, size_t width, int justify);
+void	print_str_width(char *s, size_t width, int justify);
+void	print_char_width(char c, size_t width, int justify);
 
 /*
 ** t_list UTILITIES

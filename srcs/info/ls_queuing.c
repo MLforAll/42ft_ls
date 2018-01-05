@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 06:13:45 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/05 20:47:44 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ static int			get_dcs(t_queue **dcs, t_list *paths, int optsb)
 	err = 0;
 	while (paths)
 	{
-		new = ft_queue_new(paths->content);
+		new = ft_queue_new((char*)paths->content);
 		if ((new->total = get_dir_content(new, OPTEXISTS(optsb, A_AOPT))) == -1)
 		{
 			ft_strdel(&new->dname);
 			free(new);
-			ft_miniprintf("%s: %s: %s\n", PRGM_NAME, paths->content, \
+			ft_lsprint("%s: %s: %s\n", PRGM_NAME, paths->content, \
 				strerror(errno));
 			err += (err == 0);
 		}

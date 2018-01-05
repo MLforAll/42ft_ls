@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 19:55:06 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 22:59:48 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/05 19:53:42 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 ** 0000 1000: -t (0x8)
 ** 0001 0000: -R (0x10)
 ** 0010 0000: -s (0x20)
-** 0100 0000: -f (0x40)
+** 0100 0000: -F (0x40)
 */
 
 # define A_LOPT		0x1
@@ -30,13 +30,6 @@
 # define A_TOPT		0x8
 # define A_RROPT	0x10
 # define A_SOPT		0x20
-# define A_FOPT		0x40
-
-/*
-** ARGUMENTS
-*/
-
-int		option_valid(char c);
-int		detect_options(int ac, char **av, int *idx);
+# define A_FFOPT	0x40
 
 #endif

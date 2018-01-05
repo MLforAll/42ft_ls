@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:23:13 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 06:12:04 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/05 20:47:44 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@
 
 int		sort_alpha(t_fstats *a, t_fstats *b, int rev)
 {
-	int		diff;
+	int			diff;
 
+	if (!a->fname || !b->fname)
+		return (0);
 	diff = ft_strcmp(a->fname, b->fname);
 	if (diff == 0)
 		return (0);

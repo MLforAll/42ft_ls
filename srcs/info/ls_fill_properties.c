@@ -6,18 +6,19 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/04 23:02:58 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/05 20:47:51 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <unistd.h>
 #include <dirent.h>
 #include <sys/stat.h>
 #include <grp.h>
 #include <pwd.h>
 #include "ft_ls.h"
 
-static char		*get_elem_path(char *path, char *fname, char *d_name)
+static char		*get_elem_path(char *path, char *d_name)
 {
 	int			is_root;
 	char		*ret;
@@ -29,7 +30,17 @@ static char		*get_elem_path(char *path, char *fname, char *d_name)
 	ft_strcat(ret, path);
 	if (is_root == 2)
 		ft_strcat(ret, "/");
-	ft_strcat(ret, fname);
+	ft_strcat(ret, d_name);
+	return (ret);
+}
+
+static char		*get_sym_path(char *path, off_t size)
+{
+	char	*ret;
+
+	if (!(ret = ft_strnew(size + 1)))
+		return (NULL);
+	readlink(path, ret, size);
 	return (ret);
 }
 
@@ -40,13 +51,9 @@ static int		fill_usr_grp(t_stat *sstat, t_fstats *fstats)
 
 	grp = getgrgid(sstat->st_gid);
 	pw = getpwuid(sstat->st_uid);
-	if (grp)
-		if (!(fstats->grname = ft_strdup(grp->gr_name)))
-			return (0);
-	if (pw)
-		if (!(fstats->usrname = ft_strdup(pw->pw_name)))
-			return (0);
-	return (1);
+	fstats->grname = (!grp) ? ft_itoa(sstat->st_gid) : ft_strdup(grp->gr_name);
+	fstats->usrname = (!pw) ? ft_itoa(sstat->st_uid) : ft_strdup(pw->pw_name);
+	return ((fstats->grname != NULL && fstats->usrname != NULL));
 }
 
 static void		fill_if_smaller(size_t *dest, size_t new)
@@ -61,30 +68,30 @@ static void		fill_if_smaller(size_t *dest, size_t new)
 ** sstat.st_mtime; ==> compatibility with Linux
 */
 
-quad_t			fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue)
+int				fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue)
 {
 	t_stat		sstat;
 	off_t		size;
-	int			nbblocks;
 
 	if (!(fstats->fname = ft_strdup(d_name)))
-		return (-1);
-	if (!(fstats->fpath = get_elem_path(queue->dname, fstats->fname, d_name)))
+		return (0);
+	if (!(fstats->fpath = get_elem_path(queue->dname, d_name)))
 		ft_strdel(&fstats->fname);
-	if (!fstats->fname || lstat(fstats->fpath, &sstat) == -1)
-		return (-1);
+	if (!fstats->fpath || lstat(fstats->fpath, &sstat) == -1)
+		return (0);
+	fstats->nbblk = sstat.st_blocks;
 	fstats->fmode = sstat.st_mode;
 	fstats->mtime = sstat.st_mtime;
 	size = sstat.st_size;
 	fstats->size = size;
 	fstats->nblink = sstat.st_nlink;
+	fstats->sympath = (S_ISLNK(fstats->fmode)) ? get_sym_path(fstats->fpath, size) : NULL;
 	if (!fill_usr_grp(&sstat, fstats))
-		return (-1);
-	nbblocks = sstat.st_blocks;
-	fill_if_smaller(&queue->maxlens[0], ft_nbrlen(nbblocks));
+		return (0);
+	fill_if_smaller(&queue->maxlens[0], ft_nbrlen(fstats->nbblk));
 	fill_if_smaller(&queue->maxlens[1], ft_nbrlen(fstats->nblink));
-	fill_if_smaller(&queue->maxlens[2], ft_strlen(fstats->usrname));
-	fill_if_smaller(&queue->maxlens[3], ft_strlen(fstats->grname));
+	fill_if_smaller(&queue->maxlens[2], !fstats->usrname ? 6 : ft_strlen(fstats->usrname));
+	fill_if_smaller(&queue->maxlens[3], !fstats->grname ? 6 : ft_strlen(fstats->grname));
 	fill_if_smaller(&queue->maxlens[4], ft_nbrlen(size));
-	return (((fstats->fmode & S_IFMT) == S_IFREG) ? nbblocks : 0);
+	return (1);
 }
