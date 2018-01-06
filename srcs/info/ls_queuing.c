@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/05 20:47:44 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/06 17:08:14 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@
 
 static int			get_dcs(t_queue **dcs, t_list *paths, int optsb)
 {
+	t_queue		*files;
 	t_queue		*new;
 	int			err;
 
 	if (!dcs)
 		return (-1);
 	*dcs = NULL;
+	files = NULL;
 	err = 0;
 	while (paths)
 	{
@@ -30,14 +32,23 @@ static int			get_dcs(t_queue **dcs, t_list *paths, int optsb)
 		{
 			ft_strdel(&new->dname);
 			free(new);
-			ft_lsprint("%s: %s: %s\n", PRGM_NAME, paths->content, \
+			if (!files)
+				files = ft_queue_new(".");
+			if ((files->total = get_file_content(files, &files->dc, (char*)paths->content)) == -1)
+			{
+				ft_strdel(&files->dname);
+				free(files);
+				ft_lsprint("%s: %s: %s\n", PRGM_NAME, paths->content, \
 				strerror(errno));
-			err += (err == 0);
+				err += (err == 0);
+			}
 		}
 		else
 			ft_queue_pb(dcs, new);
 		paths = paths->next;
 	}
+	if (files)
+		ft_queue_pf(dcs, files);
 	return (err);
 }
 

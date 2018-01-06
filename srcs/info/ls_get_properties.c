@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/05 20:47:43 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/06 17:07:29 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,22 @@
 ** before leaving...
 */
 
+quad_t			get_file_content(t_queue *alst, t_fstats **dc, char *d_name)
+{
+	if (!(*dc = (t_fstats*)malloc(sizeof(t_fstats))))
+		return (-1);
+	if (!fill_fstats(d_name, *dc, alst))
+		return (-1);
+	return ((*dc)->nbblk);
+}
+
 quad_t			get_dir_content(t_queue *alst, int show_all)
 {
 	DIR			*dirp;
 	t_dirent	*dird;
 	t_fstats	**tmp;
 	quad_t		ret;
+	quad_t		gfc_ret;
 
 	if (!(dirp = opendir(alst->dname)))
 		return (-1);
@@ -35,11 +45,10 @@ quad_t			get_dir_content(t_queue *alst, int show_all)
 		if (*dird->d_name != '.' || show_all)
 		{
 			tmp = (!tmp) ? &alst->dc : &(*tmp)->next;
-			if (!(*tmp = (t_fstats*)malloc(sizeof(t_fstats))))
+			if ((gfc_ret = get_file_content(alst, tmp, dird->d_name)) == -1)
 				return (-1);
-			if (!fill_fstats(dird->d_name, *tmp, alst))
-				return (-1);
-			ret += (*tmp)->nbblk;
+			else
+				ret += gfc_ret;
 			(*tmp)->next = NULL;
 		}
 	}
