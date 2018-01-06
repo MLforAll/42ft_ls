@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/06 17:07:14 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/06 21:29:48 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,17 @@
 static char		*get_elem_path(char *path, char *d_name)
 {
 	int			is_root;
+	size_t		pathlen;
 	char		*ret;
 
-	is_root = ft_strcmp(path, "/") == 0 ? 1 : 2;
-	ret = ft_strnew(ft_strlen(path) + ft_strlen(d_name) + is_root);
+	is_root = (path && ft_strcmp(path, "/") == 0);
+	pathlen = (path) ? ft_strlen(path) : 0;
+	ret = ft_strnew(pathlen + ft_strlen(d_name) + is_root + 1);
 	if (!ret)
 		return (NULL);
-	ft_strcat(ret, path);
-	if (is_root == 2)
+	if (path)
+		ft_strcat(ret, path);
+	if (!is_root && path)
 		ft_strcat(ret, "/");
 	ft_strcat(ret, d_name);
 	return (ret);

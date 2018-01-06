@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/05 20:47:43 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/06 21:29:49 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ static char		get_ifmt_char(mode_t st_mode, int bigf)
 	if ((st_mode & S_IFMT) == S_IFLNK)
 		return (bigf ? '@' : 'l');
 	if ((st_mode & S_IFMT) == S_IFBLK)
-		return (bigf ? '=' : 'b');
+		return ('b');
 	if ((st_mode & S_IFMT) == S_IFCHR)
 		return ('c');
 	if ((st_mode & S_IFMT) == S_IFIFO)
 		return (bigf ? '|' : 'p');
+	if ((st_mode & S_IFMT) == S_IFSOCK)
+		return (bigf ? '=' : 's');
 	if ((st_mode & S_IFMT) == S_IFWHT)
 		return (bigf ? '%' : 'w');
 	if (bigf && ((st_mode & 64) || (st_mode & 8) || (st_mode & 1)))
@@ -96,7 +98,7 @@ static void		print_elems(t_queue *queue, int optsb, t_list **reclst)
 		return ;
 	rev = OPTEXISTS(optsb, A_ROPT);
 	sort_ls(&dc, OPTEXISTS(optsb, A_TOPT) ? &sort_mtime : &sort_alpha, rev);
-	if (OPTEXISTS(optsb, A_LOPT) || OPTEXISTS(optsb, A_SOPT))
+	if ((OPTEXISTS(optsb, A_LOPT) || OPTEXISTS(optsb, A_SOPT)) && queue->dname)
 		ft_lsprint("total %l\n", queue->total);
 	*reclst = NULL;
 	tmp = dc;
@@ -122,7 +124,7 @@ void			print_dcs(t_queue *dcs, int optsb, int add_nl)
 	{
 		if (tmp != dcs || add_nl)
 			ft_putchar('\n');
-		if ((dcs->next) || add_nl)
+		if (((dcs->next) || add_nl) && tmp->dname)
 			ft_lsprint("%s:\n", tmp->dname);
 		print_elems(tmp, optsb, &reclst);
 		if (reclst)

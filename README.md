@@ -13,11 +13,10 @@ Currently Implemented:
 - Recursiveness
 - Proper columns alignment (-l)
 - Proper Makefile
+- Files listing
 
 TODO:
 
-- Add symlink support
-- Fix size for blockdev
-- Protect everything against crashes
+- Norming / Optimization
 - Color
-- Fix total count
+- Proper size for blockdev and chardev

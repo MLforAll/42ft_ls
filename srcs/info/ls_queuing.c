@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/06 17:08:14 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/06 21:12:28 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,26 @@ static int			get_dcs(t_queue **dcs, t_list *paths, int optsb)
 {
 	t_queue		*files;
 	t_queue		*new;
+	t_fstats	**ptr;
 	int			err;
 
 	if (!dcs)
 		return (-1);
 	*dcs = NULL;
 	files = NULL;
+	ptr = NULL;
 	err = 0;
 	while (paths)
 	{
 		new = ft_queue_new((char*)paths->content);
-		if ((new->total = get_dir_content(new, OPTEXISTS(optsb, A_AOPT))) == -1)
+		if ((new->total = get_dir_content(new, optsb)) == -1)
 		{
-			ft_strdel(&new->dname);
-			free(new);
+			ft_queue_free(&new);
 			if (!files)
-				files = ft_queue_new(".");
-			if ((files->total = get_file_content(files, &files->dc, (char*)paths->content)) == -1)
+				files = ft_queue_new(NULL);
+			if ((files->total = get_file_content(files, &ptr, (char*)paths->content)) == -1)
 			{
-				ft_strdel(&files->dname);
-				free(files);
+				ft_queue_free(&files);
 				ft_lsprint("%s: %s: %s\n", PRGM_NAME, paths->content, \
 				strerror(errno));
 				err += (err == 0);

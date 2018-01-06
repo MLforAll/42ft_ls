@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 20:45:45 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/06 17:00:58 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/06 21:29:52 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_queue		*ft_queue_new(char *dname)
 
 	if (!(new = (t_queue*)malloc(sizeof(t_queue))))
 		return (NULL);
-	new->dname = ft_strdup(dname);
+	new->dname = (dname) ? ft_strdup(dname) : NULL;
 	ft_bzero((void*)new->maxlens, sizeof(size_t) * 5);
 	new->total = 0;
 	new->dc = NULL;
@@ -47,8 +47,6 @@ void		ft_queue_pb(t_queue **aq, t_queue *new)
 
 void		ft_queue_pf(t_queue **aq, t_queue *new)
 {
-	t_queue		*tmp;
-
 	if (!aq)
 		return ;
 	if (!*aq)
@@ -56,23 +54,29 @@ void		ft_queue_pf(t_queue **aq, t_queue *new)
 		*aq = new;
 		return ;
 	}
-	tmp = *aq;
+	new->next = *aq;
 	*aq = new;
-	(*aq)->next = tmp;
+}
+
+void		ft_queue_free(t_queue **aq)
+{
+	if ((*aq)->dname)
+		ft_strdel(&(*aq)->dname);
+	free(*aq);
+	*aq = NULL;
 }
 
 void		ft_queue_del(t_queue **aq)
 {
-	t_queue		**tmp;
+	t_queue		*tmp;
 	t_queue		*bak;
 
-	tmp = aq;
-	while (*tmp)
+	tmp = *aq;
+	while (tmp)
 	{
-		bak = (*tmp)->next;
-		ft_strdel(&(*tmp)->dname);
-		free(*tmp);
-		*tmp = NULL;
-		tmp = &bak;
+		bak = tmp->next;
+		if (tmp)
+			ft_queue_free(&tmp);
+		tmp = bak;
 	}
 }
