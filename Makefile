@@ -6,7 +6,7 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2018/01/05 13:37:27 by kdumarai         ###   ########.fr        #
+#    Updated: 2018/01/08 00:01:31 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,10 +35,12 @@ SRCS = $(SRCDIR)/ft_ls.c \
 OBJDIR = objs
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-all: $(NAME)
+all: lib $(NAME)
+
+lib:
+	make -C $(dir $(LIBFT))
 
 $(NAME): $(OBJS)
-	make -C $(dir $(LIBFT))
 	gcc -o $(NAME) $(LIB) $(OBJS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
@@ -55,4 +57,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all lib clean fclean re

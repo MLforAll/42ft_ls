@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/06 21:29:51 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/08 00:50:32 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,11 @@ void	print_dcs(t_queue *dcs, int optsb, int add_nl);
 */
 
 void	ft_lsprint(char *format, ...);
-void	print_int_width(int n, size_t width, int justify);
-void	print_ll_width(long long size, size_t width, int justify);
-void	print_str_width(char *s, size_t width, int justify);
-void	print_char_width(char c, size_t width, int justify);
+void	ft_lsprint_fd(int fd, char *format, ...);
+void	print_int_width_fd(int fd, int n, size_t width, int justify);
+void	print_ll_width_fd(int fd, long long size, size_t width, int justify);
+void	print_str_width_fd(int fd, char *s, size_t width, int justify);
+void	print_char_width_fd(int fd, char c, size_t width, int justify);
 
 /*
 ** t_list UTILITIES

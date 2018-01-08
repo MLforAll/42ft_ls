@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/06 21:29:49 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/07 23:16:17 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,22 +65,24 @@ static void		print_elem_props(t_fstats *dc, t_queue *queue, int optsb)
 	char		*mtime_str;
 	mode_t		getp;
 
-	mtime_str = ft_strsub(ctime(&dc->mtime), 4, 12);
+	mtime_str = ft_strsub(ctime(&dc->st.st_mtime), 4, 12);
 	if (OPTEXISTS(optsb, A_SOPT))
-		ft_lsprint("%$i ", queue->maxlens[0], dc->nbblk);
+		ft_lsprint("%$i ", queue->maxlens[0], dc->st.st_nlink);
 	if (OPTEXISTS(optsb, A_LOPT))
 	{
-		ft_putchar(get_ifmt_char(dc->fmode, 0));
+		ft_putchar(get_ifmt_char(dc->st.st_mode, 0));
 		getp = S_IRUSR * 2;
 		while (getp /= 2)
-			ft_putchar(get_perm_char(dc->fmode, getp));
-		ft_lsprint("  %$i %$-s  %$-s  %$l %s ", queue->maxlens[1], dc->nblink, \
-			queue->maxlens[2], dc->usrname, queue->maxlens[3], dc->grname, \
-			queue->maxlens[4], dc->size, mtime_str);
+			ft_putchar(get_perm_char(dc->st.st_mode, getp));
+		ft_lsprint("  %$i %$-s  %$-s  %$l %s ", \
+			queue->maxlens[1], dc->st.st_nlink, \
+			queue->maxlens[2], dc->usrname, \
+			queue->maxlens[3], dc->grname, \
+			queue->maxlens[4], dc->st.st_size, mtime_str);
 	}
 	ft_putstr(dc->fname);
 	if (OPTEXISTS(optsb, A_FFOPT))
-		ft_putchar(get_ifmt_char(dc->fmode, 1));
+		ft_putchar(get_ifmt_char(dc->st.st_mode, 1));
 	if (dc->sympath && OPTEXISTS(optsb, A_LOPT))
 		ft_lsprint(" -> %s", dc->sympath);
 	ft_putchar('\n');
@@ -105,7 +107,7 @@ static void		print_elems(t_queue *queue, int optsb, t_list **reclst)
 	while (dc)
 	{
 		print_elem_props(dc, queue, optsb);
-		if (OPTEXISTS(optsb, A_RROPT) && get_ifmt_char(dc->fmode, 0) == 'd'
+		if (OPTEXISTS(optsb, A_RROPT) && S_ISDIR(dc->st.st_mode)
 			&& ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, ".."))
 			ft_lstpushback(reclst, dc->fpath, ft_strlen(dc->fpath) + 1);
 		dc = dc->next;

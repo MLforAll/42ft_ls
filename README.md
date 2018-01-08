@@ -17,6 +17,6 @@ Currently Implemented:
 
 TODO:
 
+- Proper size for blockdev and chardev
 - Norming / Optimization
 - Color
-- Proper size for blockdev and chardev

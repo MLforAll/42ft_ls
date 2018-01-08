@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/06 21:29:46 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/08 00:46:12 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ quad_t			get_file_content(t_queue *alst, t_fstats ***dc, char *d_name)
 	if (!fill_fstats(d_name, **dc, alst))
 		return (-1);
 	(**dc)->next = NULL;
-	ret = (**dc)->nbblk;
+	ret = (**dc)->st.st_blocks;
 	*dc = &(**dc)->next;
 	return (ret);
 }

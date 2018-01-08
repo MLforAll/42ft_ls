@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:23:13 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/05 20:47:44 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/07 23:20:50 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int		sort_alpha(t_fstats *a, t_fstats *b, int rev)
 
 int		sort_mtime(t_fstats *a, t_fstats *b, int rev)
 {
-	if (a->mtime == b->mtime)
+	if (a->st.st_mtime == b->st.st_mtime)
 		return (sort_alpha(a, b, rev));
-	return ((a->mtime < b->mtime) == !rev);
+	return ((a->st.st_mtime < b->st.st_mtime) == !rev);
 }
 
 void	sort_ls(t_fstats **lst, int (*f)(t_fstats*, t_fstats*, int), int rev)

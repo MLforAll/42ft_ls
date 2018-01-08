@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/06 21:12:28 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/08 00:55:07 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int			get_dcs(t_queue **dcs, t_list *paths, int optsb)
 			if ((files->total = get_file_content(files, &ptr, (char*)paths->content)) == -1)
 			{
 				ft_queue_free(&files);
-				ft_lsprint("%s: %s: %s\n", PRGM_NAME, paths->content, \
+				ft_lsprint_fd(2, "%s: %s: %s\n", PRGM_NAME, paths->content, \
 				strerror(errno));
 				err += (err == 0);
 			}

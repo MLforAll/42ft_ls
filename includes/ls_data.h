@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/06 21:29:50 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/08 00:51:37 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LS_DATA_H
 
 # include <sys/types.h>
+# include <sys/stat.h>
 
 /*
 ** SYS TYPEDEFS
@@ -33,13 +34,9 @@ typedef struct				s_fstats
 	char				*fname;
 	char				*fpath;
 	char				*sympath;
-	mode_t				fmode;
-	time_t				mtime;
-	off_t				size;
-	nlink_t				nblink;
-	quad_t				nbblk;
-	char				*grname;
 	char				*usrname;
+	char				*grname;
+	t_stat				st;
 	struct s_fstats		*next;
 }							t_fstats;
 
