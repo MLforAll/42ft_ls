@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 01:44:07 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/09 17:19:23 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/09 21:24:08 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,23 @@
 static void	print_arg(int fd, char **fmt, va_list vlst)
 {
 	size_t		width;
+	size_t		max;
+	size_t		*ptr;
 	int			justf;
 
 	width = 0;
+	max = 0;
+	ptr = &width;
 	justf = 0;
 	while (*fmt && !ft_isalpha(**fmt))
 	{
-		*fmt += 1;
+		(*fmt)++;
 		if (**fmt == '$')
-			width = va_arg(vlst, size_t);
+			*ptr = va_arg(vlst, size_t);
+		else if (**fmt == '.')
+			ptr = &max;
 		else if (ft_isdigit(**fmt))
-			width = width * 10 + **fmt - '0';
+			*ptr = *ptr * 10 + **fmt - '0';
 		else if (**fmt == '-')
 			justf = 1;
 		else if (**fmt == 'c')
