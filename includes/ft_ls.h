@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/08 00:50:32 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/09 17:05:04 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,27 +18,32 @@
 # include "libft.h"
 
 # define PRGM_NAME	"ft_ls"
-# define OPTEXISTS(b, opt)	(b & opt) != 0
+
+/*
+** GLOBAL: COLORS
+*/
+
+int		g_clrs[12];
+
+/*
+** FUNCTIONS: COLORS
+*/
+
+void	detect_colors(char *entry);
+int		print_clr(mode_t mode);
 
 /*
 ** QUEUING
 */
 
-int		list_dirs(t_list *paths, int optsb, int add_nl);
-
-/*
-** ARGUMENTS
-*/
-
-int		option_valid(char c);
-int		detect_options(int ac, char **av, int *idx);
+int		list_dirs(t_list *paths, int add_nl);
 
 /*
 ** DB MGMT
 */
 
 quad_t	get_file_content(t_queue *alst, t_fstats ***dc, char *d_name);
-quad_t	get_dir_content(t_queue *alst, int show_all);
+quad_t	get_dir_content(t_queue *alst);
 void	free_dir_content(t_fstats **alst);
 
 /*
@@ -59,7 +64,7 @@ void	sort_ls(t_fstats **lst, int (*f)(t_fstats*, t_fstats*, int), int rev);
 ** ACTUAL PRINTING STUFF
 */
 
-void	print_dcs(t_queue *dcs, int optsb, int add_nl);
+void	print_elems(t_queue *queue, t_list **reclst);
 
 /*
 ** PRINTING UTILITIES

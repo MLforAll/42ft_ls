@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/08 00:46:12 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/09 14:29:26 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ quad_t			get_file_content(t_queue *alst, t_fstats ***dc, char *d_name)
 	return (ret);
 }
 
-quad_t			get_dir_content(t_queue *alst, int optsb)
+quad_t			get_dir_content(t_queue *alst)
 {
 	DIR			*dirp;
 	t_dirent	*dird;
@@ -46,7 +46,7 @@ quad_t			get_dir_content(t_queue *alst, int optsb)
 	quad_t		ret;
 	quad_t		gfc_ret;
 
-	if ((OPTEXISTS(optsb, A_LOPT) || OPTEXISTS(optsb, A_FFOPT))
+	if ((OPTEXISTS(A_LOPT) || OPTEXISTS(A_FFOPT))
 		&& readlink(alst->dname, NULL, 0) == 0
 		&& (alst->dname)[ft_strlen(alst->dname) - 1] != '/')
 		return (-1);
@@ -56,7 +56,7 @@ quad_t			get_dir_content(t_queue *alst, int optsb)
 	tmp = NULL;
 	while ((dird = readdir(dirp)))
 	{
-		if (*dird->d_name != '.' || OPTEXISTS(optsb, A_AOPT))
+		if (*dird->d_name != '.' || OPTEXISTS(A_AOPT))
 		{
 			if ((gfc_ret = get_file_content(alst, &tmp, dird->d_name)) == -1)
 				return (-1);
@@ -73,14 +73,16 @@ void			free_dir_content(t_fstats **alst)
 {
 	t_fstats	*curr;
 	t_fstats	*tmp;
+	int			path_nomalloc;
 
 	curr = *alst;
 	while (curr)
 	{
 		tmp = curr->next;
+		path_nomalloc = (curr->fname == curr->fpath);
 		if (curr->fname)
 			ft_strdel(&curr->fname);
-		if (curr->fpath)
+		if (path_nomalloc && curr->fpath)
 			ft_strdel(&curr->fpath);
 		if (curr->sympath)
 			ft_strdel(&curr->sympath);

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/07 23:16:17 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/09 18:57:30 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,36 +60,50 @@ static char		get_perm_char(mode_t fmode, mode_t mask)
 	return (pchr == 's' || pchr == 't' ? ft_toupper(pchr) : '-');
 }
 
-static void		print_elem_props(t_fstats *dc, t_queue *queue, int optsb)
+static void		print_element_name(char *name, mode_t mode)
+{
+	int		pclr_ret;
+
+	pclr_ret = print_clr(mode);
+	ft_putstr(name);
+	if (pclr_ret)
+		ft_putstr("\033[0;39m");
+}
+
+static void		print_elem_props(t_fstats *dc, t_queue *queue)
 {
 	char		*mtime_str;
 	mode_t		getp;
 
 	mtime_str = ft_strsub(ctime(&dc->st.st_mtime), 4, 12);
-	if (OPTEXISTS(optsb, A_SOPT))
+	if (OPTEXISTS(A_SOPT))
 		ft_lsprint("%$i ", queue->maxlens[0], dc->st.st_nlink);
-	if (OPTEXISTS(optsb, A_LOPT))
+	if (OPTEXISTS(A_LOPT))
 	{
 		ft_putchar(get_ifmt_char(dc->st.st_mode, 0));
 		getp = S_IRUSR * 2;
 		while (getp /= 2)
 			ft_putchar(get_perm_char(dc->st.st_mode, getp));
-		ft_lsprint("  %$i %$-s  %$-s  %$l %s ", \
+		ft_lsprint("  %$i %$-s  %$-s  ", \
 			queue->maxlens[1], dc->st.st_nlink, \
 			queue->maxlens[2], dc->usrname, \
-			queue->maxlens[3], dc->grname, \
-			queue->maxlens[4], dc->st.st_size, mtime_str);
+			queue->maxlens[3], dc->grname);
+		if (S_ISCHR(dc->st.st_mode) || S_ISBLK(dc->st.st_mode))
+			ft_lsprint("%3i, %3i", major(dc->st.st_rdev), minor(dc->st.st_rdev));
+		else
+			ft_lsprint("%$l", queue->maxlens[4], dc->st.st_size);
+		ft_lsprint(" %s ", mtime_str);
 	}
-	ft_putstr(dc->fname);
-	if (OPTEXISTS(optsb, A_FFOPT))
+	print_element_name(dc->fname, dc->st.st_mode);
+	if (OPTEXISTS(A_FFOPT))
 		ft_putchar(get_ifmt_char(dc->st.st_mode, 1));
-	if (dc->sympath && OPTEXISTS(optsb, A_LOPT))
+	if (dc->sympath && OPTEXISTS(A_LOPT))
 		ft_lsprint(" -> %s", dc->sympath);
 	ft_putchar('\n');
 	ft_strdel(&mtime_str);
 }
 
-static void		print_elems(t_queue *queue, int optsb, t_list **reclst)
+void			print_elems(t_queue *queue, t_list **reclst)
 {
 	t_fstats	*tmp;
 	int			rev;
@@ -98,42 +112,19 @@ static void		print_elems(t_queue *queue, int optsb, t_list **reclst)
 	dc = queue->dc;
 	if (queue->total == -1 || !dc)
 		return ;
-	rev = OPTEXISTS(optsb, A_ROPT);
-	sort_ls(&dc, OPTEXISTS(optsb, A_TOPT) ? &sort_mtime : &sort_alpha, rev);
-	if ((OPTEXISTS(optsb, A_LOPT) || OPTEXISTS(optsb, A_SOPT)) && queue->dname)
+	rev = OPTEXISTS(A_ROPT);
+	sort_ls(&dc, OPTEXISTS(A_TOPT) ? &sort_mtime : &sort_alpha, rev);
+	if ((OPTEXISTS(A_LOPT) || OPTEXISTS(A_SOPT)) && queue->dname)
 		ft_lsprint("total %l\n", queue->total);
 	*reclst = NULL;
 	tmp = dc;
 	while (dc)
 	{
-		print_elem_props(dc, queue, optsb);
-		if (OPTEXISTS(optsb, A_RROPT) && S_ISDIR(dc->st.st_mode)
+		print_elem_props(dc, queue);
+		if (OPTEXISTS(A_RROPT) && S_ISDIR(dc->st.st_mode)
 			&& ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, ".."))
 			ft_lstpushback(reclst, dc->fpath, ft_strlen(dc->fpath) + 1);
 		dc = dc->next;
 	}
 	free_dir_content(&tmp);
-}
-
-void			print_dcs(t_queue *dcs, int optsb, int add_nl)
-{
-	t_queue		*tmp;
-	t_list		*reclst;
-
-	reclst = NULL;
-	tmp = dcs;
-	while (tmp)
-	{
-		if (tmp != dcs || add_nl)
-			ft_putchar('\n');
-		if (((dcs->next) || add_nl) && tmp->dname)
-			ft_lsprint("%s:\n", tmp->dname);
-		print_elems(tmp, optsb, &reclst);
-		if (reclst)
-		{
-			list_dirs(reclst, optsb, 1);
-			ft_lstdel(&reclst, &ft_lstdelf);
-		}
-		tmp = tmp->next;
-	}
 }

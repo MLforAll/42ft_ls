@@ -6,6 +6,7 @@
 Currently Implemented:
 
 - Option parsing (i.e: -laR || -l -a -R)
+- Color Parsing with env var
 - Permissions
 - User/Group
 - Date
@@ -17,6 +18,5 @@ Currently Implemented:
 
 TODO:
 
-- Proper size for blockdev and chardev
+- Date when past 6 months
 - Norming / Optimization
-- Color

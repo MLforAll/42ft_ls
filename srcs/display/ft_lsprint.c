@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 01:44:07 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/08 00:58:47 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/09 17:19:23 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ static void	print_arg(int fd, char **fmt, va_list vlst)
 		*fmt += 1;
 		if (**fmt == '$')
 			width = va_arg(vlst, size_t);
+		else if (ft_isdigit(**fmt))
+			width = width * 10 + **fmt - '0';
 		else if (**fmt == '-')
 			justf = 1;
 		else if (**fmt == 'c')
