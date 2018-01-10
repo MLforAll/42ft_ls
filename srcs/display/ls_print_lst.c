@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/10 19:14:14 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/10 21:25:28 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void		print_elem_date(t_stat *st)
 	ft_putchar(' ');
 	if (time(NULL) - time_n >= HALFYRSEC)
 		ft_lsprint("%.6s  %.4s", time_str + 4, time_str + 20);
-	else	
+	else
 		ft_lsprint("%.12s", time_str + 4);
 	ft_putchar(' ');
 }
@@ -34,7 +34,8 @@ static void		print_elem_name(t_fstats *dc)
 	int		pclr_ret;
 
 	pclr_ret = print_clr(dc->st.st_mode);
-	ft_putstr(dc->fname);
+	if (dc->fname)
+		ft_putstr(dc->fname);
 	if (pclr_ret)
 		ft_putstr("\033[0;39m");
 	if (OPTEXISTS(A_FFOPT))
@@ -60,7 +61,8 @@ static void		print_elem_props(t_fstats *dc, t_queue *queue)
 			queue->maxlens[2], dc->usrname, \
 			queue->maxlens[3], dc->grname);
 		if (S_ISCHR(dc->st.st_mode) || S_ISBLK(dc->st.st_mode))
-			ft_lsprint("%3i, %3i", major(dc->st.st_rdev), minor(dc->st.st_rdev));
+			ft_lsprint("%3i, %3i", major(dc->st.st_rdev), \
+									minor(dc->st.st_rdev));
 		else
 			ft_lsprint("%$l", queue->maxlens[4], dc->st.st_size);
 		print_elem_date(&dc->st);

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/10 19:18:05 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/10 20:15:02 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int		print_clr(mode_t mode);
 ** QUEUING
 */
 
-int		list_dirs(t_list *paths, int add_nl);
+int		list_dirs(t_list **paths, int add_nl);
 
 /*
 ** DB MGMT

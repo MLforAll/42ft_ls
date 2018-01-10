@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/09 19:39:48 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/10 21:26:03 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@
 #include <pwd.h>
 #include "ft_ls.h"
 
-static char		*get_elem_path(char *path, char *d_name)
+static char		*get_elem_path(char *path, char *d_name, char *fname)
 {
 	int			is_root;
 	size_t		pathlen;
 	char		*ret;
 
 	if (!path)
-		return (d_name);
+		return (fname);
 	is_root = (path && ft_strcmp(path, "/") == 0);
 	pathlen = (path) ? ft_strlen(path) : 0;
 	if (!(ret = ft_strnew(pathlen + ft_strlen(d_name) + is_root + 1)))
@@ -98,7 +98,7 @@ int				fill_fstats(char *d_name, t_fstats *dc, t_queue *queue)
 {
 	if (!(dc->fname = ft_strdup(d_name)))
 		return (0);
-	if (!(dc->fpath = get_elem_path(queue->dname, d_name)))
+	if (!(dc->fpath = get_elem_path(queue->dname, d_name, dc->fname)))
 		ft_strdel(&dc->fname);
 	if (!dc->fpath || lstat(dc->fpath, &dc->st) == -1)
 		return (0);

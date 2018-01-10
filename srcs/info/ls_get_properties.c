@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/10 19:17:14 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/10 21:26:02 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,30 +43,28 @@ t_blkc			get_dir_content(t_queue *alst)
 	DIR			*dirp;
 	t_dirent	*dird;
 	t_fstats	**tmp;
-	t_blkc		ret;
-	t_blkc		gfc_ret;
+	t_blkc		rets[2];
 
-	if ((OPTEXISTS(A_LOPT) || OPTEXISTS(A_FFOPT))
+	if (((OPTEXISTS(A_LOPT) || OPTEXISTS(A_FFOPT))
 		&& readlink(alst->dname, NULL, 0) == 0
 		&& (alst->dname)[ft_strlen(alst->dname) - 1] != '/')
+		|| !(dirp = opendir(alst->dname)))
 		return (-1);
-	if (!(dirp = opendir(alst->dname)))
-		return (-1);
-	ret = 0;
+	rets[0] = 0;
 	tmp = NULL;
 	while ((dird = readdir(dirp)))
 	{
 		if (*dird->d_name != '.' || OPTEXISTS(A_AOPT))
 		{
-			if ((gfc_ret = get_file_content(alst, &tmp, dird->d_name)) == -1)
+			if ((rets[1] = get_file_content(alst, &tmp, dird->d_name)) == -1)
 				return (-1);
 			else
-				ret += gfc_ret;
+				rets[0] += rets[1];
 		}
 	}
 	free(dird);
 	closedir(dirp);
-	return (ret);
+	return (rets[0]);
 }
 
 void			free_dir_content(t_fstats **alst)
