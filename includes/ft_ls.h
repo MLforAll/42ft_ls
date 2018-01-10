@@ -6,16 +6,17 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/09 17:05:04 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/10 19:18:05 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
 
+# include "libft.h"
 # include "ls_data.h"
 # include "ls_args.h"
-# include "libft.h"
+# include "ft_lsprint.h"
 
 # define PRGM_NAME	"ft_ls"
 
@@ -42,8 +43,8 @@ int		list_dirs(t_list *paths, int add_nl);
 ** DB MGMT
 */
 
-quad_t	get_file_content(t_queue *alst, t_fstats ***dc, char *d_name);
-quad_t	get_dir_content(t_queue *alst);
+t_blkc	get_file_content(t_queue *alst, t_fstats ***dc, char *d_name);
+t_blkc	get_dir_content(t_queue *alst);
 void	free_dir_content(t_fstats **alst);
 
 /*
@@ -51,6 +52,8 @@ void	free_dir_content(t_fstats **alst);
 */
 
 int		fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue);
+char	get_ifmt_char(mode_t st_mode, int bigf);
+char	get_perm_char(mode_t fmode, mode_t mask);
 
 /*
 ** DB SORTING
@@ -65,17 +68,6 @@ void	sort_ls(t_fstats **lst, int (*f)(t_fstats*, t_fstats*, int), int rev);
 */
 
 void	print_elems(t_queue *queue, t_list **reclst);
-
-/*
-** PRINTING UTILITIES
-*/
-
-void	ft_lsprint(char *format, ...);
-void	ft_lsprint_fd(int fd, char *format, ...);
-void	print_int_width_fd(int fd, int n, size_t width, int justify);
-void	print_ll_width_fd(int fd, long long size, size_t width, int justify);
-void	print_str_width_fd(int fd, char *s, size_t width, int justify);
-void	print_char_width_fd(int fd, char c, size_t width, int justify);
 
 /*
 ** t_list UTILITIES

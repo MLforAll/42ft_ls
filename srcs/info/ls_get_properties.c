@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/09 14:29:26 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/10 19:17:14 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 ** before leaving...
 */
 
-quad_t			get_file_content(t_queue *alst, t_fstats ***dc, char *d_name)
+t_blkc			get_file_content(t_queue *alst, t_fstats ***dc, char *d_name)
 {
-	quad_t		ret;
+	t_blkc		ret;
 
 	if (!dc)
 		return (-1);
@@ -38,13 +38,13 @@ quad_t			get_file_content(t_queue *alst, t_fstats ***dc, char *d_name)
 	return (ret);
 }
 
-quad_t			get_dir_content(t_queue *alst)
+t_blkc			get_dir_content(t_queue *alst)
 {
 	DIR			*dirp;
 	t_dirent	*dird;
 	t_fstats	**tmp;
-	quad_t		ret;
-	quad_t		gfc_ret;
+	t_blkc		ret;
+	t_blkc		gfc_ret;
 
 	if ((OPTEXISTS(A_LOPT) || OPTEXISTS(A_FFOPT))
 		&& readlink(alst->dname, NULL, 0) == 0
@@ -82,7 +82,7 @@ void			free_dir_content(t_fstats **alst)
 		path_nomalloc = (curr->fname == curr->fpath);
 		if (curr->fname)
 			ft_strdel(&curr->fname);
-		if (path_nomalloc && curr->fpath)
+		if (!path_nomalloc && curr->fpath)
 			ft_strdel(&curr->fpath);
 		if (curr->sympath)
 			ft_strdel(&curr->sympath);

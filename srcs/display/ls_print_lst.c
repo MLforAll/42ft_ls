@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/09 18:57:30 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/10 19:14:14 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,68 +14,39 @@
 #include <time.h>
 #include "ft_ls.h"
 
-static char		get_ifmt_char(mode_t st_mode, int bigf)
+static void		print_elem_date(t_stat *st)
 {
-	if ((st_mode & S_IFMT) == S_IFDIR)
-		return (bigf ? '/' : 'd');
-	if ((st_mode & S_IFMT) == S_IFLNK)
-		return (bigf ? '@' : 'l');
-	if ((st_mode & S_IFMT) == S_IFBLK)
-		return ('b');
-	if ((st_mode & S_IFMT) == S_IFCHR)
-		return ('c');
-	if ((st_mode & S_IFMT) == S_IFIFO)
-		return (bigf ? '|' : 'p');
-	if ((st_mode & S_IFMT) == S_IFSOCK)
-		return (bigf ? '=' : 's');
-	if ((st_mode & S_IFMT) == S_IFWHT)
-		return (bigf ? '%' : 'w');
-	if (bigf && ((st_mode & 64) || (st_mode & 8) || (st_mode & 1)))
-		return ('*');
-	return (!bigf ? '-' : '\0');
+	time_t	time_n;
+	char	*time_str;
+
+	time_n = st->st_mtime;
+	time_str = ctime(&time_n);
+	ft_putchar(' ');
+	if (time(NULL) - time_n >= HALFYRSEC)
+		ft_lsprint("%.6s  %.4s", time_str + 4, time_str + 20);
+	else	
+		ft_lsprint("%.12s", time_str + 4);
+	ft_putchar(' ');
 }
 
-static char		get_perm_char(mode_t fmode, mode_t mask)
-{
-	char		pchr;
-
-	if (mask == 256 || mask == 32 || mask == 4)
-		pchr = 'r';
-	else if (mask == 128 || mask == 16 || mask == 2)
-		pchr = 'w';
-	else if (mask == 64 || mask == 8 || mask == 1)
-	{
-		if ((mask == 64 && (fmode & S_ISUID) != 0)
-			|| (mask == 8 && (fmode & S_ISGID) != 0))
-			pchr = 's';
-		else if (mask == 1 && (fmode & S_ISVTX) != 0)
-			pchr = 't';
-		else
-			pchr = 'x';
-	}
-	else
-		return ('-');
-	if ((fmode & mask) != 0)
-		return (pchr);
-	return (pchr == 's' || pchr == 't' ? ft_toupper(pchr) : '-');
-}
-
-static void		print_element_name(char *name, mode_t mode)
+static void		print_elem_name(t_fstats *dc)
 {
 	int		pclr_ret;
 
-	pclr_ret = print_clr(mode);
-	ft_putstr(name);
+	pclr_ret = print_clr(dc->st.st_mode);
+	ft_putstr(dc->fname);
 	if (pclr_ret)
 		ft_putstr("\033[0;39m");
+	if (OPTEXISTS(A_FFOPT))
+		ft_putchar(get_ifmt_char(dc->st.st_mode, 1));
+	if (dc->sympath && OPTEXISTS(A_LOPT))
+		ft_lsprint(" -> %s", dc->sympath);
 }
 
 static void		print_elem_props(t_fstats *dc, t_queue *queue)
 {
-	char		*mtime_str;
 	mode_t		getp;
 
-	mtime_str = ft_strsub(ctime(&dc->st.st_mtime), 4, 12);
 	if (OPTEXISTS(A_SOPT))
 		ft_lsprint("%$i ", queue->maxlens[0], dc->st.st_nlink);
 	if (OPTEXISTS(A_LOPT))
@@ -92,15 +63,10 @@ static void		print_elem_props(t_fstats *dc, t_queue *queue)
 			ft_lsprint("%3i, %3i", major(dc->st.st_rdev), minor(dc->st.st_rdev));
 		else
 			ft_lsprint("%$l", queue->maxlens[4], dc->st.st_size);
-		ft_lsprint(" %s ", mtime_str);
+		print_elem_date(&dc->st);
 	}
-	print_element_name(dc->fname, dc->st.st_mode);
-	if (OPTEXISTS(A_FFOPT))
-		ft_putchar(get_ifmt_char(dc->st.st_mode, 1));
-	if (dc->sympath && OPTEXISTS(A_LOPT))
-		ft_lsprint(" -> %s", dc->sympath);
+	print_elem_name(dc);
 	ft_putchar('\n');
-	ft_strdel(&mtime_str);
 }
 
 void			print_elems(t_queue *queue, t_list **reclst)

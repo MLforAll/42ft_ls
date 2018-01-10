@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/09 11:31:04 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/10 18:55:03 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,12 @@
 # include <sys/stat.h>
 
 /*
+** DEFINES
+*/
+
+# define HALFYRSEC			15552000
+
+/*
 ** SYS TYPEDEFS
 */
 
@@ -24,6 +30,12 @@ typedef struct dirent		t_dirent;
 typedef struct stat			t_stat;
 typedef struct passwd		t_pw;
 typedef struct group		t_group;
+
+#ifdef _DARWIN_FEATURE_64_BIT_INODE
+typedef blkcnt_t			t_blkc;
+#else
+typedef quad_t				t_blkc;
+#endif
 
 /*
 ** DATA STRUCT

@@ -6,45 +6,44 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 01:44:07 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/09 21:24:08 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/10 17:57:10 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdarg.h>
-#include "ft_ls.h"
+#include "libft.h"
+#include "ft_lsprint.h"
+
+/*
+** FT_LSPRINT PARSER
+*/
 
 static void	print_arg(int fd, char **fmt, va_list vlst)
 {
-	size_t		width;
-	size_t		max;
+	t_opts		opts;
 	size_t		*ptr;
-	int			justf;
 
-	width = 0;
-	max = 0;
-	ptr = &width;
-	justf = 0;
-	while (*fmt && !ft_isalpha(**fmt))
+	ft_bzero(&opts, sizeof(t_opts));
+	ptr = &opts.width;
+	while (**fmt && !ft_isalpha(**fmt))
 	{
 		(*fmt)++;
 		if (**fmt == '$')
 			*ptr = va_arg(vlst, size_t);
 		else if (**fmt == '.')
-			ptr = &max;
+			ptr = &opts.max;
 		else if (ft_isdigit(**fmt))
 			*ptr = *ptr * 10 + **fmt - '0';
 		else if (**fmt == '-')
-			justf = 1;
+			opts.justf = 1;
 		else if (**fmt == 'c')
-			print_char_width_fd(fd, va_arg(vlst, int), width, justf);
+			print_char_width_fd(fd, va_arg(vlst, int), opts);
 		else if (**fmt == 'd' || **fmt == 'i')
-			print_int_width_fd(fd, va_arg(vlst, int), width, justf);
+			print_int_width_fd(fd, va_arg(vlst, int), opts);
 		else if (**fmt == 'l')
-			print_ll_width_fd(fd, va_arg(vlst, long long), width, justf);
+			print_ll_width_fd(fd, va_arg(vlst, long long), opts);
 		else if (**fmt == 's')
-			print_str_width_fd(fd, va_arg(vlst, char*), width, justf);
-		else
-			ft_putstr_fd(*fmt, fd);
+			print_str_width_fd(fd, va_arg(vlst, char*), opts);
 	}
 }
 

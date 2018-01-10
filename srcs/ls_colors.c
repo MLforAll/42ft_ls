@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/09 11:15:35 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/09 19:10:24 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/10 17:14:59 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,12 @@ void		detect_colors(char *entry)
 	idxs[0] = 0;
 	idxs[1] = 22;
 	shift = 0;
+	if (!entry)
+		return ;
 	while (*entry && *entry != '=')
 		entry++;
 	g_clrs[11] = 1;
-	while (*(entry++) && idxs[1]--)
+	while (*(++entry) && idxs[1]--)
 	{
 		if ((*entry < 'A' || (*entry > 'H' && *entry < 'a') || *entry > 'h')
 			&& *entry != 'x' && *entry != 'X')
