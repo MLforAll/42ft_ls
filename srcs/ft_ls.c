@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 02:04:52 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/10 20:54:52 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/12 17:29:02 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ static void		ls_usage(char illopt)
 
 static char		*get_env_ptr(char **env, char *start)
 {
+	char	*ret;
+
 	while (*env)
 	{
-		if (ft_strstart(*env, start))
-			return (*env);
+		if ((ret = ft_strstart(*env, start)))
+			return (ret);
 		env++;
 	}
 	return (NULL);
@@ -63,11 +65,9 @@ int				main(int ac, char **av, char **env)
 	if (g_optsb < 0)
 		ls_usage(-g_optsb);
 	ft_bzero(g_clrs, 11);
-	if (OPTEXISTS(A_GGOPT) || get_env_ptr(env, "CLICOLOR="))
-	{
-		if ((lscolors_entry = get_env_ptr(env, "LSCOLORS=")))
-			detect_colors(lscolors_entry);
-	}
+	if (ft_isatty(1) && (OPTEXISTS(A_GGOPT) || get_env_ptr(env, "CLICOLOR="))
+		&& (lscolors_entry = get_env_ptr(env, "LSCOLORS=")))
+		detect_colors(lscolors_entry);
 	paths = get_paths(idx, ac, av);
 	return (list_dirs(&paths, 0));
 }

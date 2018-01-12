@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/10 21:26:03 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/12 18:14:18 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,6 @@ int				fill_fstats(char *d_name, t_fstats *dc, t_queue *queue)
 		fillinf(&queue->maxlens[4], 8);
 	else
 		fillinf(&queue->maxlens[4], ft_nbrlen(dc->st.st_size));
+	fillinf(&queue->maxlens[5], ft_strlen(dc->fname));
 	return (1);
 }

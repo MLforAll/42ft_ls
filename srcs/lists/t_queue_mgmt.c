@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 20:45:45 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/09 11:20:43 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/12 18:21:18 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@ t_queue		*ft_queue_new(char *dname)
 	if (!(new = (t_queue*)malloc(sizeof(t_queue))))
 		return (NULL);
 	new->dname = (dname) ? ft_strdup(dname) : NULL;
-	ft_bzero((void*)new->maxlens, sizeof(size_t) * 5);
-	new->total = 0;
 	new->dc = NULL;
+	new->total = 0;
+	new->nbfiles = 0;
+	ft_bzero((void*)new->maxlens, sizeof(new->maxlens));
 	new->next = NULL;
 	return (new);
 }

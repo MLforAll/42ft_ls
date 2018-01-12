@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/10 21:26:02 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/12 20:36:34 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 t_blkc			get_file_content(t_queue *alst, t_fstats ***dc, char *d_name)
 {
-	t_blkc		ret;
+	t_blkc			ret;
 
 	if (!dc)
 		return (-1);
@@ -35,15 +35,16 @@ t_blkc			get_file_content(t_queue *alst, t_fstats ***dc, char *d_name)
 	(**dc)->next = NULL;
 	ret = (**dc)->st.st_blocks;
 	*dc = &(**dc)->next;
+	alst->nbfiles++;
 	return (ret);
 }
 
 t_blkc			get_dir_content(t_queue *alst)
 {
-	DIR			*dirp;
-	t_dirent	*dird;
-	t_fstats	**tmp;
-	t_blkc		rets[2];
+	DIR				*dirp;
+	t_dirent		*dird;
+	t_fstats		**tmp;
+	t_blkc			rets[2];
 
 	if (((OPTEXISTS(A_LOPT) || OPTEXISTS(A_FFOPT))
 		&& readlink(alst->dname, NULL, 0) == 0
@@ -69,9 +70,9 @@ t_blkc			get_dir_content(t_queue *alst)
 
 void			free_dir_content(t_fstats **alst)
 {
-	t_fstats	*curr;
-	t_fstats	*tmp;
-	int			path_nomalloc;
+	t_fstats		*curr;
+	t_fstats		*tmp;
+	int				path_nomalloc;
 
 	curr = *alst;
 	while (curr)
@@ -92,4 +93,16 @@ void			free_dir_content(t_fstats **alst)
 		curr = tmp;
 	}
 	*alst = NULL;
+}
+
+t_fstats	*get_nnext_elem(t_fstats *alst, size_t len)
+{
+	unsigned int	cnt;
+
+	if (!alst)
+		return (NULL);
+	cnt = 0;
+	while (alst && cnt++ < len)
+		alst = alst->next;
+	return (alst);
 }

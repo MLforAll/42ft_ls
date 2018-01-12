@@ -6,18 +6,20 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/10 21:25:28 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/12 23:46:03 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/stat.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 #include <time.h>
 #include "ft_ls.h"
 
 static void		print_elem_date(t_stat *st)
 {
-	time_t	time_n;
-	char	*time_str;
+	time_t		time_n;
+	char		*time_str;
 
 	time_n = st->st_mtime;
 	time_str = ctime(&time_n);
@@ -29,24 +31,34 @@ static void		print_elem_date(t_stat *st)
 	ft_putchar(' ');
 }
 
-static void		print_elem_name(t_fstats *dc)
+static size_t	print_elem_name(t_fstats *dc)
 {
-	int		pclr_ret;
+	int			pclr_ret;
+	size_t		ret;
+	char		getc_ret;
 
 	pclr_ret = print_clr(dc->st.st_mode);
+	ret = 0;
 	if (dc->fname)
-		ft_putstr(dc->fname);
+		ret = ft_strlen(dc->fname);
+	if (ret != 0)
+		write(1, dc->fname, ret);
 	if (pclr_ret)
 		ft_putstr("\033[0;39m");
 	if (OPTEXISTS(A_FFOPT))
-		ft_putchar(get_ifmt_char(dc->st.st_mode, 1));
+	{
+		getc_ret = get_ifmt_char(dc->st.st_mode, 1);
+		ft_putchar(getc_ret);
+		ret += (getc_ret != 0);
+	}
 	if (dc->sympath && OPTEXISTS(A_LOPT))
 		ft_lsprint(" -> %s", dc->sympath);
+	return (ret);
 }
 
 static void		print_elem_props(t_fstats *dc, t_queue *queue)
 {
-	mode_t		getp;
+	mode_t			getp;
 
 	if (OPTEXISTS(A_SOPT))
 		ft_lsprint("%$i ", queue->maxlens[0], dc->st.st_nlink);
@@ -71,21 +83,47 @@ static void		print_elem_props(t_fstats *dc, t_queue *queue)
 	ft_putchar('\n');
 }
 
+static void		print_elem_columns(t_fstats *dc, t_queue *queue)
+{
+	t_winsize		ws;
+	size_t			nb_cr[2];
+	unsigned int	cnts[2];
+	size_t			spacesn[0];
+	t_fstats		*tmp;
+
+	ioctl(1, TIOCGWINSZ, &ws);
+	nb_cr[0] = ws.ws_col / (queue->maxlens[5] + 2);
+	nb_cr[1] = queue->nbfiles / nb_cr[0] + (queue->nbfiles % nb_cr[0] != 0);
+	cnts[0] = 0;
+	while (dc && cnts[0]++ < nb_cr[1])
+	{
+		cnts[1] = 0;
+		tmp = dc;
+		while (tmp && cnts[1]++ < nb_cr[0])
+		{
+			if (tmp != dc)
+				while (spacesn[1]-- + ((spacesn[0] > queue->maxlens[5]) ? 1 : 2))
+					ft_putchar(' ');
+			spacesn[0] = print_elem_name(tmp);
+			spacesn[1] = (queue->maxlens[5] > spacesn[0]) ? queue->maxlens[5] - spacesn[0] : 0;
+			tmp = get_nnext_elem(tmp, nb_cr[1]);
+		}
+		dc = dc->next;
+		ft_putchar('\n');
+	}
+}
+
 void			print_elems(t_queue *queue, t_list **reclst)
 {
-	t_fstats	*tmp;
-	int			rev;
-	t_fstats	*dc;
+	t_fstats		*dc;
 
 	dc = queue->dc;
-	if (queue->total == -1 || !dc)
+	if (!(OPTEXISTS(A_LOPT)) && ft_isatty(1))
+	{
+		print_elem_columns(dc, queue);
 		return ;
-	rev = OPTEXISTS(A_ROPT);
-	sort_ls(&dc, OPTEXISTS(A_TOPT) ? &sort_mtime : &sort_alpha, rev);
-	if ((OPTEXISTS(A_LOPT) || OPTEXISTS(A_SOPT)) && queue->dname)
-		ft_lsprint("total %l\n", queue->total);
+	}
 	*reclst = NULL;
-	tmp = dc;
 	while (dc)
 	{
 		print_elem_props(dc, queue);
@@ -94,5 +132,4 @@ void			print_elems(t_queue *queue, t_list **reclst)
 			ft_lstpushback(reclst, dc->fpath, ft_strlen(dc->fpath) + 1);
 		dc = dc->next;
 	}
-	free_dir_content(&tmp);
 }

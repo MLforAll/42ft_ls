@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/10 21:26:04 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/12 23:40:27 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,20 @@ static int			get_dcs(t_queue **dcs, t_list *paths)
 	return (err);
 }
 
+static void			print_queue_props(t_queue *queue, t_list **reclst)
+{
+	int			rev;
+
+	if (!queue || queue->total == -1)
+		return ;
+	rev = OPTEXISTS(A_ROPT);
+	sort_ls(&queue->dc, OPTEXISTS(A_TOPT) ? &sort_mtime : &sort_alpha, rev);
+	if ((OPTEXISTS(A_LOPT) || OPTEXISTS(A_SOPT)) && queue->dname)
+		ft_lsprint("total %l\n", queue->total);
+	print_elems(queue, reclst);
+	free_dir_content(&queue->dc);
+}
+
 static void			print_dcs(t_queue *dcs, int add_nl)
 {
 	t_queue		*tmp;
@@ -74,7 +88,7 @@ static void			print_dcs(t_queue *dcs, int add_nl)
 			ft_putchar('\n');
 		if (((dcs->next) || add_nl) && tmp->dname)
 			ft_lsprint("%s:\n", tmp->dname);
-		print_elems(tmp, &reclst);
+		print_queue_props(tmp, &reclst);
 		if (reclst)
 			list_dirs(&reclst, 1);
 		tmp = tmp->next;

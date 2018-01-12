@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/10 18:55:03 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/12 18:21:20 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <sys/stat.h>
 
 /*
-** DEFINES
+** MACROS
 */
 
 # define HALFYRSEC			15552000
@@ -26,16 +26,17 @@
 ** SYS TYPEDEFS
 */
 
+# ifdef _DARWIN_FEATURE_64_BIT_INODE
+typedef blkcnt_t			t_blkc;
+# else
+typedef quad_t				t_blkc;
+# endif
+
 typedef struct dirent		t_dirent;
 typedef struct stat			t_stat;
 typedef struct passwd		t_pw;
 typedef struct group		t_group;
-
-#ifdef _DARWIN_FEATURE_64_BIT_INODE
-typedef blkcnt_t			t_blkc;
-#else
-typedef quad_t				t_blkc;
-#endif
+typedef struct winsize		t_winsize;
 
 /*
 ** DATA STRUCT
@@ -53,15 +54,16 @@ typedef struct				s_fstats
 }							t_fstats;
 
 /*
-** QUEUE (ERR MGMT)
+** GROUP (a.k.a FOLDER)
 */
 
 typedef struct				s_queue
 {
 	char				*dname;
 	t_fstats			*dc;
-	quad_t				total;
-	size_t				maxlens[5];
+	t_blkc				total;
+	size_t				nbfiles;
+	size_t				maxlens[6];
 	struct s_queue		*next;
 }							t_queue;
 

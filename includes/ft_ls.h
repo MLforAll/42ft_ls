@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/10 20:15:02 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/12 20:02:28 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int		list_dirs(t_list **paths, int add_nl);
 t_blkc	get_file_content(t_queue *alst, t_fstats ***dc, char *d_name);
 t_blkc	get_dir_content(t_queue *alst);
 void	free_dir_content(t_fstats **alst);
+t_fstats	*get_nnext_elem(t_fstats *alst, size_t len);
 
 /*
 ** DB Filling/Freeing
