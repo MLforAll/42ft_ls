@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/12 18:14:18 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/13 19:25:31 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char		*get_sym_path(t_fstats *dc)
 	ret = NULL;
 	size = dc->st.st_size;
 	rl_ret = 0;
-	while (rl_ret == size)
+	while (rl_ret == size || !ret)
 	{
 		size = (size == 0) ? 20 : size;
 		if (ret)

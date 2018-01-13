@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/12 23:40:27 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/13 18:57:33 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,23 @@
 
 static int			try_file(t_queue **files, char *path)
 {
-	t_fstats	**ptr;
+	int			errno_bak;
+	int			err_gfc;
 
-	ptr = NULL;
+	errno_bak = errno;
 	if (!files)
 		return (0);
 	if (!*files)
 		*files = ft_queue_new(NULL);
-	if (((*files)->total = get_file_content(*files, &ptr, (char*)path)) == -1)
+	if ((err_gfc = get_file_content(*files, path)) == -1)
 	{
-		ft_queue_free(files);
-		ft_lsprint_fd(2, "%s: %s: %s\n", PRGM_NAME, path, strerror(errno));
+		ft_lsprint_fd(2, "%s: %s: %s\n", PRGM_NAME, path, strerror(errno_bak));
+		free_done(&(*files)->dc);
+		if (!(*files)->dc)
+			ft_queue_free(files);
 		return (0);
 	}
+	(*files)->total += err_gfc;
 	return (1);
 }
 
@@ -61,18 +65,20 @@ static int			get_dcs(t_queue **dcs, t_list *paths)
 	return (err);
 }
 
-static void			print_queue_props(t_queue *queue, t_list **reclst)
+static t_list		*print_queue_props(t_queue *queue)
 {
 	int			rev;
+	t_list		*ret;
 
-	if (!queue || queue->total == -1)
-		return ;
+	if (!queue || !queue->dc || queue->total == -1)
+		return (NULL);
 	rev = OPTEXISTS(A_ROPT);
 	sort_ls(&queue->dc, OPTEXISTS(A_TOPT) ? &sort_mtime : &sort_alpha, rev);
 	if ((OPTEXISTS(A_LOPT) || OPTEXISTS(A_SOPT)) && queue->dname)
 		ft_lsprint("total %l\n", queue->total);
-	print_elems(queue, reclst);
+	ret = print_elems(queue);
 	free_dir_content(&queue->dc);
+	return (ret);
 }
 
 static void			print_dcs(t_queue *dcs, int add_nl)
@@ -80,7 +86,6 @@ static void			print_dcs(t_queue *dcs, int add_nl)
 	t_queue		*tmp;
 	t_list		*reclst;
 
-	reclst = NULL;
 	tmp = dcs;
 	while (tmp)
 	{
@@ -88,7 +93,7 @@ static void			print_dcs(t_queue *dcs, int add_nl)
 			ft_putchar('\n');
 		if (((dcs->next) || add_nl) && tmp->dname)
 			ft_lsprint("%s:\n", tmp->dname);
-		print_queue_props(tmp, &reclst);
+		reclst = print_queue_props(tmp);
 		if (reclst)
 			list_dirs(&reclst, 1);
 		tmp = tmp->next;

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/12 20:36:34 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/13 18:47:07 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,20 @@
 ** before leaving...
 */
 
-t_blkc			get_file_content(t_queue *alst, t_fstats ***dc, char *d_name)
+t_blkc			get_file_content(t_queue *alst, char *d_name)
 {
 	t_blkc			ret;
+	t_fstats		*new;
 
-	if (!dc)
+	if (!(new = ft_dcnew()))
 		return (-1);
-	if (!*dc)
-		*dc = &alst->dc;
-	if (!(**dc = (t_fstats*)malloc(sizeof(t_fstats))))
+	ft_bzero(new, sizeof(t_fstats));
+	ft_dcadd(&alst->dc, new);
+	if (!fill_fstats(d_name, new, alst))
 		return (-1);
-	if (!fill_fstats(d_name, **dc, alst))
+	if (!alst->dname && S_ISDIR(new->st.st_mode))
 		return (-1);
-	(**dc)->next = NULL;
-	ret = (**dc)->st.st_blocks;
-	*dc = &(**dc)->next;
+	ret = new->st.st_blocks;
 	alst->nbfiles++;
 	return (ret);
 }
@@ -43,7 +42,6 @@ t_blkc			get_dir_content(t_queue *alst)
 {
 	DIR				*dirp;
 	t_dirent		*dird;
-	t_fstats		**tmp;
 	t_blkc			rets[2];
 
 	if (((OPTEXISTS(A_LOPT) || OPTEXISTS(A_FFOPT))
@@ -52,12 +50,11 @@ t_blkc			get_dir_content(t_queue *alst)
 		|| !(dirp = opendir(alst->dname)))
 		return (-1);
 	rets[0] = 0;
-	tmp = NULL;
 	while ((dird = readdir(dirp)))
 	{
 		if (*dird->d_name != '.' || OPTEXISTS(A_AOPT))
 		{
-			if ((rets[1] = get_file_content(alst, &tmp, dird->d_name)) == -1)
+			if ((rets[1] = get_file_content(alst, dird->d_name)) == -1)
 				return (-1);
 			else
 				rets[0] += rets[1];
@@ -68,41 +65,30 @@ t_blkc			get_dir_content(t_queue *alst)
 	return (rets[0]);
 }
 
-void			free_dir_content(t_fstats **alst)
+void			free_done(t_fstats **alst)
 {
-	t_fstats		*curr;
-	t_fstats		*tmp;
-	int				path_nomalloc;
+	t_fstats	*tmp;
+	int			path_nomalloc;
 
-	curr = *alst;
-	while (curr)
-	{
-		tmp = curr->next;
-		path_nomalloc = (curr->fname == curr->fpath);
-		if (curr->fname)
-			ft_strdel(&curr->fname);
-		if (!path_nomalloc && curr->fpath)
-			ft_strdel(&curr->fpath);
-		if (curr->sympath)
-			ft_strdel(&curr->sympath);
-		if (curr->usrname)
-			ft_strdel(&curr->usrname);
-		if (curr->grname)
-			ft_strdel(&curr->grname);
-		free(curr);
-		curr = tmp;
-	}
-	*alst = NULL;
+	tmp = (*alst)->next;
+	path_nomalloc = ((*alst)->fname == (*alst)->fpath);
+	if ((*alst)->fname)
+		ft_strdel(&(*alst)->fname);
+	if (!path_nomalloc && (*alst)->fpath)
+		ft_strdel(&(*alst)->fpath);
+	if ((*alst)->sympath)
+		ft_strdel(&(*alst)->sympath);
+	if ((*alst)->usrname)
+		ft_strdel(&(*alst)->usrname);
+	if ((*alst)->grname)
+		ft_strdel(&(*alst)->grname);
+	free(*alst);
+	*alst = tmp;
 }
 
-t_fstats	*get_nnext_elem(t_fstats *alst, size_t len)
+void			free_dir_content(t_fstats **alst)
 {
-	unsigned int	cnt;
-
-	if (!alst)
-		return (NULL);
-	cnt = 0;
-	while (alst && cnt++ < len)
-		alst = alst->next;
-	return (alst);
+	while (*alst)
+		free_done(alst);
+	*alst = NULL;
 }

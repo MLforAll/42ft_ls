@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:43:21 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/10 21:07:49 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/13 19:16:24 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ static int	is_option_valid(char c)
 		return (A_FFOPT);
 	if (c == 'G')
 		return (A_GGOPT);
+	if (c == '1')
+		return (A_1OPT);
 	return (0);
 }
 

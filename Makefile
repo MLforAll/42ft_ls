@@ -6,7 +6,7 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2018/01/10 18:27:47 by kdumarai         ###   ########.fr        #
+#    Updated: 2018/01/13 17:33:24 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ SRCS = $(SRCDIR)/ft_ls.c \
 	$(SRCDIR)/ft_lsprint/ft_lsprint.c \
 	$(SRCDIR)/ft_lsprint/ft_lsprint_utils.c \
 	$(SRCDIR)/lists/t_list_mgmt.c \
-	$(SRCDIR)/lists/t_queue_mgmt.c
+	$(SRCDIR)/lists/t_queue_mgmt.c \
+	$(SRCDIR)/lists/t_dc_mgmt.c
 
 OBJDIR = objs
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)

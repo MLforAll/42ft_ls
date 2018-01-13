@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/12 18:21:20 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/13 19:13:51 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <sys/types.h>
 # include <sys/stat.h>
+# include <string.h>
 
 /*
 ** MACROS
@@ -66,5 +67,23 @@ typedef struct				s_queue
 	size_t				maxlens[6];
 	struct s_queue		*next;
 }							t_queue;
+
+/*
+** t_fstats UTILITIES
+*/
+
+void						ft_dcadd(t_fstats **alst, t_fstats *new);
+t_fstats					*ft_dcnew(void);
+t_fstats					*ft_dcnnext_elem(t_fstats *alst, size_t len);
+
+/*
+** t_queue UTILITIES
+*/
+
+t_queue	*ft_queue_new(char *dname);
+void	ft_queue_pb(t_queue **aq, t_queue *new);
+void	ft_queue_pf(t_queue **aq, t_queue *new);
+void	ft_queue_free(t_queue **aq);
+void	ft_queue_del(t_queue **aqueue);
 
 #endif

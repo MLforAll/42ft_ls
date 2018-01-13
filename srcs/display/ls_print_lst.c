@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/12 23:46:03 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/13 19:24:16 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static void		print_elem_props(t_fstats *dc, t_queue *queue)
 	ft_putchar('\n');
 }
 
-static void		print_elem_columns(t_fstats *dc, t_queue *queue)
+static void		print_elems_columns(t_fstats *dc, t_queue *queue)
 {
 	t_winsize		ws;
 	size_t			nb_cr[2];
@@ -102,34 +102,39 @@ static void		print_elem_columns(t_fstats *dc, t_queue *queue)
 		while (tmp && cnts[1]++ < nb_cr[0])
 		{
 			if (tmp != dc)
-				while (spacesn[1]-- + ((spacesn[0] > queue->maxlens[5]) ? 1 : 2))
-					ft_putchar(' ');
+				print_nspaces_fd(1, 0, spacesn[1]);
 			spacesn[0] = print_elem_name(tmp);
 			spacesn[1] = (queue->maxlens[5] > spacesn[0]) ? queue->maxlens[5] - spacesn[0] : 0;
-			tmp = get_nnext_elem(tmp, nb_cr[1]);
+			spacesn[1] += (spacesn[0] > queue->maxlens[5] || !(OPTEXISTS(A_FFOPT))) ? 1 : 2;
+			tmp = ft_dcnnext_elem(tmp, nb_cr[1]);
 		}
 		dc = dc->next;
 		ft_putchar('\n');
 	}
 }
 
-void			print_elems(t_queue *queue, t_list **reclst)
+t_list			*print_elems(t_queue *queue)
 {
 	t_fstats		*dc;
+	t_list			*ret;
+	int				show_elems;
 
+	ret = NULL;
 	dc = queue->dc;
-	if (!(OPTEXISTS(A_LOPT)) && ft_isatty(1))
+	show_elems = 1;
+	if (!(OPTEXISTS(A_LOPT)) && !(OPTEXISTS(A_1OPT)) && ft_isatty(1))
 	{
-		print_elem_columns(dc, queue);
-		return ;
+		show_elems = 0;
+		print_elems_columns(dc, queue);
 	}
-	*reclst = NULL;
 	while (dc)
 	{
-		print_elem_props(dc, queue);
+		if (show_elems)
+			print_elem_props(dc, queue);
 		if (OPTEXISTS(A_RROPT) && S_ISDIR(dc->st.st_mode)
 			&& ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, ".."))
-			ft_lstpushback(reclst, dc->fpath, ft_strlen(dc->fpath) + 1);
+			ft_lstpushback(&ret, dc->fpath, ft_strlen(dc->fpath) + 1);
 		dc = dc->next;
 	}
+	return (ret);
 }

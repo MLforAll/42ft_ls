@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/12 20:02:28 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/13 19:14:16 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ int		list_dirs(t_list **paths, int add_nl);
 ** DB MGMT
 */
 
-t_blkc	get_file_content(t_queue *alst, t_fstats ***dc, char *d_name);
+t_blkc	get_file_content(t_queue *alst, char *d_name);
 t_blkc	get_dir_content(t_queue *alst);
+void	free_done(t_fstats **alst);
 void	free_dir_content(t_fstats **alst);
-t_fstats	*get_nnext_elem(t_fstats *alst, size_t len);
 
 /*
 ** DB Filling/Freeing
@@ -68,7 +68,7 @@ void	sort_ls(t_fstats **lst, int (*f)(t_fstats*, t_fstats*, int), int rev);
 ** ACTUAL PRINTING STUFF
 */
 
-void	print_elems(t_queue *queue, t_list **reclst);
+t_list	*print_elems(t_queue *queue);
 
 /*
 ** t_list UTILITIES
@@ -78,15 +78,5 @@ void	ft_lstdelf(void *data, size_t data_size);
 int		ft_lst_sortalpha(t_list *a, t_list *b);
 void	ft_lstpushback(t_list **alst, void *data, size_t data_content);
 t_list	*ft_lstpushback_edit(t_list **alst, t_list *new);
-
-/*
-** t_queue UTILITIES
-*/
-
-t_queue	*ft_queue_new(char *dname);
-void	ft_queue_pb(t_queue **aq, t_queue *new);
-void	ft_queue_pf(t_queue **aq, t_queue *new);
-void	ft_queue_free(t_queue **aq);
-void	ft_queue_del(t_queue **aqueue);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/10 16:44:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/10 17:57:12 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/13 19:13:16 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void			ft_lsprint_fd(int fd, char *format, ...);
 ** Kind of private (or u have to setup the t_ops struct bf calling them)
 */
 
+void			print_nspaces_fd(int fd, size_t len, size_t width);
 void			print_int_width_fd(int fd, int n, t_opts opts);
 void			print_ll_width_fd(int fd, long long n, t_opts opts);
 void			print_str_width_fd(int fd, char *s, t_opts opts);
