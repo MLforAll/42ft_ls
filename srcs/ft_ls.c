@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 02:04:52 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/13 19:14:30 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/15 18:12:53 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 static void		ls_usage(char illopt)
 {
 	ft_lsprint("%s: illegal option -- %c\n", PRGM_NAME, illopt);
-	ft_lsprint("usage: %s [-FGRalrst] [file ...]\n", PRGM_NAME);
+	ft_lsprint("usage: %s [%s] [file ...]\n", PRGM_NAME, ARGS_ERR_LST);
 	exit(1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/13 19:13:51 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/15 18:09:47 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,16 @@ typedef struct stat			t_stat;
 typedef struct passwd		t_pw;
 typedef struct group		t_group;
 typedef struct winsize		t_winsize;
+
+/*
+** SIZE STRUCT (W/H -- COLS/ROWS)
+*/
+
+typedef struct			s_size
+{
+	size_t		width;
+	size_t		height;
+}						t_size;
 
 /*
 ** DATA STRUCT
@@ -80,10 +90,10 @@ t_fstats					*ft_dcnnext_elem(t_fstats *alst, size_t len);
 ** t_queue UTILITIES
 */
 
-t_queue	*ft_queue_new(char *dname);
-void	ft_queue_pb(t_queue **aq, t_queue *new);
-void	ft_queue_pf(t_queue **aq, t_queue *new);
-void	ft_queue_free(t_queue **aq);
-void	ft_queue_del(t_queue **aqueue);
+t_queue						*ft_queue_new(char *dname);
+void						ft_queue_pb(t_queue **aq, t_queue *new);
+void						ft_queue_pf(t_queue **aq, t_queue *new);
+void						ft_queue_free(t_queue **aq);
+void						ft_queue_del(t_queue **aqueue);
 
 #endif

@@ -6,16 +6,21 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 17:22:31 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/13 17:54:28 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/15 18:18:33 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ls_data.h"
 #include <stdlib.h>
+#include "libft.h"
+#include "ls_data.h"
 
 t_fstats	*ft_dcnew(void)
 {
-	return ((t_fstats*)malloc(sizeof(t_fstats)));
+	t_fstats	*ret;
+
+	ret = (t_fstats*)malloc(sizeof(t_fstats));
+	ft_bzero(ret, sizeof(t_fstats));
+	return (ret);
 }
 
 void		ft_dcadd(t_fstats **alst, t_fstats *new)
@@ -33,12 +38,9 @@ void		ft_dcadd(t_fstats **alst, t_fstats *new)
 
 t_fstats	*ft_dcnnext_elem(t_fstats *alst, size_t len)
 {
-	unsigned int	cnt;
-
 	if (!alst)
 		return (NULL);
-	cnt = 0;
-	while (alst && cnt++ < len)
+	while (alst && len--)
 		alst = alst->next;
 	return (alst);
 }

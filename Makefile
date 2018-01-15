@@ -6,7 +6,7 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2018/01/13 17:33:24 by kdumarai         ###   ########.fr        #
+#    Updated: 2018/01/15 17:20:39 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRCS = $(SRCDIR)/ft_ls.c \
 	$(SRCDIR)/info/ls_lst_sort.c \
 	$(SRCDIR)/info/ls_queuing.c \
 	$(SRCDIR)/display/ls_print_lst.c \
+	$(SRCDIR)/display/ls_columns.c \
 	$(SRCDIR)/ft_lsprint/ft_lsprint.c \
 	$(SRCDIR)/ft_lsprint/ft_lsprint_utils.c \
 	$(SRCDIR)/lists/t_list_mgmt.c \

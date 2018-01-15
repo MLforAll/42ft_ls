@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/13 19:14:16 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/15 17:53:52 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	detect_colors(char *entry);
 int		print_clr(mode_t mode);
 
 /*
-** QUEUING
+** ENTRY POINT
 */
 
 int		list_dirs(t_list **paths, int add_nl);
@@ -49,7 +49,7 @@ void	free_done(t_fstats **alst);
 void	free_dir_content(t_fstats **alst);
 
 /*
-** DB Filling/Freeing
+** DB Filling
 */
 
 int		fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue);
@@ -68,6 +68,8 @@ void	sort_ls(t_fstats **lst, int (*f)(t_fstats*, t_fstats*, int), int rev);
 ** ACTUAL PRINTING STUFF
 */
 
+int		get_ls_columns_rows(t_size *ref, t_queue *grp);
+size_t	get_spaces_to_add(size_t pre, t_queue *grp);
 t_list	*print_elems(t_queue *queue);
 
 /*

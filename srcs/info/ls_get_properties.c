@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/13 18:47:07 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/15 18:15:30 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ t_blkc			get_file_content(t_queue *alst, char *d_name)
 
 	if (!(new = ft_dcnew()))
 		return (-1);
-	ft_bzero(new, sizeof(t_fstats));
 	ft_dcadd(&alst->dc, new);
 	if (!fill_fstats(d_name, new, alst))
 		return (-1);
