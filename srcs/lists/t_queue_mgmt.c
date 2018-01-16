@@ -6,13 +6,12 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 20:45:45 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 14:45:01 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 20:30:44 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "libft.h"
-#include "ls_data.h"
+#include "ft_ls.h"
 
 t_queue		*ft_queue_new(char *dname)
 {
@@ -63,6 +62,8 @@ void		ft_queue_free(t_queue **aq)
 {
 	if ((*aq)->dname)
 		ft_strdel(&(*aq)->dname);
+	if ((*aq)->dc)
+		free_dir_content(&(*aq)->dc);
 	free(*aq);
 	*aq = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 17:01:46 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 20:37:34 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,15 @@ t_blkc			get_file_content(t_queue *alst, char *d_name)
 	return (ret);
 }
 
+static int		is_link(char *path)
+{
+	char	buff[1];
+
+	if (path[ft_strlen(path) - 1] == '/')
+		return (0);
+	return ((readlink(path, buff, 0) == 0));
+}
+
 t_blkc			get_dir_content(t_queue *alst)
 {
 	DIR				*dirp;
@@ -44,9 +53,7 @@ t_blkc			get_dir_content(t_queue *alst)
 	t_blkc			rets[2];
 
 	if (((OPTEXISTS(A_LOPT) || OPTEXISTS(A_FFOPT))
-		&& readlink(alst->dname, NULL, 0) == 0
-		&& (alst->dname)[ft_strlen(alst->dname) - 1] != '/')
-		|| !(dirp = opendir(alst->dname)))
+		&& is_link(alst->dname)) || !(dirp = opendir(alst->dname)))
 		return (-1);
 	rets[0] = 0;
 	while ((dird = readdir(dirp)))

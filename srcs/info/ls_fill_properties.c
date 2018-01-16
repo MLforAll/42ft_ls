@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/13 19:25:31 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 20:30:03 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ static int		fill_usr_grp(t_fstats *dc)
 	grp = getgrgid(dc->st.st_gid);
 	pw = getpwuid(dc->st.st_uid);
 	if (!grp)
-		dc->grname = ft_itoa(dc->st.st_gid);
+		dc->grname = ft_lltoa(dc->st.st_gid);
 	else
 		dc->grname = ft_strdup(grp->gr_name);
 	if (!pw)
-		dc->usrname = ft_itoa(dc->st.st_uid);
+		dc->usrname = ft_lltoa(dc->st.st_uid);
 	else
 		dc->usrname = ft_strdup(pw->pw_name);
 	return ((dc->grname != NULL && dc->usrname != NULL));
@@ -98,8 +98,7 @@ int				fill_fstats(char *d_name, t_fstats *dc, t_queue *queue)
 {
 	if (!(dc->fname = ft_strdup(d_name)))
 		return (0);
-	if (!(dc->fpath = get_elem_path(queue->dname, d_name, dc->fname)))
-		ft_strdel(&dc->fname);
+	dc->fpath = get_elem_path(queue->dname, d_name, dc->fname);
 	if (!dc->fpath || lstat(dc->fpath, &dc->st) == -1)
 		return (0);
 	dc->sympath = get_sym_path(dc);

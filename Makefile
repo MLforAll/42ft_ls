@@ -6,7 +6,7 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2018/01/16 13:44:20 by kdumarai         ###   ########.fr        #
+#    Updated: 2018/01/16 20:16:19 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,22 +43,27 @@ OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 all: lib $(NAME)
 
 lib:
-	make -C $(dir $(LIBFT))
+	@make -C $(dir $(LIBFT))
 
 $(NAME): $(OBJS)
-	gcc -o $(NAME) $(LIB) $(OBJS)
+	@printf "\r\033[KCompiling\nLinking\n"
+	@gcc -o $(NAME) $(LIB) $(OBJS)
+	@printf "\033[1;32mProgram built at $(NAME)\033[0;39m\n"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@if [ ! -z $@ ]; then mkdir -p $(dir $@); fi
-	gcc $(CFLAGS) -c $< $(INCLUDES) -o $@
+	@printf "\033[KCompiling \033[1;33m$<\033[0;39m\r"
+	@gcc $(CFLAGS) -c $< $(INCLUDES) -o $@
 
 clean:
-	make clean -C $(dir $(LIBFT))
-	rm -rf $(OBJDIR)
+	@make clean -C $(dir $(LIBFT))
+	@rm -rf $(OBJDIR)
+	@printf "Removed ft_ls's objects\n"
 
 fclean: clean
-	make fclean -C $(dir $(LIBFT))
-	rm -f $(NAME)
+	@make fclean -C $(dir $(LIBFT))
+	@rm -f $(NAME)
+	@printf "Removed $(NAME)\n"
 
 re: fclean all
 

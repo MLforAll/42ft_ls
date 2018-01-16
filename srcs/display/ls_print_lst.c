@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 15:08:40 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 20:20:59 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,32 +107,3 @@ void		print_elems(t_queue *queue)
 		ft_putchar('\n');
 	}
 }
-
-/*t_list			*print_elems(t_queue *queue)
-{
-	t_fstats		*dc;
-	t_list			*ret;
-	int				show_elems;
-
-	dc = queue->dc;
-	show_elems = 1;
-	if (!(OPTEXISTS(A_LOPT)) && !(OPTEXISTS(A_1OPT)) && ft_isatty(1))
-	{
-		show_elems = 0;
-		print_elems_columns(dc, queue);
-	}
-	ret = NULL;
-	while (dc)
-	{
-		if (show_elems)
-		{
-			print_elem_props(dc, queue);
-			ft_putchar('\n');
-		}
-		if (OPTEXISTS(A_RROPT) && S_ISDIR(dc->st.st_mode)
-			&& ft_strcmp(dc->fname, ".") && ft_strcmp(dc->fname, ".."))
-			ft_lstpushback(&ret, dc->fpath, ft_strlen(dc->fpath) + 1);
-		dc = dc->next;
-	}
-	return (ret);
-}*/

@@ -9,6 +9,7 @@ Currently Implemented:
 - Option parsing (i.e: -laR || -l -a -R)
 - Color Parsing with env var (LSCOLORS)
 - Long printing (-l) with proper columns alignment
+- Columns when -l is not spec
 - Recursiveness (-R)
 - Proper Makefile
 
@@ -17,5 +18,4 @@ TODO:
 - Norming
 - Opti: Freeing what's already malloced when unexpected fails of malloc
 - Opti: Names of structs and fcts
-- Opti: Sorting algorithm
 - Opti: setup get_dir_content and such fcts to be usable as-is in libft
