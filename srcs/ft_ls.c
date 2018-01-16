@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 02:04:52 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/15 18:12:53 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 15:30:07 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ int				main(int ac, char **av, char **env)
 	char		*lscolors_entry;
 
 	idx = 1;
-	g_optsb = (ac == 1) ? 0 : detect_options(ac, av, &idx);
-	if (g_optsb < 0)
-		ls_usage(-g_optsb);
+	g_opts = (ac == 1) ? 0 : detect_options(ac, av, &idx);
+	if (g_opts < 0)
+		ls_usage(-g_opts);
 	ft_bzero(g_clrs, 11);
 	if (ft_isatty(1) && (OPTEXISTS(A_GGOPT) || get_env_ptr(env, "CLICOLOR="))
 		&& (lscolors_entry = get_env_ptr(env, "LSCOLORS=")))

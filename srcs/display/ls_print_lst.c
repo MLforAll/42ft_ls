@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/15 18:24:08 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 15:08:40 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,15 @@ static size_t	print_elem_props(t_fstats *dc, t_queue *queue)
 	return (print_elem_name(dc));
 }
 
-static void		print_elems_columns(t_fstats *dc, t_queue *queue)
+void		print_elems(t_queue *queue)
 {
 	t_size			nb_cr;
 	size_t			spacesn;
 	unsigned int	cnts[2];
+	t_fstats		*dc;
 	t_fstats		*tmp;
 
+	dc = queue->dc;
 	get_ls_columns_rows(&nb_cr, queue);
 	cnts[0] = 0;
 	while (dc && cnts[0]++ < nb_cr.height)
@@ -106,7 +108,7 @@ static void		print_elems_columns(t_fstats *dc, t_queue *queue)
 	}
 }
 
-t_list			*print_elems(t_queue *queue)
+/*t_list			*print_elems(t_queue *queue)
 {
 	t_fstats		*dc;
 	t_list			*ret;
@@ -133,4 +135,4 @@ t_list			*print_elems(t_queue *queue)
 		dc = dc->next;
 	}
 	return (ret);
-}
+}*/

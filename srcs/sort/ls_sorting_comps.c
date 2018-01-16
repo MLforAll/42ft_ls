@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ls_lst_sort.c                                      :+:      :+:    :+:   */
+/*   ls_sorting_comps.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:23:13 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/15 18:25:57 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 14:07:22 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 ** SORT FUNCTIONS RETURN:
 **	1 if swapping is needed
-**	0 otherwise
+**	0 if swapping is not needed
 */
 
 int		sort_alpha(t_fstats *a, t_fstats *b, int rev)
@@ -37,31 +37,33 @@ int		sort_mtime(t_fstats *a, t_fstats *b, int rev)
 	return ((a->st.st_mtime < b->st.st_mtime) == !rev);
 }
 
-void	sort_ls(t_fstats **lst, int (*f)(t_fstats*, t_fstats*, int), int rev)
-{
-	t_fstats	*curr;
-	t_fstats	*prev;
-	t_fstats	*tmp;
-
-	curr = *lst;
-	while (curr->next)
-	{
-		prev = (curr == *lst) ? NULL : prev;
-		if (f(curr, curr->next, rev))
-		{
-			if (prev)
-				prev->next = curr->next;
-			else
-				*lst = curr->next;
-			tmp = curr->next->next;
-			curr->next->next = curr;
-			curr->next = tmp;
-			curr = *lst;
-		}
-		else
-		{
-			prev = curr;
-			curr = curr->next;
-		}
-	}
-}
+/*
+** void	sort_ls(t_fstats **lst, int (*f)(t_fstats*, t_fstats*, int), int rev)
+** {
+**	t_fstats	*curr;
+**	t_fstats	*prev;
+**	t_fstats	*tmp;
+**
+**	curr = *lst;
+**	while (curr->next)
+**	{
+**		prev = (curr == *lst) ? NULL : prev;
+**		if (f(curr, curr->next, rev))
+**		{
+**			if (prev)
+**				prev->next = curr->next;
+**			else
+**				*lst = curr->next;
+**			tmp = curr->next->next;
+**			curr->next->next = curr;
+**			curr->next = tmp;
+**			curr = *lst;
+**		}
+**		else
+**		{
+**			prev = curr;
+**			curr = curr->next;
+**		}
+**	}
+** }
+*/

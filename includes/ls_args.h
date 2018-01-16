@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 19:55:06 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/15 18:11:50 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 14:51:13 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@
 ** GLOBAL: OPTIONS
 */
 
-int		g_optsb;
+int		g_opts;
 
-# define OPTEXISTS(opt)	(g_optsb & opt) != 0
+# define OPTEXISTS(opt)	(g_opts & opt) != 0
 
 /*
 ** ARGUMENTS

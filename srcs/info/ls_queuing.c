@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/13 18:57:33 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 17:01:45 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int			try_file(t_queue **files, char *path)
 	if ((err_gfc = get_file_content(*files, path)) == -1)
 	{
 		ft_lsprint_fd(2, "%s: %s: %s\n", PRGM_NAME, path, strerror(errno_bak));
-		free_done(&(*files)->dc);
+		free_dir_elem_content(&(*files)->dc);
 		if (!(*files)->dc)
 			ft_queue_free(files);
 		return (0);
@@ -68,6 +68,7 @@ static int			get_dcs(t_queue **dcs, t_list *paths)
 static t_list		*print_queue_props(t_queue *queue)
 {
 	int			rev;
+	t_fstats	*bw;
 	t_list		*ret;
 
 	if (!queue || !queue->dc || queue->total == -1)
@@ -76,7 +77,16 @@ static t_list		*print_queue_props(t_queue *queue)
 	sort_ls(&queue->dc, OPTEXISTS(A_TOPT) ? &sort_mtime : &sort_alpha, rev);
 	if ((OPTEXISTS(A_LOPT) || OPTEXISTS(A_SOPT)) && queue->dname)
 		ft_lsprint("total %l\n", queue->total);
-	ret = print_elems(queue);
+	print_elems(queue);
+	ret = NULL;
+	bw = queue->dc;
+	while (bw)
+	{
+		if (OPTEXISTS(A_RROPT) && S_ISDIR(bw->st.st_mode)
+			&& ft_strcmp(bw->fname, ".") && ft_strcmp(bw->fname, ".."))
+			ft_lstpushback(&ret, bw->fpath, ft_strlen(bw->fpath) + 1);
+		bw = bw->next;
+	}
 	free_dir_content(&queue->dc);
 	return (ret);
 }

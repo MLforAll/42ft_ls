@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/15 18:15:30 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 17:01:46 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_blkc			get_dir_content(t_queue *alst)
 	return (rets[0]);
 }
 
-void			free_done(t_fstats **alst)
+void			free_dir_elem_content(t_fstats **alst)
 {
 	t_fstats	*tmp;
 	int			path_nomalloc;
@@ -88,6 +88,6 @@ void			free_done(t_fstats **alst)
 void			free_dir_content(t_fstats **alst)
 {
 	while (*alst)
-		free_done(alst);
+		free_dir_elem_content(alst);
 	*alst = NULL;
 }

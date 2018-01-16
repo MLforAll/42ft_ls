@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/09 11:15:35 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/12 17:30:53 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 14:49:53 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,16 @@
 /*
 ** COLORS DATA
 **
-** array of 11 ints
-** Each int rep a 10-bit value as follows:
+** array of 12 ints
+** First 11 int rep a 10-bit value as follows:
+** Last int rep on/off switch
 **
 ** bxxxx bxxxx where:
 **		b is a 'bold' bit
 **		x is a 'value' bit
+**
+** The first 4 bits rep foreground
+** whereas the last 4 rep background
 */
 
 static int	get_clr_id(mode_t mode)

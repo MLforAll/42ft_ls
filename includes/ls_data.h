@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/15 18:09:47 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 15:29:03 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@
 */
 
 # ifdef _DARWIN_FEATURE_64_BIT_INODE
-typedef blkcnt_t			t_blkc;
+#  define BLKCTYPE			blkcnt_t
 # else
-typedef quad_t				t_blkc;
+#  define BLKCTYPE			quad_t
 # endif
+typedef BLKCTYPE			t_blkc;
 
 typedef struct dirent		t_dirent;
 typedef struct stat			t_stat;
@@ -43,11 +44,11 @@ typedef struct winsize		t_winsize;
 ** SIZE STRUCT (W/H -- COLS/ROWS)
 */
 
-typedef struct			s_size
+typedef struct				s_size
 {
-	size_t		width;
-	size_t		height;
-}						t_size;
+	size_t				width;
+	size_t				height;
+}							t_size;
 
 /*
 ** DATA STRUCT
@@ -77,23 +78,5 @@ typedef struct				s_queue
 	size_t				maxlens[6];
 	struct s_queue		*next;
 }							t_queue;
-
-/*
-** t_fstats UTILITIES
-*/
-
-void						ft_dcadd(t_fstats **alst, t_fstats *new);
-t_fstats					*ft_dcnew(void);
-t_fstats					*ft_dcnnext_elem(t_fstats *alst, size_t len);
-
-/*
-** t_queue UTILITIES
-*/
-
-t_queue						*ft_queue_new(char *dname);
-void						ft_queue_pb(t_queue **aq, t_queue *new);
-void						ft_queue_pf(t_queue **aq, t_queue *new);
-void						ft_queue_free(t_queue **aq);
-void						ft_queue_del(t_queue **aqueue);
 
 #endif

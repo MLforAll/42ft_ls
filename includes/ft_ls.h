@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/15 17:53:52 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 15:15:47 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "libft.h"
 # include "ls_data.h"
 # include "ls_args.h"
+# include "ls_lists.h"
 # include "ft_lsprint.h"
 
 # define PRGM_NAME	"ft_ls"
@@ -45,7 +46,7 @@ int		list_dirs(t_list **paths, int add_nl);
 
 t_blkc	get_file_content(t_queue *alst, char *d_name);
 t_blkc	get_dir_content(t_queue *alst);
-void	free_done(t_fstats **alst);
+void	free_dir_elem_content(t_fstats **alst);
 void	free_dir_content(t_fstats **alst);
 
 /*
@@ -68,17 +69,8 @@ void	sort_ls(t_fstats **lst, int (*f)(t_fstats*, t_fstats*, int), int rev);
 ** ACTUAL PRINTING STUFF
 */
 
-int		get_ls_columns_rows(t_size *ref, t_queue *grp);
+void	get_ls_columns_rows(t_size *ref, t_queue *grp);
 size_t	get_spaces_to_add(size_t pre, t_queue *grp);
-t_list	*print_elems(t_queue *queue);
-
-/*
-** t_list UTILITIES
-*/
-
-void	ft_lstdelf(void *data, size_t data_size);
-int		ft_lst_sortalpha(t_list *a, t_list *b);
-void	ft_lstpushback(t_list **alst, void *data, size_t data_content);
-t_list	*ft_lstpushback_edit(t_list **alst, t_list *new);
+void	print_elems(t_queue *queue);
 
 #endif
