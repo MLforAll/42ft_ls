@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/09 11:15:35 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 14:49:53 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/16 21:30:55 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,12 @@ int			print_clr(mode_t mode)
 	if ((g_clrs[idx] & 0xF) == 0)
 		color_codes[0] = 39;
 	else
-		color_codes[0] = 30 + (g_clrs[idx] & 0xF);
+		color_codes[0] = 29 + (g_clrs[idx] & 0xF);
 	if (((g_clrs[idx] >> 5) & 0xF) == 0)
 		color_codes[1] = 49;
 	else
-		color_codes[1] = ((g_clrs[idx] >> 5) & 0xF) + 40;
-	ft_lsprint("\033[%i;%i;%im", ((g_clrs[idx] & 0x10)) ? 1 : 0, \
+		color_codes[1] = 39 + ((g_clrs[idx] >> 5) & 0xF);
+	ft_lsprint("\033[%i;%i;%im", ((g_clrs[idx] & 0x10) != 0), \
 			color_codes[0], color_codes[1]);
 	return (1);
 }
@@ -94,8 +94,8 @@ void		detect_colors(char *entry)
 				*entry);
 		else if (*entry != 'x' && *entry != 'X')
 		{
-			value = ft_isupper((int)*entry) ? (((int)*entry - 65) | 0x10) \
-										: (int)*entry - 97;
+			value = ft_isupper((int)*entry) ? (((int)*entry - 64) | 0x10) \
+										: (int)*entry - 96;
 			g_clrs[idxs[0]] = g_clrs[idxs[0]] | (value << shift);
 		}
 		idxs[0] += (shift == 5);
