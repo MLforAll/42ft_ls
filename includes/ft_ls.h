@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 15:15:47 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 21:10:56 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,33 +44,34 @@ int		list_dirs(t_list **paths, int add_nl);
 ** DB MGMT
 */
 
-t_blkc	get_file_content(t_queue *alst, char *d_name);
-t_blkc	get_dir_content(t_queue *alst);
-void	free_dir_elem_content(t_fstats **alst);
-void	free_dir_content(t_fstats **alst);
+t_blkc	get_file_content(t_group *alst, char *d_name);
+t_blkc	get_dir_content(t_group *alst);
+void	free_dir_elem_content(t_elem **alst);
+void	free_dir_content(t_elem **alst);
 
 /*
 ** DB Filling
 */
 
-int		fill_fstats(char *d_name, t_fstats *fstats, t_queue *queue);
-char	get_ifmt_char(mode_t st_mode, int bigf);
-char	get_perm_char(mode_t fmode, mode_t mask);
+int		fill_elem(char *d_name, t_elem *elem, t_group *grp);
+char	get_ifmt_char(mode_t mode, int bigf);
+char	get_perm_char(mode_t mode, mode_t mask);
+char	get_acl_xattrs_char(t_elem *elem);
 
 /*
 ** DB SORTING
 */
 
-int		sort_alpha(t_fstats *a, t_fstats *b, int rev);
-int		sort_mtime(t_fstats *a, t_fstats *b, int rev);
-void	sort_ls(t_fstats **lst, int (*f)(t_fstats*, t_fstats*, int), int rev);
+int		sort_alpha(t_elem *a, t_elem *b, int rev);
+int		sort_mtime(t_elem *a, t_elem *b, int rev);
+void	sort_ls(t_elem **lst, int (*f)(t_elem*, t_elem*, int), int rev);
 
 /*
 ** ACTUAL PRINTING STUFF
 */
 
-void	get_ls_columns_rows(t_size *ref, t_queue *grp);
-size_t	get_spaces_to_add(size_t pre, t_queue *grp);
-void	print_elems(t_queue *queue);
+void	get_ls_columns_rows(t_size *ref, t_group *grp);
+size_t	get_spaces_to_add(size_t pre, t_group *grp);
+void	print_elems(t_group *grp);
 
 #endif

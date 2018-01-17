@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 16:56:56 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 17:01:48 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 18:19:24 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** This function retreive the properties required for columns display
 */
 
-void	get_ls_columns_rows(t_size *ref, t_queue *grp)
+void	get_ls_columns_rows(t_size *ref, t_group *grp)
 {
 	t_winsize		ws;
 	size_t			maxlen;
@@ -37,7 +37,7 @@ void	get_ls_columns_rows(t_size *ref, t_queue *grp)
 	ref->height = grp->nbfiles / ref->width + (grp->nbfiles % ref->width != 0);
 }
 
-size_t	get_spaces_to_add(size_t pre, t_queue *grp)
+size_t	get_spaces_to_add(size_t pre, t_group *grp)
 {
 	size_t	ret;
 

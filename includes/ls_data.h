@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 22:06:05 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 20:33:30 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,51 +32,44 @@
 # else
 #  define BLKCTYPE			quad_t
 # endif
+
 typedef BLKCTYPE			t_blkc;
 
 typedef struct dirent		t_dirent;
 typedef struct stat			t_stat;
 typedef struct passwd		t_pw;
-typedef struct group		t_group;
+typedef struct group		t_grp;
 typedef struct winsize		t_winsize;
-
-/*
-** SIZE STRUCT (W/H -- COLS/ROWS)
-*/
-
-typedef struct				s_size
-{
-	size_t				width;
-	size_t				height;
-}							t_size;
 
 /*
 ** DATA STRUCT
 */
 
-typedef struct				s_fstats
+typedef struct				s_elem
 {
 	char				*fname;
 	char				*fpath;
 	char				*sympath;
 	char				*usrname;
 	char				*grname;
+	char				*xattrs;
+	ssize_t				lxattr;
 	t_stat				st;
-	struct s_fstats		*next;
-}							t_fstats;
+	struct s_elem		*next;
+}							t_elem;
 
 /*
 ** GROUP (a.k.a FOLDER)
 */
 
-typedef struct				s_queue
+typedef struct				s_group
 {
-	char				*dname;
-	t_fstats			*dc;
+	char				*grp_name;
+	t_elem				*elems;
 	t_blkc				total;
 	size_t				nbfiles;
 	size_t				maxlens[6];
-	struct s_queue		*next;
-}							t_queue;
+	struct s_group		*next;
+}							t_group;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 19:08:53 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 15:29:07 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 18:17:42 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,22 @@
 # define LS_LISTS_H
 
 /*
-** t_queue UTILITIES
+** t_group UTILITIES
 */
 
-t_queue		*ft_queue_new(char *dname);
-void		ft_queue_pb(t_queue **aq, t_queue *new);
-void		ft_queue_pf(t_queue **aq, t_queue *new);
-void		ft_queue_free(t_queue **aq);
-void		ft_queue_del(t_queue **aqueue);
+t_group		*ft_group_new(char *grp_name);
+void		ft_group_push(t_group **agrp, t_group *new);
+void		ft_group_add(t_group **agrp, t_group *new);
+void		ft_group_del(t_group **agrp);
+void		ft_group_delall(t_group **agrp);
 
 /*
-** t_fstats UTILITIES
+** t_elem UTILITIES
 */
 
-t_fstats	*ft_dcnew(void);
-void		ft_dcadd(t_fstats **alst, t_fstats *new);
-t_fstats	*ft_dcnnext_elem(t_fstats *alst, size_t len);
+t_elem		*ft_elem_new(void);
+void		ft_elem_add(t_elem **alst, t_elem *new);
+t_elem		*ft_elem_nnext(t_elem *alst, size_t len);
 
 /*
 ** t_list UTILITIES

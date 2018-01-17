@@ -15,7 +15,6 @@ Currently Implemented:
 
 TODO:
 
-- Norming (pretty much ok by now)
+- Err mgmt when errno != 2
 - Opti: Freeing what's already malloced when unexpected fails of malloc (should be OK)
-- Opti: Names of structs and fcts
 - Opti: setup get_dir_content and such fcts to be usable as-is in libft

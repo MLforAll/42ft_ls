@@ -6,12 +6,12 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:43:21 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 14:50:53 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 19:15:13 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ls_args.h"
 #include "libft.h"
+#include "ls_args_equivalence.h"
 
 /*
 ** OPTIONS BINARY VALUES: SEE LS_ARGS.H
@@ -22,25 +22,25 @@
 
 static int	is_option_valid(char c)
 {
-	if (c == 'l')
-		return (A_LOPT);
-	if (c == 'a')
-		return (A_AOPT);
-	if (c == 'r')
-		return (A_ROPT);
-	if (c == 't')
-		return (A_TOPT);
-	if (c == 'R')
-		return (A_RROPT);
-	if (c == 's')
-		return (A_SOPT);
-	if (c == 'F')
-		return (A_FFOPT);
-	if (c == 'G')
-		return (A_GGOPT);
-	if (c == '1')
-		return (A_1OPT);
+	int		idx;
+
+	idx = 0;
+	while (g_lsargs_equi[idx].c && g_lsargs_equi[idx].bcode)
+	{
+		if (c == g_lsargs_equi[idx].c)
+			return (g_lsargs_equi[idx].bcode);
+		idx++;
+	}
 	return (0);
+}
+
+static int	change_override(int optsb, int last)
+{
+	if (last == A_LOPT && optsb & A_1OPT)
+		return (optsb ^ A_1OPT);
+	if (last == A_1OPT && optsb & A_LOPT)
+		return (optsb ^ A_LOPT);
+	return (optsb);
 }
 
 int			detect_options(int ac, char **av, int *idx)
@@ -65,7 +65,7 @@ int			detect_options(int ac, char **av, int *idx)
 		{
 			if (!(validret = is_option_valid(av[*idx][i])))
 				return (-av[*idx][i]);
-			retb |= validret;
+			retb = change_override(retb |= validret, validret);
 		}
 		*idx += 1;
 	}

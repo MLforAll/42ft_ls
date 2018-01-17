@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_queue_mgmt.c                                     :+:      :+:    :+:   */
+/*   t_group_mgmt.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 20:45:45 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 20:30:44 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 18:20:47 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "ft_ls.h"
 
-t_queue		*ft_queue_new(char *dname)
+t_group		*ft_group_new(char *grp_name)
 {
-	t_queue		*new;
+	t_group		*new;
 
-	if (!(new = (t_queue*)malloc(sizeof(t_queue))))
+	if (!(new = (t_group*)malloc(sizeof(t_group))))
 		return (NULL);
-	new->dname = (dname) ? ft_strdup(dname) : NULL;
-	new->dc = NULL;
+	new->grp_name = (grp_name) ? ft_strdup(grp_name) : NULL;
+	new->elems = NULL;
 	new->total = 0;
 	new->nbfiles = 0;
 	ft_bzero((void*)new->maxlens, sizeof(new->maxlens));
@@ -28,57 +28,57 @@ t_queue		*ft_queue_new(char *dname)
 	return (new);
 }
 
-void		ft_queue_pb(t_queue **aq, t_queue *new)
+void		ft_group_push(t_group **agrp, t_group *new)
 {
-	t_queue		*bw;
+	t_group		*bw;
 
-	if (!aq)
+	if (!agrp)
 		return ;
-	if (!*aq)
+	if (!*agrp)
 	{
-		*aq = new;
+		*agrp = new;
 		return ;
 	}
-	bw = *aq;
+	bw = *agrp;
 	while (bw->next)
 		bw = bw->next;
 	bw->next = new;
 }
 
-void		ft_queue_pf(t_queue **aq, t_queue *new)
+void		ft_group_add(t_group **agrp, t_group *new)
 {
-	if (!aq)
+	if (!agrp)
 		return ;
-	if (!*aq)
+	if (!*agrp)
 	{
-		*aq = new;
+		*agrp = new;
 		return ;
 	}
-	new->next = *aq;
-	*aq = new;
+	new->next = *agrp;
+	*agrp = new;
 }
 
-void		ft_queue_free(t_queue **aq)
+void		ft_group_del(t_group **agrp)
 {
-	if ((*aq)->dname)
-		ft_strdel(&(*aq)->dname);
-	if ((*aq)->dc)
-		free_dir_content(&(*aq)->dc);
-	free(*aq);
-	*aq = NULL;
+	if ((*agrp)->grp_name)
+		ft_strdel(&(*agrp)->grp_name);
+	if ((*agrp)->elems)
+		free_dir_content(&(*agrp)->elems);
+	free(*agrp);
+	*agrp = NULL;
 }
 
-void		ft_queue_del(t_queue **aq)
+void		ft_group_delall(t_group **agrp)
 {
-	t_queue		*tmp;
-	t_queue		*bak;
+	t_group		*tmp;
+	t_group		*bak;
 
-	tmp = *aq;
+	tmp = *agrp;
 	while (tmp)
 	{
 		bak = tmp->next;
 		if (tmp)
-			ft_queue_free(&tmp);
+			ft_group_del(&tmp);
 		tmp = bak;
 	}
 }

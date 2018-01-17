@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 19:55:06 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 14:51:13 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 20:33:23 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 ** 0000 0100 0000: -F (0x40)
 ** 0000 1000 0000: -G (0x80)
 ** 0001 0000 0000: -1 (0x100)
+** 0010 0000 0000: -@ (0x200)
 */
 
 # define A_LOPT			0x1
@@ -35,8 +36,9 @@
 # define A_FFOPT		0x40
 # define A_GGOPT		0x80
 # define A_1OPT			0x100
+# define A_ATOPT		0x200
 
-# define ARGS_ERR_LST	"-FGRalrst1"
+# define ARGS_ERR_LST	"-FGR@alrst1"
 
 /*
 ** GLOBAL: OPTIONS
@@ -47,7 +49,7 @@ int		g_opts;
 # define OPTEXISTS(opt)	(g_opts & opt) != 0
 
 /*
-** ARGUMENTS
+** ARGUMENTS FUNTION
 */
 
 int		detect_options(int ac, char **av, int *idx);

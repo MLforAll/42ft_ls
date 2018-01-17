@@ -6,16 +6,16 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 20:30:02 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 14:06:53 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 21:15:10 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static t_fstats	*get_middle(t_fstats *lst)
+static t_elem	*get_middle(t_elem *lst)
 {
-	t_fstats	*fast;
-	t_fstats	*ret;
+	t_elem		*fast;
+	t_elem		*ret;
 	int			i;
 
 	if (!lst)
@@ -33,9 +33,9 @@ static t_fstats	*get_middle(t_fstats *lst)
 	return (ret);
 }
 
-static void		split_lst(t_fstats *lst, t_fstats **side_a, t_fstats **side_b)
+static void		split_lst(t_elem *lst, t_elem **side_a, t_elem **side_b)
 {
-	t_fstats	*middle;
+	t_elem		*middle;
 
 	if (!lst || !lst->next)
 	{
@@ -49,10 +49,10 @@ static void		split_lst(t_fstats *lst, t_fstats **side_a, t_fstats **side_b)
 	middle->next = NULL;
 }
 
-static t_fstats	*merge_lists(t_fstats *a, t_fstats *b, \
-	int (*cmp)(t_fstats*, t_fstats*, int), int rev)
+static t_elem	*merge_lists(t_elem *a, t_elem *b, \
+	int (*cmp)(t_elem*, t_elem*, int), int rev)
 {
-	t_fstats	*ret;
+	t_elem		*ret;
 
 	if (!a && !b)
 		return (NULL);
@@ -73,11 +73,10 @@ static t_fstats	*merge_lists(t_fstats *a, t_fstats *b, \
 	return (ret);
 }
 
-void			sort_ls(t_fstats **lst, int (*f)(t_fstats*, t_fstats*, int), \
-	int rev)
+void			sort_ls(t_elem **lst, int (*f)(t_elem*, t_elem*, int), int rev)
 {
-	t_fstats	*side_a;
-	t_fstats	*side_b;
+	t_elem		*side_a;
+	t_elem		*side_b;
 
 	if (!*lst || !(*lst)->next)
 		return ;

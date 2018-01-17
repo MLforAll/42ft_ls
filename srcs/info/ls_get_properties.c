@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 20:37:34 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 19:00:26 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@
 ** before leaving...
 */
 
-t_blkc			get_file_content(t_queue *alst, char *d_name)
+t_blkc			get_file_content(t_group *alst, char *d_name)
 {
 	t_blkc			ret;
-	t_fstats		*new;
+	t_elem			*new;
 
-	if (!(new = ft_dcnew()))
+	if (!(new = ft_elem_new()))
 		return (-1);
-	ft_dcadd(&alst->dc, new);
-	if (!fill_fstats(d_name, new, alst))
+	ft_elem_add(&alst->elems, new);
+	if (!fill_elem(d_name, new, alst))
 		return (-1);
-	if (!alst->dname && S_ISDIR(new->st.st_mode))
+	if (!alst->grp_name && S_ISDIR(new->st.st_mode))
 		return (-1);
 	ret = new->st.st_blocks;
 	alst->nbfiles++;
@@ -46,14 +46,14 @@ static int		is_link(char *path)
 	return ((readlink(path, buff, 0) == 0));
 }
 
-t_blkc			get_dir_content(t_queue *alst)
+t_blkc			get_dir_content(t_group *alst)
 {
 	DIR				*dirp;
 	t_dirent		*dird;
 	t_blkc			rets[2];
 
 	if (((OPTEXISTS(A_LOPT) || OPTEXISTS(A_FFOPT))
-		&& is_link(alst->dname)) || !(dirp = opendir(alst->dname)))
+		&& is_link(alst->grp_name)) || !(dirp = opendir(alst->grp_name)))
 		return (-1);
 	rets[0] = 0;
 	while ((dird = readdir(dirp)))
@@ -71,9 +71,9 @@ t_blkc			get_dir_content(t_queue *alst)
 	return (rets[0]);
 }
 
-void			free_dir_elem_content(t_fstats **alst)
+void			free_dir_elem_content(t_elem **alst)
 {
-	t_fstats	*tmp;
+	t_elem		*tmp;
 	int			path_nomalloc;
 
 	tmp = (*alst)->next;
@@ -88,11 +88,13 @@ void			free_dir_elem_content(t_fstats **alst)
 		ft_strdel(&(*alst)->usrname);
 	if ((*alst)->grname)
 		ft_strdel(&(*alst)->grname);
+	if ((*alst)->xattrs)
+		ft_strdel(&(*alst)->xattrs);
 	free(*alst);
 	*alst = tmp;
 }
 
-void			free_dir_content(t_fstats **alst)
+void			free_dir_content(t_elem **alst)
 {
 	while (*alst)
 		free_dir_elem_content(alst);

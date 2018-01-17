@@ -6,108 +6,133 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 22:04:22 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 21:14:32 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/stat.h>
+#include <sys/xattr.h>
 #include <unistd.h>
 #include <time.h>
 #include "ft_ls.h"
 
 static void		print_elem_date(t_stat *st)
 {
-	time_t		time_n;
-	time_t		time_now;
-	time_t		time_diff;
-	char		*time_str;
+	time_t			time_n;
+	time_t			time_now;
+	time_t			time_diff;
+	char			*time_str;
 
 	time_n = st->st_mtime;
-	time_now = time(NULL);
-	time_diff = (time_now >= time_n) ? time_now - time_n : time_n - time_now;
 	time_str = ctime(&time_n);
+	time_now = time(NULL);
+	time_diff = (time_now >= time_n) ? time_now - time_n : 0;
 	ft_putchar(' ');
-	if (time_diff >= HALFYRSEC)
+	if (time_n > time_now || time_diff >= HALFYRSEC)
 		ft_lsprint("%.6s  %.4s", time_str + 4, time_str + 20);
 	else
 		ft_lsprint("%.12s", time_str + 4);
 	ft_putchar(' ');
 }
 
-static size_t	print_elem_name(t_fstats *dc)
+static void		print_xattrs(t_elem *elem)
 {
-	size_t		ret;
-	int			pclr_ret;
-	char		getc_ret;
+	char		*ptr;
+	ssize_t		size;
+	ssize_t		offset;
+	size_t		len;
+
+	if (!(OPTEXISTS(A_LOPT) && OPTEXISTS(A_ATOPT)))
+		return ;
+	ptr = elem->xattrs;
+	offset = 0;
+	while (offset < elem->lxattr)
+	{
+		size = getxattr(elem->fpath, ptr, NULL, 0, 0, XATTR_NOFOLLOW);
+		ft_lsprint("\n\t%s\t%3i ", ptr, size);
+		len = ft_strlen(ptr);
+		offset += len + 1;
+		ptr += len + 1;
+	}
+}
+
+static size_t	print_elem_name(t_elem *elem)
+{
+	size_t			ret;
+	int				pclr_ret;
+	char			getc_ret;
 
 	ret = 0;
-	pclr_ret = print_clr(dc->st.st_mode);
-	if (dc->fname)
-		ret = ft_strlen(dc->fname);
+	pclr_ret = print_clr(elem->st.st_mode);
+	if (elem->fname)
+		ret = ft_strlen(elem->fname);
 	if (ret != 0)
-		write(1, dc->fname, ret);
+		write(1, elem->fname, ret);
 	if (pclr_ret)
 		ft_putstr("\033[0;39m");
 	if (OPTEXISTS(A_FFOPT))
 	{
-		getc_ret = get_ifmt_char(dc->st.st_mode, 1);
+		getc_ret = get_ifmt_char(elem->st.st_mode, 1);
 		ft_putchar(getc_ret);
 		ret += (getc_ret != 0);
 	}
-	if (dc->sympath && OPTEXISTS(A_LOPT))
-		ft_lsprint(" -> %s", dc->sympath);
+	if (elem->sympath && OPTEXISTS(A_LOPT))
+		ft_lsprint(" -> %s", elem->sympath);
 	return (ret);
 }
 
-static size_t	print_elem_props(t_fstats *dc, t_queue *queue)
+static size_t	print_elem_props(t_elem *elem, t_group *grp)
 {
+	size_t			ret;
 	mode_t			getp;
 
 	if (OPTEXISTS(A_SOPT))
-		ft_lsprint("%$i ", queue->maxlens[0], dc->st.st_blocks);
+		ft_lsprint("%$i ", grp->maxlens[0], elem->st.st_blocks);
 	if (OPTEXISTS(A_LOPT))
 	{
-		ft_putchar(get_ifmt_char(dc->st.st_mode, 0));
+		ft_putchar(get_ifmt_char(elem->st.st_mode, 0));
 		getp = S_IRUSR * 2;
 		while (getp /= 2)
-			ft_putchar(get_perm_char(dc->st.st_mode, getp));
-		ft_lsprint("  %$i %$-s  %$-s  ", \
-			queue->maxlens[1], dc->st.st_nlink, \
-			queue->maxlens[2], dc->usrname, \
-			queue->maxlens[3], dc->grname);
-		if (S_ISCHR(dc->st.st_mode) || S_ISBLK(dc->st.st_mode))
-			ft_lsprint("%3i, %3i", major(dc->st.st_rdev), \
-									minor(dc->st.st_rdev));
+			ft_putchar(get_perm_char(elem->st.st_mode, getp));
+		ft_lsprint("%c %$i %$-s  %$-s  ", get_acl_xattrs_char(elem), \
+			grp->maxlens[1], elem->st.st_nlink, \
+			grp->maxlens[2], elem->usrname, \
+			grp->maxlens[3], elem->grname);
+		if (S_ISCHR(elem->st.st_mode) || S_ISBLK(elem->st.st_mode))
+			ft_lsprint("%3i, %3i", major(elem->st.st_rdev), \
+									minor(elem->st.st_rdev));
 		else
-			ft_lsprint("%$l", queue->maxlens[4], dc->st.st_size);
-		print_elem_date(&dc->st);
+			ft_lsprint("%$l", grp->maxlens[4], elem->st.st_size);
+		print_elem_date(&elem->st);
 	}
-	return (print_elem_name(dc));
+	ret = print_elem_name(elem);
+	print_xattrs(elem);
+	return (ret);
 }
 
-void		print_elems(t_queue *queue)
+void			print_elems(t_group *grp)
 {
 	t_size			nb_cr;
 	size_t			spacesn;
 	unsigned int	cnts[2];
-	t_fstats		*dc;
-	t_fstats		*tmp;
+	t_elem			*elem;
+	t_elem			*tmp;
 
-	dc = queue->dc;
-	get_ls_columns_rows(&nb_cr, queue);
+	elem = grp->elems;
+	get_ls_columns_rows(&nb_cr, grp);
 	cnts[0] = 0;
-	while (dc && cnts[0]++ < nb_cr.height)
+	while (elem && cnts[0]++ < nb_cr.height)
 	{
 		cnts[1] = 0;
-		tmp = dc;
+		tmp = elem;
 		while (tmp && cnts[1]++ < nb_cr.width)
 		{
-			if (tmp != dc)
+			if (tmp != elem)
 				print_nspaces_fd(1, 0, spacesn);
-			spacesn = get_spaces_to_add(print_elem_props(tmp, queue), queue);
-			tmp = ft_dcnnext_elem(tmp, nb_cr.height);
+			spacesn = get_spaces_to_add(print_elem_props(tmp, grp), grp);
+			tmp = ft_elem_nnext(tmp, nb_cr.height);
 		}
-		dc = dc->next;
+		elem = elem->next;
 		ft_putchar('\n');
 	}
 }

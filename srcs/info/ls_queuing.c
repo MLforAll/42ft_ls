@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 20:30:15 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 21:36:12 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include "ft_ls.h"
 
-static int			try_file(t_queue **files, char *path)
+static int			try_file(t_group **files, char *path)
 {
 	int			errno_bak;
 	int			err_gfc;
@@ -23,102 +23,109 @@ static int			try_file(t_queue **files, char *path)
 	if (!files)
 		return (0);
 	if (!*files)
-		*files = ft_queue_new(NULL);
+		*files = ft_group_new(NULL);
 	if ((err_gfc = get_file_content(*files, path)) == -1)
 	{
 		ft_lsprint_fd(2, "%s: %s: %s\n", PRGM_NAME, path, strerror(errno_bak));
-		free_dir_elem_content(&(*files)->dc);
-		if (!(*files)->dc)
-			ft_queue_free(files);
+		free_dir_elem_content(&(*files)->elems);
+		if (!(*files)->elems)
+			ft_group_del(files);
 		return (0);
 	}
 	(*files)->total += err_gfc;
 	return (1);
 }
 
-static int			get_dcs(t_queue **dcs, t_list *paths)
+static int			get_groups(t_group **groups, t_list *paths)
 {
-	t_queue		*files;
-	t_queue		*new;
+	t_group		*files;
+	t_group		*new;
 	int			err;
 
-	if (!dcs)
+	if (!groups)
 		return (-1);
-	*dcs = NULL;
+	*groups = NULL;
 	files = NULL;
 	err = 0;
 	while (paths)
 	{
-		new = ft_queue_new((char*)paths->content);
+		new = ft_group_new((char*)paths->content);
 		if ((new->total = get_dir_content(new)) == -1)
 		{
-			ft_queue_free(&new);
+			ft_group_del(&new);
 			if (!try_file(&files, (char*)paths->content))
 				err += (err == 0);
 		}
 		else
-			ft_queue_pb(dcs, new);
+			ft_group_push(groups, new);
 		paths = paths->next;
 	}
 	if (files)
-		ft_queue_pf(dcs, files);
+		ft_group_add(groups, files);
 	return (err);
 }
 
-static t_list		*print_queue_props(t_queue *queue)
+static t_list		*print_group_props(t_group *grp)
 {
 	int			rev;
-	t_fstats	*bw;
+	t_elem		*bw;
 	t_list		*ret;
 
-	if (!queue || !queue->dc || queue->total == -1)
+	if (!grp || !grp->elems || grp->total == -1)
 		return (NULL);
 	rev = OPTEXISTS(A_ROPT);
-	sort_ls(&queue->dc, OPTEXISTS(A_TOPT) ? &sort_mtime : &sort_alpha, rev);
-	if ((OPTEXISTS(A_LOPT) || OPTEXISTS(A_SOPT)) && queue->dname)
-		ft_lsprint("total %l\n", queue->total);
-	print_elems(queue);
+	sort_ls(&grp->elems, OPTEXISTS(A_TOPT) ? &sort_mtime : &sort_alpha, rev);
+	if ((OPTEXISTS(A_LOPT) || OPTEXISTS(A_SOPT)) && grp->grp_name)
+		ft_lsprint("total %l\n", grp->total);
+	print_elems(grp);
 	ret = NULL;
-	bw = queue->dc;
-	while (bw)
+	bw = grp->elems;
+	if (OPTEXISTS(A_RROPT))
 	{
-		if (OPTEXISTS(A_RROPT) && S_ISDIR(bw->st.st_mode)
-			&& ft_strcmp(bw->fname, ".") && ft_strcmp(bw->fname, ".."))
-			ft_lstpushback(&ret, bw->fpath, ft_strlen(bw->fpath) + 1);
-		bw = bw->next;
+		while (bw)
+		{
+			if (S_ISDIR(bw->st.st_mode) && ft_strcmp(bw->fname, ".")
+				&& ft_strcmp(bw->fname, ".."))
+				ft_lstpushback(&ret, bw->fpath, ft_strlen(bw->fpath) + 1);
+			bw = bw->next;
+		}
 	}
-	free_dir_content(&queue->dc);
+	free_dir_content(&grp->elems);
 	return (ret);
 }
 
-static void			print_dcs(t_queue *dcs, int add_nl)
+static int			print_groups(t_group *groups, int add_nl)
 {
-	t_queue		*tmp;
+	t_group		*tmp;
 	t_list		*reclst;
+	int			err;
 
-	tmp = dcs;
+	tmp = groups;
+	err = 0;
 	while (tmp)
 	{
-		if (tmp != dcs || add_nl)
+		if (tmp != groups || add_nl)
 			ft_putchar('\n');
-		if (((dcs->next) || add_nl) && tmp->dname)
-			ft_lsprint("%s:\n", tmp->dname);
-		reclst = print_queue_props(tmp);
+		if (((groups->next) || add_nl) && tmp->grp_name)
+			ft_lsprint("%s:\n", tmp->grp_name);
+		reclst = print_group_props(tmp);
 		if (reclst)
-			list_dirs(&reclst, 1);
+			err = list_dirs(&reclst, 1);
 		tmp = tmp->next;
 	}
+	return (err);
 }
 
 int					list_dirs(t_list **paths, int add_nl)
 {
 	int			err;
-	t_queue		*dcs;
+	int			print_err;
+	t_group		*groups;
 
 	ft_lstsort(paths, &ft_lst_sortalpha);
-	err = get_dcs(&dcs, *paths);
-	print_dcs(dcs, add_nl);
-	ft_queue_del(&dcs);
+	err = get_groups(&groups, *paths);
+	print_err = print_groups(groups, add_nl);
+	ft_group_delall(&groups);
 	ft_lstdel(paths, &ft_lstdelf);
-	return (err);
+	return ((err || print_err));
 }

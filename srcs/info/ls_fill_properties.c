@@ -6,12 +6,13 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 20:30:03 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 20:33:34 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/xattr.h>
 #include <dirent.h>
 #include <grp.h>
 #include <pwd.h>
@@ -36,16 +37,16 @@ static char		*get_elem_path(char *path, char *d_name, char *fname)
 	return (ret);
 }
 
-static char		*get_sym_path(t_fstats *dc)
+static char		*get_sym_path(t_elem *elem)
 {
 	char	*ret;
 	ssize_t	rl_ret;
 	off_t	size;
 
-	if (!S_ISLNK(dc->st.st_mode))
+	if (!S_ISLNK(elem->st.st_mode))
 		return (NULL);
 	ret = NULL;
-	size = dc->st.st_size;
+	size = elem->st.st_size;
 	rl_ret = 0;
 	while (rl_ret == size || !ret)
 	{
@@ -57,29 +58,29 @@ static char		*get_sym_path(t_fstats *dc)
 		}
 		if (!(ret = ft_strnew(size + 1)))
 			return (NULL);
-		rl_ret = readlink(dc->fpath, ret, size);
-		if (dc->st.st_size > 0)
+		rl_ret = readlink(elem->fpath, ret, size);
+		if (elem->st.st_size > 0)
 			break ;
 	}
 	return (ret);
 }
 
-static int		fill_usr_grp(t_fstats *dc)
+static int		fill_usr_grp(t_elem *elem)
 {
-	t_pw		*pw;
-	t_group		*grp;
+	t_grp		*elem_grp;
+	t_pw		*elem_pw;
 
-	grp = getgrgid(dc->st.st_gid);
-	pw = getpwuid(dc->st.st_uid);
-	if (!grp)
-		dc->grname = ft_lltoa(dc->st.st_gid);
+	elem_grp = getgrgid(elem->st.st_gid);
+	elem_pw = getpwuid(elem->st.st_uid);
+	if (!elem_grp)
+		elem->grname = ft_itoa(elem->st.st_gid);
 	else
-		dc->grname = ft_strdup(grp->gr_name);
-	if (!pw)
-		dc->usrname = ft_lltoa(dc->st.st_uid);
+		elem->grname = ft_strdup(elem_grp->gr_name);
+	if (!elem_pw)
+		elem->usrname = ft_itoa(elem->st.st_uid);
 	else
-		dc->usrname = ft_strdup(pw->pw_name);
-	return ((dc->grname != NULL && dc->usrname != NULL));
+		elem->usrname = ft_strdup(elem_pw->pw_name);
+	return ((elem->grname != NULL && elem->usrname != NULL));
 }
 
 static void		fillinf(size_t *dest, size_t new)
@@ -94,24 +95,29 @@ static void		fillinf(size_t *dest, size_t new)
 ** st.st_mtime; ==> compatibility with Linux
 */
 
-int				fill_fstats(char *d_name, t_fstats *dc, t_queue *queue)
+int				fill_elem(char *d_name, t_elem *elem, t_group *grp)
 {
-	if (!(dc->fname = ft_strdup(d_name)))
+	if (!(elem->fname = ft_strdup(d_name)))
 		return (0);
-	dc->fpath = get_elem_path(queue->dname, d_name, dc->fname);
-	if (!dc->fpath || lstat(dc->fpath, &dc->st) == -1)
+	elem->fpath = get_elem_path(grp->grp_name, d_name, elem->fname);
+	if (!elem->fpath || lstat(elem->fpath, &elem->st) == -1)
 		return (0);
-	dc->sympath = get_sym_path(dc);
-	if (!fill_usr_grp(dc))
+	elem->sympath = get_sym_path(elem);
+	if (!fill_usr_grp(elem))
 		return (0);
-	fillinf(&queue->maxlens[0], ft_nbrlen(dc->st.st_blocks));
-	fillinf(&queue->maxlens[1], ft_nbrlen(dc->st.st_nlink));
-	fillinf(&queue->maxlens[2], !dc->usrname ? 6 : ft_strlen(dc->usrname));
-	fillinf(&queue->maxlens[3], !dc->grname ? 6 : ft_strlen(dc->grname));
-	if (S_ISCHR(dc->st.st_mode) || S_ISBLK(dc->st.st_mode))
-		fillinf(&queue->maxlens[4], 8);
+	if ((elem->lxattr = listxattr(elem->fpath, NULL, 0, XATTR_NOFOLLOW)) > 0)
+	{
+		elem->xattrs = (char*)malloc(sizeof(char) * elem->lxattr);
+		listxattr(elem->fpath, elem->xattrs, elem->lxattr, XATTR_NOFOLLOW);
+	}
+	fillinf(&grp->maxlens[0], ft_nbrlen(elem->st.st_blocks));
+	fillinf(&grp->maxlens[1], ft_nbrlen(elem->st.st_nlink));
+	fillinf(&grp->maxlens[2], !elem->usrname ? 6 : ft_strlen(elem->usrname));
+	fillinf(&grp->maxlens[3], !elem->grname ? 6 : ft_strlen(elem->grname));
+	if (S_ISCHR(elem->st.st_mode) || S_ISBLK(elem->st.st_mode))
+		fillinf(&grp->maxlens[4], 8);
 	else
-		fillinf(&queue->maxlens[4], ft_nbrlen(dc->st.st_size));
-	fillinf(&queue->maxlens[5], ft_strlen(dc->fname));
+		fillinf(&grp->maxlens[4], ft_nbrlen(elem->st.st_size));
+	fillinf(&grp->maxlens[5], ft_strlen(elem->fname));
 	return (1);
 }

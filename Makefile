@@ -6,7 +6,7 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2018/01/16 21:31:06 by kdumarai         ###   ########.fr        #
+#    Updated: 2018/01/17 18:13:05 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,25 +20,28 @@ LIBFT = libft/libft.a
 LIB = -L libft -lft
 
 SRCDIR = srcs
-SRCS = $(SRCDIR)/ft_ls.c \
-	$(SRCDIR)/ls_args.c \
-	$(SRCDIR)/ls_colors.c \
-	$(SRCDIR)/info/ls_getchars.c \
-	$(SRCDIR)/info/ls_get_properties.c \
-	$(SRCDIR)/info/ls_fill_properties.c \
-	$(SRCDIR)/info/ls_queuing.c \
-	$(SRCDIR)/sort/ls_sorting_comps.c \
-	$(SRCDIR)/sort/ls_sorting_routine.c \
-	$(SRCDIR)/display/ls_print_lst.c \
-	$(SRCDIR)/display/ls_columns.c \
-	$(SRCDIR)/ft_lsprint/ft_lsprint.c \
-	$(SRCDIR)/ft_lsprint/ft_lsprint_utils.c \
-	$(SRCDIR)/lists/t_list_mgmt.c \
-	$(SRCDIR)/lists/t_queue_mgmt.c \
-	$(SRCDIR)/lists/t_dc_mgmt.c
+SRCFILES = ft_ls.c \
+	ls_args.c \
+	ls_colors.c \
+	info/ls_getchars.c \
+	info/ls_get_properties.c \
+	info/ls_fill_properties.c \
+	info/ls_queuing.c \
+	sort/ls_sorting_comps.c \
+	sort/ls_sorting_routine.c \
+	display/ls_print_lst.c \
+	display/ls_columns.c \
+	ft_lsprint/ft_lsprint.c \
+	ft_lsprint/ft_lsprint_utils.c \
+	lists/t_list_mgmt.c \
+	lists/t_group_mgmt.c \
+	lists/t_elem_mgmt.c
+SRCS = $(addprefix $(SRCDIR)/, $(SRCFILES))
 
 OBJDIR = objs
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+
+PROJTEXT = \033[1;33mft_ls: \033[1;39m
 
 all: lib $(NAME)
 
@@ -46,24 +49,25 @@ lib:
 	@make -C $(dir $(LIBFT))
 
 $(NAME): $(OBJS)
-	@printf "\r\033[KCompiling\nLinking\n"
-	@gcc -o $(NAME) $(LIB) $(OBJS)
-	@printf "\033[1;32mProgram built at $(NAME)\033[0;39m\n"
+	@ printf "\r\033[K$(PROJTEXT)Compiling\n"
+	@ printf "$(PROJTEXT)Linking\n"
+	@ gcc -o $(NAME) $(LIB) $(OBJS)
+	@ printf "$(PROJTEXT)\033[1;32mProgram built at $(NAME)\033[0;39m\n"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@if [ ! -z $@ ]; then mkdir -p $(dir $@); fi
-	@printf "\033[KCompiling \033[1;33m$<\033[0;39m\r"
-	@gcc $(CFLAGS) -c $< $(INCLUDES) -o $@
+	@ if [ ! -z $@ ]; then mkdir -p $(dir $@); fi
+	@ printf "$(PROJTEXT)Compiling \033[1;33m$<\033[0;39m\r"
+	@ gcc $(CFLAGS) -c $< $(INCLUDES) -o $@
 
 clean:
-	@make clean -C $(dir $(LIBFT))
-	@rm -rf $(OBJDIR)
-	@printf "Removed ft_ls's objects\n"
+	@ make clean -C $(dir $(LIBFT))
+	@ rm -rf $(OBJDIR)
+	@ printf "$(PROJTEXT)Removed objects\n"
 
 fclean: clean
-	@make fclean -C $(dir $(LIBFT))
-	@rm -f $(NAME)
-	@printf "Removed $(NAME)\n"
+	@ make fclean -C $(dir $(LIBFT))
+	@ rm -f $(NAME)
+	@ printf "$(PROJTEXT)Removed $(NAME)\n"
 
 re: fclean all
 

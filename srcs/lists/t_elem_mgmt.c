@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_dc_mgmt.c                                        :+:      :+:    :+:   */
+/*   t_elem_mgmt.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 17:22:31 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 17:01:44 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 21:15:30 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 #include "libft.h"
 #include "ls_data.h"
 
-t_fstats	*ft_dcnew(void)
+t_elem		*ft_elem_new(void)
 {
-	t_fstats	*ret;
+	t_elem	*ret;
 
-	ret = (t_fstats*)malloc(sizeof(t_fstats));
-	ft_bzero(ret, sizeof(t_fstats));
+	ret = (t_elem*)malloc(sizeof(t_elem));
+	ft_bzero(ret, sizeof(t_elem));
 	return (ret);
 }
 
-void		ft_dcadd(t_fstats **alst, t_fstats *new)
+void		ft_elem_add(t_elem **alst, t_elem *new)
 {
 	if (!alst)
 		return ;
@@ -36,7 +36,7 @@ void		ft_dcadd(t_fstats **alst, t_fstats *new)
 	*alst = new;
 }
 
-t_fstats	*ft_dcnnext_elem(t_fstats *alst, size_t len)
+t_elem		*ft_elem_nnext(t_elem *alst, size_t len)
 {
 	if (!alst)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:23:13 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 14:07:22 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/17 17:50:49 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 **	0 if swapping is not needed
 */
 
-int		sort_alpha(t_fstats *a, t_fstats *b, int rev)
+int		sort_alpha(t_elem *a, t_elem *b, int rev)
 {
 	int			diff;
 
@@ -30,40 +30,9 @@ int		sort_alpha(t_fstats *a, t_fstats *b, int rev)
 	return ((diff > 0) == !rev);
 }
 
-int		sort_mtime(t_fstats *a, t_fstats *b, int rev)
+int		sort_mtime(t_elem *a, t_elem *b, int rev)
 {
 	if (a->st.st_mtime == b->st.st_mtime)
 		return (sort_alpha(a, b, rev));
 	return ((a->st.st_mtime < b->st.st_mtime) == !rev);
 }
-
-/*
-** void	sort_ls(t_fstats **lst, int (*f)(t_fstats*, t_fstats*, int), int rev)
-** {
-**	t_fstats	*curr;
-**	t_fstats	*prev;
-**	t_fstats	*tmp;
-**
-**	curr = *lst;
-**	while (curr->next)
-**	{
-**		prev = (curr == *lst) ? NULL : prev;
-**		if (f(curr, curr->next, rev))
-**		{
-**			if (prev)
-**				prev->next = curr->next;
-**			else
-**				*lst = curr->next;
-**			tmp = curr->next->next;
-**			curr->next->next = curr;
-**			curr->next = tmp;
-**			curr = *lst;
-**		}
-**		else
-**		{
-**			prev = curr;
-**			curr = curr->next;
-**		}
-**	}
-** }
-*/
