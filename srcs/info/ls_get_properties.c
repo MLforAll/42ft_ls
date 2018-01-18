@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/17 19:00:26 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/18 02:10:29 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,20 @@
 ** before leaving...
 */
 
-t_blkc			get_file_content(t_group *alst, char *d_name)
+int				get_file_content(t_group *alst, char *d_name)
 {
-	t_blkc			ret;
 	t_elem			*new;
 
 	if (!(new = ft_elem_new()))
-		return (-1);
+		return (0);
 	ft_elem_add(&alst->elems, new);
 	if (!fill_elem(d_name, new, alst))
-		return (-1);
+		return (0);
 	if (!alst->grp_name && S_ISDIR(new->st.st_mode))
-		return (-1);
-	ret = new->st.st_blocks;
+		return (0);
+	alst->total += new->st.st_blocks;
 	alst->nbfiles++;
-	return (ret);
+	return (1);
 }
 
 static int		is_link(char *path)
@@ -46,29 +45,25 @@ static int		is_link(char *path)
 	return ((readlink(path, buff, 0) == 0));
 }
 
-t_blkc			get_dir_content(t_group *alst)
+int				get_dir_content(t_group *alst)
 {
 	DIR				*dirp;
 	t_dirent		*dird;
-	t_blkc			rets[2];
 
 	if (((OPTEXISTS(A_LOPT) || OPTEXISTS(A_FFOPT))
 		&& is_link(alst->grp_name)) || !(dirp = opendir(alst->grp_name)))
-		return (-1);
-	rets[0] = 0;
+		return (0);
 	while ((dird = readdir(dirp)))
 	{
 		if (*dird->d_name != '.' || OPTEXISTS(A_AOPT))
 		{
-			if ((rets[1] = get_file_content(alst, dird->d_name)) == -1)
-				return (-1);
-			else
-				rets[0] += rets[1];
+			if (!get_file_content(alst, dird->d_name))
+				return (0);
 		}
 	}
 	free(dird);
 	closedir(dirp);
-	return (rets[0]);
+	return (1);
 }
 
 void			free_dir_elem_content(t_elem **alst)

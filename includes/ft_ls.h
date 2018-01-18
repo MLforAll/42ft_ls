@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/17 21:10:56 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/18 02:20:11 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ int		list_dirs(t_list **paths, int add_nl);
 ** DB MGMT
 */
 
-t_blkc	get_file_content(t_group *alst, char *d_name);
-t_blkc	get_dir_content(t_group *alst);
+int		get_file_content(t_group *alst, char *d_name);
+int		get_dir_content(t_group *alst);
 void	free_dir_elem_content(t_elem **alst);
 void	free_dir_content(t_elem **alst);
 
@@ -73,5 +73,11 @@ void	sort_ls(t_elem **lst, int (*f)(t_elem*, t_elem*, int), int rev);
 void	get_ls_columns_rows(t_size *ref, t_group *grp);
 size_t	get_spaces_to_add(size_t pre, t_group *grp);
 void	print_elems(t_group *grp);
+
+/*
+** MISC
+*/
+
+void			ls_err(const char *path, int err);
 
 #endif

@@ -6,13 +6,18 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 02:04:52 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/16 15:30:07 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/18 02:19:39 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
 #include "ft_ls.h"
+
+void			ls_err(const char *path, int err)
+{
+	ft_lsprint_fd(2, "%s: %s: %s\n", PRGM_NAME, path, strerror(err));
+}
 
 static void		ls_usage(char illopt)
 {
