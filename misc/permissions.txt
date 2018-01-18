@@ -1,4 +1,4 @@
-File mode bits:
+File mode bits, extracted from man
 
 S_IRWXU
 read, write, execute/search by owner
