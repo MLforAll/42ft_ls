@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 20:45:45 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 02:22:28 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/18 18:20:59 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void		ft_group_push(t_group **agrp, t_group *new)
 {
 	t_group		*bw;
 
-	if (!agrp)
+	if (!agrp || !new)
 		return ;
 	if (!*agrp)
 	{
@@ -47,7 +47,7 @@ void		ft_group_push(t_group **agrp, t_group *new)
 
 void		ft_group_add(t_group **agrp, t_group *new)
 {
-	if (!agrp)
+	if (!agrp || !new)
 		return ;
 	if (!*agrp)
 	{

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 14:43:58 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/18 18:45:10 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include "ft_ls.h"
 
-static t_list		*print_group_props(t_group *grp)
+static t_list	*print_group_props(t_group *grp)
 {
 	int			rev;
 	t_elem		*bw;
@@ -43,7 +43,7 @@ static t_list		*print_group_props(t_group *grp)
 	return (ret);
 }
 
-static int			print_groups(t_group *groups, int add_nl)
+static int		print_groups(t_group *groups, int add_nl)
 {
 	t_group		*tmp;
 	t_list		*reclst;
@@ -67,7 +67,7 @@ static int			print_groups(t_group *groups, int add_nl)
 	return (err);
 }
 
-static int			try_file(t_group **files, char *path)
+static int		try_file(t_group **files, char *path)
 {
 	int			errno_bak;
 
@@ -87,53 +87,59 @@ static int			try_file(t_group **files, char *path)
 	return (1);
 }
 
-static int			get_groups(t_group **groups, t_list *paths, int nocache)
+static int		get_group(t_group **dirs, t_group **files, char *path, int now)
 {
-	t_group		*files;
 	t_group		*new;
 	int			err;
 
-	if (!groups)
+	if (!dirs || !files)
 		return (-1);
-	*groups = NULL;
-	files = NULL;
 	err = 0;
-	while (paths)
+	new = ft_group_new(path);
+	if (!get_dir_content(new))
 	{
-		new = ft_group_new((char*)paths->content);
-		if (!get_dir_content(new))
+		new->total = errno;
+		free_dir_content(&new->elems);
+		if (errno == ENOTDIR || errno == ENOENT)
 		{
-			new->total = errno;
-			free_dir_content(&new->elems);
-			if (errno == ENOTDIR || errno == ENOENT)
-			{
-				ft_group_del(&new);
-				if (!try_file(&files, (char*)paths->content))
-					err += (err == 0);
-			}
+			ft_group_del(&new);
+			if (!try_file(files, path))
+				err += (err == 0);
 		}
-		ft_group_push(groups, new);
-		if (nocache)
-			print_groups(new, 1);
-		paths = paths->next;
 	}
-	if (files)
-		ft_group_add(groups, files);
+	if (now)
+	{
+		print_groups(new, 1);
+		ft_group_del(&new);
+	}
+	ft_group_push(dirs, new);
 	return (err);
 }
 
-int					list_dirs(t_list **paths, int add_nl)
+int				list_dirs(t_list **paths, int add_nl)
 {
 	int			err;
-	int			print_err;
+	int			aux_err;
+	t_list		*bw;
 	t_group		*groups;
+	t_group		*files;
 
+	groups = NULL;
+	files = NULL;
 	ft_lstsort(paths, &ft_lst_sortalpha);
-	if ((err = get_groups(&groups, *paths, add_nl) == -1))
-		return (1);
+	bw = *paths;
+	err = 0;
+	while (bw)
+	{
+		if ((aux_err = get_group(&groups, &files, bw->content, add_nl) == -1))
+			return (1);
+		err += (aux_err == 1 && err == 0);
+		bw = bw->next;
+	}
+	ft_group_add(&groups, files);
 	if (!add_nl)
-		print_err = print_groups(groups, add_nl);
+		aux_err = print_groups(groups, add_nl);
 	ft_group_delall(&groups);
 	ft_lstdel(paths, &ft_lstdelf);
-	return ((err || print_err));
+	return ((err || aux_err));
 }

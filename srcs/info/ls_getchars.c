@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/10 18:06:34 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/17 21:13:14 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/18 18:35:15 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char		get_acl_xattrs_char(t_elem *elem)
 	aclg_ret = acl_get_entry(acl, ACL_FIRST_ENTRY, &dummy);
 	if (acl && aclg_ret == 0)
 		ret = '+';
-	else if (aclg_ret == -1)
+	if (acl)
 		acl_free((void*)acl);
 	if (elem->xattrs)
 		ret = '@';

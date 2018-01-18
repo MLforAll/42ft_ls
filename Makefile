@@ -6,7 +6,7 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2018/01/17 18:13:05 by kdumarai         ###   ########.fr        #
+#    Updated: 2018/01/18 18:38:30 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ SRCS = $(addprefix $(SRCDIR)/, $(SRCFILES))
 OBJDIR = objs
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-PROJTEXT = \033[1;33mft_ls: \033[1;39m
+PROJTEXT = \033[1;33mft_ls: \033[0;39m
 
 all: lib $(NAME)
 
@@ -56,7 +56,7 @@ $(NAME): $(OBJS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@ if [ ! -z $@ ]; then mkdir -p $(dir $@); fi
-	@ printf "$(PROJTEXT)Compiling \033[1;33m$<\033[0;39m\r"
+	@ printf "\033[K$(PROJTEXT)Compiling \033[1;33m$<\033[0;39m\r"
 	@ gcc $(CFLAGS) -c $< $(INCLUDES) -o $@
 
 clean:
