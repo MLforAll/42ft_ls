@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 02:43:57 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/18 13:59:30 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ static int			get_groups(t_group **groups, t_list *paths, int reccur)
 		}
 		ft_group_push(groups, new);
 		if (reccur)
-			print_groups(new, 1);
+			return (err);
 		paths = paths->next;
 	}
 	if (files)
@@ -131,8 +131,7 @@ int					list_dirs(t_list **paths, int add_nl)
 	ft_lstsort(paths, &ft_lst_sortalpha);
 	if ((err = get_groups(&groups, *paths, add_nl) == -1))
 		return (1);
-	if (!add_nl)
-		print_err = print_groups(groups, add_nl);
+	print_err = print_groups(groups, add_nl);
 	ft_group_delall(&groups);
 	ft_lstdel(paths, &ft_lstdelf);
 	return ((err || print_err));
