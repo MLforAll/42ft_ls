@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:43:21 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/17 19:15:13 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/18 18:53:14 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int			detect_options(int ac, char **av, int *idx)
 	retb = 0;
 	while (*idx < ac && *av[*idx] == '-')
 	{
-		if (ft_strstart(av[*idx], "--"))
+		if (!ft_strcmp(av[*idx], "--"))
 		{
 			(*idx)++;
 			break ;
