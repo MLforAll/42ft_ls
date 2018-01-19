@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 19:55:06 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 05:28:06 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 06:15:21 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 # define A_HOPT			0x400
 # define A_NOPT			0x800
 
-# define ARGS_ERR_LST	"-FGR@alrst1"
+# define ARGS_ERR_LST	"-FGR@ahlnrst1"
 
 /*
 ** GLOBAL: OPTIONS
