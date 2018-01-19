@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 02:33:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 06:11:25 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 18:21:34 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	get_float_digit(float n, int fdigit)
 	return ((int)(n * factor) % 10);
 }
 
-static void	print_human_fmt(t_elem *elm)
+void		print_human_fmt(off_t size)
 {
 	off_t	size_factor;
 	float	size_dup;
@@ -30,9 +30,9 @@ static void	print_human_fmt(t_elem *elm)
 	char	*size_char;
 
 	size_factor = 1024;
-	size_dup = (float)elm->st.st_size;
+	size_dup = (float)size;
 	size_char = "BKGTP";
-	while (size_dup > 1024)
+	while (size_dup >= 1024)
 	{
 		size_dup /= size_factor;
 		size_char += (size_char + 1 != NULL);
@@ -53,7 +53,7 @@ void		print_elem_size(t_elem *elm, t_group *grp)
 	if (S_ISCHR(elm->st.st_mode) || S_ISBLK(elm->st.st_mode))
 		ft_lsprint("%3i, %3i", major(elm->st.st_rdev), minor(elm->st.st_rdev));
 	else if (optexists(A_HOPT))
-		print_human_fmt(elm);
+		print_human_fmt(elm->st.st_size);
 	else
 		ft_lsprint("%$l", grp->maxlens[4], elm->st.st_size);
 }
