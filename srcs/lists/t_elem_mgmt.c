@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 17:22:31 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/17 21:15:30 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 00:44:33 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ t_elem		*ft_elem_new(void)
 {
 	t_elem	*ret;
 
-	ret = (t_elem*)malloc(sizeof(t_elem));
+	if (!(ret = (t_elem*)malloc(sizeof(t_elem))))
+		return (NULL);
 	ft_bzero(ret, sizeof(t_elem));
 	return (ret);
 }
