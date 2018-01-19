@@ -6,7 +6,7 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2018/01/19 03:48:28 by kdumarai         ###   ########.fr        #
+#    Updated: 2018/01/19 05:44:47 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,11 +46,11 @@ PROJTEXT = \033[1;33mft_ls: \033[0;39m
 
 all: $(NAME)
 
-lib:
-	@ make -C $(dir $(LIBFT))
 
-$(NAME): lib $(OBJS)
+
+$(NAME): $(OBJS)
 	@ printf "\r\033[K$(PROJTEXT)Compiling\n"
+	@ make -C $(dir $(LIBFT))
 	@ printf "$(PROJTEXT)Linking\n"
 	@ gcc -o $(NAME) $(CC_LIB) $(OBJS)
 	@ printf "$(PROJTEXT)\033[1;32mProgram built at $(NAME)\033[0;39m\n"
