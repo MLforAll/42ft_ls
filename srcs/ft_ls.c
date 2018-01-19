@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 02:04:52 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 01:52:48 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 05:29:46 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int				main(int ac, char **av, char **env)
 	if (g_opts < 0)
 		ls_usage(av[0], -g_opts);
 	ft_bzero(g_clrs, 11);
-	if (ft_isatty(1) && (OPTEXISTS(A_GGOPT) || get_env_ptr(env, "CLICOLOR"))
+	if (ft_isatty(1) && (optexists(A_GGOPT) || get_env_ptr(env, "CLICOLOR"))
 		&& (lscolors_entry = get_env_ptr(env, "LSCOLORS")))
 		detect_colors(lscolors_entry);
 	paths = get_paths(idx, ac, av);

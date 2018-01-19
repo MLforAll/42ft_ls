@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 23:24:44 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 05:28:35 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,14 @@ int				get_dir_content(t_group *alst)
 	DIR				*dirp;
 	t_dirent		*dird;
 
-	if (((OPTEXISTS(A_LOPT) || OPTEXISTS(A_FFOPT))
+	if (((optexists(A_LOPT) || optexists(A_FFOPT))
 		&& is_link(alst->grp_name)))
 		return (-1);
 	if (!(dirp = opendir(alst->grp_name)))
 		return (0);
 	while ((dird = readdir(dirp)))
 	{
-		if (*dird->d_name != '.' || OPTEXISTS(A_AOPT))
+		if (*dird->d_name != '.' || optexists(A_AOPT))
 			get_file_content(alst, dird->d_name);
 	}
 	free(dird);

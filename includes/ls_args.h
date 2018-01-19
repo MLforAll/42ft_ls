@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 19:55:06 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 03:59:26 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 05:28:06 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,11 @@
 
 int		g_opts;
 
-# define OPTEXISTS(opt)	(g_opts & opt) != 0
-
 /*
 ** ARGUMENTS FUNTION
 */
 
+int		optexists(int opt);
 int		detect_options(int ac, char **av, int *idx);
 
 #endif

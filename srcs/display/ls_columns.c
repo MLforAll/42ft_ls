@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 16:56:56 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/17 18:19:24 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 05:33:21 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ void	get_ls_columns_rows(t_size *ref, t_group *grp)
 	t_winsize		ws;
 	size_t			maxlen;
 
-	if (OPTEXISTS(A_LOPT) || OPTEXISTS(A_1OPT)
+	if (optexists(A_LOPT) || optexists(A_1OPT)
 		|| ioctl(1, TIOCGWINSZ, &ws) == -1)
 		ref->width = 1;
 	else
 	{
-		maxlen = grp->maxlens[5] + (OPTEXISTS(A_FFOPT) ? 2 : 1);
-		if (OPTEXISTS(A_SOPT))
-			maxlen += grp->maxlens[0];
+		maxlen = grp->maxlens[5] + (optexists(A_FFOPT) ? 2 : 1);
+		if (optexists(A_SOPT))
+			maxlen += grp->maxlens[0] + 1;
 		ref->width = ws.ws_col / maxlen;
 		if (ref->width == 0)
 			ref->width = 1;
@@ -42,6 +42,6 @@ size_t	get_spaces_to_add(size_t pre, t_group *grp)
 	size_t	ret;
 
 	ret = (grp->maxlens[5] > pre) ? grp->maxlens[5] - pre : 0;
-	ret += (pre > grp->maxlens[5] || !(OPTEXISTS(A_FFOPT))) ? 1 : 2;
+	ret += (pre > grp->maxlens[5] || !(optexists(A_FFOPT))) ? 1 : 2;
 	return (ret);
 }

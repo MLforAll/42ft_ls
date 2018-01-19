@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 03:46:03 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 05:31:16 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void		print_xattrs(t_elem *elem)
 	ssize_t		offset;
 	size_t		len;
 
-	if (!(OPTEXISTS(A_LOPT) && OPTEXISTS(A_ATOPT)))
+	if (!optexists(A_LOPT) || !optexists(A_ATOPT))
 		return ;
 	ptr = elem->xattrs;
 	offset = 0;
@@ -79,13 +79,13 @@ static size_t	print_elem_name(t_elem *elem)
 		write(1, elem->fname, ret);
 	if (pclr_ret)
 		ft_putstr("\033[0;39m");
-	if (OPTEXISTS(A_FFOPT))
+	if (optexists(A_FFOPT))
 	{
 		if ((getc_ret = get_ifmt_char(elem->st.st_mode, 1)))
 			ft_putchar(getc_ret);
 		ret += (getc_ret != 0);
 	}
-	if (elem->sympath && OPTEXISTS(A_LOPT))
+	if (elem->sympath && optexists(A_LOPT))
 		ft_lsprint(" -> %s", elem->sympath);
 	return (ret);
 }
@@ -95,9 +95,9 @@ static size_t	print_elem_props(t_elem *elem, t_group *grp)
 	size_t			ret;
 	mode_t			getp;
 
-	if (OPTEXISTS(A_SOPT))
+	if (optexists(A_SOPT))
 		ft_lsprint("%$i ", grp->maxlens[0], elem->st.st_blocks);
-	if (OPTEXISTS(A_LOPT))
+	if (optexists(A_LOPT))
 	{
 		ft_putchar(get_ifmt_char(elem->st.st_mode, 0));
 		getp = S_IRUSR * 2;

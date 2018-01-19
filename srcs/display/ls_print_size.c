@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 02:33:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 03:48:11 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 05:29:34 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void		print_elem_size(t_elem *elm, t_group *grp)
 {
 	if (S_ISCHR(elm->st.st_mode) || S_ISBLK(elm->st.st_mode))
 		ft_lsprint("%3i, %3i", major(elm->st.st_rdev), minor(elm->st.st_rdev));
-	else if (OPTEXISTS(A_HOPT))
+	else if (optexists(A_HOPT))
 		print_human_fmt(elm);
 	else
 		ft_lsprint("%$l", grp->maxlens[4], elm->st.st_size);

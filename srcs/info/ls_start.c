@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 01:50:58 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 05:28:30 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ static t_list	*print_group_props(t_group *grp)
 
 	if (!grp || !grp->elems || grp->total == -1)
 		return (NULL);
-	rev = OPTEXISTS(A_ROPT);
-	sort_ls(&grp->elems, OPTEXISTS(A_TOPT) ? &sort_mtime : &sort_alpha, rev);
-	if ((OPTEXISTS(A_LOPT) || OPTEXISTS(A_SOPT)) && grp->grp_name)
+	rev = optexists(A_ROPT);
+	sort_ls(&grp->elems, optexists(A_TOPT) ? &sort_mtime : &sort_alpha, rev);
+	if ((optexists(A_LOPT) || optexists(A_SOPT)) && grp->grp_name)
 		ft_lsprint("total %l\n", grp->total);
 	print_elems(grp);
 	ret = NULL;
 	bw = grp->elems;
-	if (OPTEXISTS(A_RROPT))
+	if (optexists(A_RROPT))
 	{
 		while (bw)
 		{
