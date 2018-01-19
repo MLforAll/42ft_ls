@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 01:52:41 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 03:48:50 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	sort_ls(t_elem **lst, int (*f)(t_elem*, t_elem*, int), int rev);
 ** ACTUAL PRINTING STUFF
 */
 
+void	print_elem_size(t_elem *elm, t_group *grp);
 void	get_ls_columns_rows(t_size *ref, t_group *grp);
 size_t	get_spaces_to_add(size_t pre, t_group *grp);
 void	print_elems(t_group *grp);

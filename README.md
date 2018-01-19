@@ -13,3 +13,20 @@ Currently Implemented:
 - Recursiveness (-R)
 - Proper Makefile
 
+Supported Flags:
+
+-l (long format)
+-a (show all)
+-r (reverse sort)
+-R (recursive search)
+-t (sort by mod time)
+
+Bonus Flags:
+
+-s (show blocks for each file)
+-F (show char after filename dep on file type)
+-G (colors, assumed if CLICOLORS is set)
+-1 (show one file per line in non long)
+-@ (show extended attributes entires and data size)
+-h (human format for sizes)
+-n (force displaying user and group ID in numeric form)

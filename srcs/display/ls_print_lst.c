@@ -6,14 +6,13 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 00:23:35 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 03:46:03 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/stat.h>
 #include <sys/xattr.h>
-#include <unistd.h>
 #include <time.h>
+#include <unistd.h>
 #include "ft_ls.h"
 
 static void		print_elem_date(t_stat *st)
@@ -108,11 +107,7 @@ static size_t	print_elem_props(t_elem *elem, t_group *grp)
 			grp->maxlens[1], elem->st.st_nlink, \
 			grp->maxlens[2], elem->usrname, \
 			grp->maxlens[3], elem->grname);
-		if (S_ISCHR(elem->st.st_mode) || S_ISBLK(elem->st.st_mode))
-			ft_lsprint("%3i, %3i", major(elem->st.st_rdev), \
-									minor(elem->st.st_rdev));
-		else
-			ft_lsprint("%$l", grp->maxlens[4], elem->st.st_size);
+		print_elem_size(elem, grp);
 		print_elem_date(&elem->st);
 	}
 	ret = print_elem_name(elem);
