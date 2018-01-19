@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ls_queuing.c                                       :+:      :+:    :+:   */
+/*   ls_start.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 18:45:10 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 01:50:58 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static t_list	*print_group_props(t_group *grp)
 	return (ret);
 }
 
-static int		print_groups(t_group *groups, int add_nl)
+static int		print_groups(t_group *groups, int force_print, int add_nl)
 {
 	t_group		*tmp;
 	t_list		*reclst;
@@ -55,10 +55,10 @@ static int		print_groups(t_group *groups, int add_nl)
 	{
 		if (tmp != groups || add_nl)
 			ft_putchar('\n');
-		if (((groups->next) || add_nl) && tmp->grp_name)
+		if (((groups->next) || add_nl || force_print) && tmp->grp_name)
 			ft_lsprint("%s:\n", tmp->grp_name);
-		if (!tmp->elems)
-			ls_err(tmp->grp_name, tmp->total);
+		if (tmp->err >= 0)
+			ls_elem_err(tmp->grp_name, tmp->err);
 		reclst = print_group_props(tmp);
 		if (reclst)
 			err = list_dirs(&reclst, 1);
@@ -69,6 +69,7 @@ static int		print_groups(t_group *groups, int add_nl)
 
 static int		try_file(t_group **files, char *path)
 {
+	int			get_ret;
 	int			errno_bak;
 
 	errno_bak = errno;
@@ -76,10 +77,11 @@ static int		try_file(t_group **files, char *path)
 		return (0);
 	if (!*files)
 		*files = ft_group_new(NULL);
-	if (!get_file_content(*files, path))
+	if ((get_ret = get_file_content(*files, path)) <= 0)
 	{
-		ls_err(path, errno_bak);
-		free_dir_elem_content(&(*files)->elems);
+		ls_elem_err(path, errno_bak);
+		if (get_ret == -1)
+			return (0);
 		if (!(*files)->elems)
 			ft_group_del(files);
 		return (0);
@@ -90,17 +92,17 @@ static int		try_file(t_group **files, char *path)
 static int		get_group(t_group **dirs, t_group **files, char *path, int now)
 {
 	t_group		*new;
+	int			getd_err;
 	int			err;
 
-	if (!dirs || !files)
-		return (-1);
 	err = 0;
-	new = ft_group_new(path);
-	if (!get_dir_content(new))
+	if (!dirs || !files || !(new = ft_group_new(path)))
+		return (-1);
+	if ((getd_err = get_dir_content(new)) <= 0)
 	{
-		new->total = errno;
+		new->err = errno;
 		free_dir_content(&new->elems);
-		if (errno == ENOTDIR || errno == ENOENT)
+		if (errno == ENOTDIR || errno == ENOENT || getd_err == -1)
 		{
 			ft_group_del(&new);
 			if (!try_file(files, path))
@@ -109,7 +111,7 @@ static int		get_group(t_group **dirs, t_group **files, char *path, int now)
 	}
 	if (now)
 	{
-		print_groups(new, 1);
+		print_groups(new, 0, 1);
 		ft_group_del(&new);
 	}
 	ft_group_push(dirs, new);
@@ -126,19 +128,20 @@ int				list_dirs(t_list **paths, int add_nl)
 
 	groups = NULL;
 	files = NULL;
-	ft_lstsort(paths, &ft_lst_sortalpha);
+	if (!add_nl)
+		ft_lstmergesort(paths, &ft_lst_sortalpha);
 	bw = *paths;
 	err = 0;
 	while (bw)
 	{
-		if ((aux_err = get_group(&groups, &files, bw->content, add_nl) == -1))
+		if ((aux_err = get_group(&groups, &files, bw->content, add_nl)) == -1)
 			return (1);
 		err += (aux_err == 1 && err == 0);
 		bw = bw->next;
 	}
 	ft_group_add(&groups, files);
 	if (!add_nl)
-		aux_err = print_groups(groups, add_nl);
+		aux_err = print_groups(groups, (err > 0), add_nl);
 	ft_group_delall(&groups);
 	ft_lstdel(paths, &ft_lstdelf);
 	return ((err || aux_err));

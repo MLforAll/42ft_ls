@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/09 11:15:35 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/17 21:15:38 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 00:18:43 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ static int	get_clr_id(mode_t mode)
 		ret = 1;
 	else if (S_ISSOCK(mode))
 		ret = 2;
+	else if (S_ISFIFO(mode))
+		ret = 3;
 	else if (mode & S_IXUSR || mode & S_IXGRP || mode & S_IXOTH)
 		ret = 4;
 	else if (S_ISBLK(mode))

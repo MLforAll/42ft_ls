@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 20:45:45 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 18:20:59 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/18 23:11:38 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_group		*ft_group_new(char *grp_name)
 		return (NULL);
 	new->grp_name = (grp_name) ? ft_strdup(grp_name) : NULL;
 	new->elems = NULL;
+	new->err = -1;
 	new->total = 0;
 	new->nbfiles = 0;
 	ft_bzero((void*)new->maxlens, sizeof(new->maxlens));
@@ -60,6 +61,8 @@ void		ft_group_add(t_group **agrp, t_group *new)
 
 void		ft_group_del(t_group **agrp)
 {
+	if (!agrp || !*agrp)
+		return ;
 	if ((*agrp)->grp_name)
 		ft_strdel(&(*agrp)->grp_name);
 	if ((*agrp)->elems)

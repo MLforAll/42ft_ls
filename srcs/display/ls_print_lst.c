@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 18:34:47 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 00:23:35 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void		print_elem_date(t_stat *st)
 	time_t			time_n;
 	time_t			time_now;
 	time_t			time_diff;
+	size_t			tillnl;
 	char			*time_str;
 
 	time_n = st->st_mtime;
@@ -29,7 +30,16 @@ static void		print_elem_date(t_stat *st)
 	time_diff = (time_now >= time_n) ? time_now - time_n : 0;
 	ft_putchar(' ');
 	if (time_n > time_now || time_diff >= HALFYRSEC)
-		ft_lsprint("%.6s  %.4s", time_str + 4, time_str + 20);
+	{
+		ft_lsprint("%.6s  ", time_str + 4);
+		tillnl = 0;
+		time_str += 20;
+		while (!ft_isdigit(*time_str))
+			time_str++;
+		while (*(time_str + tillnl) != '\n')
+			tillnl++;
+		write(1, time_str, tillnl);
+	}
 	else
 		ft_lsprint("%.12s", time_str + 4);
 	ft_putchar(' ');
@@ -72,8 +82,8 @@ static size_t	print_elem_name(t_elem *elem)
 		ft_putstr("\033[0;39m");
 	if (OPTEXISTS(A_FFOPT))
 	{
-		getc_ret = get_ifmt_char(elem->st.st_mode, 1);
-		ft_putchar(getc_ret);
+		if ((getc_ret = get_ifmt_char(elem->st.st_mode, 1)))
+			ft_putchar(getc_ret);
 		ret += (getc_ret != 0);
 	}
 	if (elem->sympath && OPTEXISTS(A_LOPT))

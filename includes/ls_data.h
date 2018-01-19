@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 02:10:55 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/18 19:08:12 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct				s_group
 	char				*grp_name;
 	t_elem				*elems;
 	t_blkc				total;
+	int					err;
 	size_t				nbfiles;
 	size_t				maxlens[6];
 	struct s_group		*next;

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 02:10:29 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/18 23:24:44 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,14 @@ int				get_file_content(t_group *alst, char *d_name)
 	t_elem			*new;
 
 	if (!(new = ft_elem_new()))
+		return (-1);
+	if (!fill_elem(d_name, new, alst)
+		|| (!alst->grp_name && S_ISDIR(new->st.st_mode)))
+	{
+		free_dir_elem_content(&new);
 		return (0);
+	}
 	ft_elem_add(&alst->elems, new);
-	if (!fill_elem(d_name, new, alst))
-		return (0);
-	if (!alst->grp_name && S_ISDIR(new->st.st_mode))
-		return (0);
 	alst->total += new->st.st_blocks;
 	alst->nbfiles++;
 	return (1);
@@ -51,15 +53,14 @@ int				get_dir_content(t_group *alst)
 	t_dirent		*dird;
 
 	if (((OPTEXISTS(A_LOPT) || OPTEXISTS(A_FFOPT))
-		&& is_link(alst->grp_name)) || !(dirp = opendir(alst->grp_name)))
+		&& is_link(alst->grp_name)))
+		return (-1);
+	if (!(dirp = opendir(alst->grp_name)))
 		return (0);
 	while ((dird = readdir(dirp)))
 	{
 		if (*dird->d_name != '.' || OPTEXISTS(A_AOPT))
-		{
-			if (!get_file_content(alst, dird->d_name))
-				return (0);
-		}
+			get_file_content(alst, dird->d_name);
 	}
 	free(dird);
 	closedir(dirp);
@@ -71,6 +72,8 @@ void			free_dir_elem_content(t_elem **alst)
 	t_elem		*tmp;
 	int			path_nomalloc;
 
+	if (!alst || !*alst)
+		return ;
 	tmp = (*alst)->next;
 	path_nomalloc = ((*alst)->fname == (*alst)->fpath);
 	if ((*alst)->fname)
@@ -91,6 +94,8 @@ void			free_dir_elem_content(t_elem **alst)
 
 void			free_dir_content(t_elem **alst)
 {
+	if (!alst)
+		return ;
 	while (*alst)
 		free_dir_elem_content(alst);
 	*alst = NULL;

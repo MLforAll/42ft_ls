@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/10 18:06:34 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 18:35:15 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 00:49:20 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,23 @@
 
 char		get_ifmt_char(mode_t mode, int bigf)
 {
-	if ((mode & S_IFMT) == S_IFDIR)
+	if (S_ISDIR(mode))
 		return (bigf ? '/' : 'd');
-	if ((mode & S_IFMT) == S_IFLNK)
+	if (S_ISLNK(mode))
 		return (bigf ? '@' : 'l');
-	if ((mode & S_IFMT) == S_IFBLK)
+	if (S_ISBLK(mode))
 		return ('b');
-	if ((mode & S_IFMT) == S_IFCHR)
+	if (S_ISCHR(mode))
 		return ('c');
-	if ((mode & S_IFMT) == S_IFIFO)
+	if (S_ISFIFO(mode))
 		return (bigf ? '|' : 'p');
-	if ((mode & S_IFMT) == S_IFSOCK)
+	if (S_ISSOCK(mode))
 		return (bigf ? '=' : 's');
-	if ((mode & S_IFMT) == S_IFWHT)
+	if (S_ISWHT(mode))
 		return (bigf ? '%' : 'w');
 	if (bigf && ((mode & S_IXUSR) || (mode & S_IXGRP) || (mode & S_IXOTH)))
 		return ('*');
-	return (!bigf ? '-' : '\0');
+	return (!bigf ? '-' : 0);
 }
 
 char		get_perm_char(mode_t mode, mode_t mask)

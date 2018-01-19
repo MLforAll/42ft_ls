@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 18:42:23 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 01:52:41 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	print_elems(t_group *grp);
 ** MISC
 */
 
-void	ls_err(const char *path, int err);
+void	fillinf(size_t *dest, size_t new);
+void	ls_elem_err(char *path, int err);
 
 #endif

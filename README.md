@@ -13,7 +13,3 @@ Currently Implemented:
 - Recursiveness (-R)
 - Proper Makefile
 
-TODO:
-
-- Opti: Freeing what's already malloced when unexpected fails of malloc (should be OK)
-- Opti: setup get_dir_content and such fcts to be usable as-is in libft

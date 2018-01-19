@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 02:04:52 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 02:19:39 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 01:52:48 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,10 @@
 #include <stdlib.h>
 #include "ft_ls.h"
 
-void			ls_err(const char *path, int err)
+static void		ls_usage(char *dyn_prname, char illopt)
 {
-	ft_lsprint_fd(2, "%s: %s: %s\n", PRGM_NAME, path, strerror(err));
-}
-
-static void		ls_usage(char illopt)
-{
-	ft_lsprint("%s: illegal option -- %c\n", PRGM_NAME, illopt);
-	ft_lsprint("usage: %s [%s] [file ...]\n", PRGM_NAME, ARGS_ERR_LST);
+	ft_lsprint_fd(2, "%s: illegal option -- %c\n", dyn_prname, illopt);
+	ft_lsprint_fd(2, "usage: %s [%s] [file ...]\n", PRGM_NAME, ARGS_ERR_LST);
 	exit(1);
 }
 
@@ -33,7 +28,7 @@ static char		*get_env_ptr(char **env, char *start)
 	while (*env)
 	{
 		if ((ret = ft_strstart(*env, start)))
-			return (ret);
+			return (ret + 1);
 		env++;
 	}
 	return (NULL);
@@ -68,10 +63,10 @@ int				main(int ac, char **av, char **env)
 	idx = 1;
 	g_opts = (ac == 1) ? 0 : detect_options(ac, av, &idx);
 	if (g_opts < 0)
-		ls_usage(-g_opts);
+		ls_usage(av[0], -g_opts);
 	ft_bzero(g_clrs, 11);
-	if (ft_isatty(1) && (OPTEXISTS(A_GGOPT) || get_env_ptr(env, "CLICOLOR="))
-		&& (lscolors_entry = get_env_ptr(env, "LSCOLORS=")))
+	if (ft_isatty(1) && (OPTEXISTS(A_GGOPT) || get_env_ptr(env, "CLICOLOR"))
+		&& (lscolors_entry = get_env_ptr(env, "LSCOLORS")))
 		detect_colors(lscolors_entry);
 	paths = get_paths(idx, ac, av);
 	return (list_dirs(&paths, 0));

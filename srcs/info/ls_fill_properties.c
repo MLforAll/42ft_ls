@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/17 20:33:34 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/19 01:53:44 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,6 @@ static int		fill_usr_grp(t_elem *elem)
 	else
 		elem->usrname = ft_strdup(elem_pw->pw_name);
 	return ((elem->grname != NULL && elem->usrname != NULL));
-}
-
-static void		fillinf(size_t *dest, size_t new)
-{
-	if (*dest < new)
-		*dest = new;
 }
 
 /*

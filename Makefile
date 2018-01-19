@@ -6,27 +6,27 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2018/01/18 18:38:30 by kdumarai         ###   ########.fr        #
+#    Updated: 2018/01/19 01:55:53 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_ls
 
-CFLAGS = -Wall -Werror -Wextra
-
-INCLUDES = -I includes -I libft
+CC_FLAGS = -Wall -Werror -Wextra
+CC_LIB = -L libft -lft
 
 LIBFT = libft/libft.a
-LIB = -L libft -lft
+INCLUDES = -I includes -I libft
 
 SRCDIR = srcs
 SRCFILES = ft_ls.c \
 	ls_args.c \
 	ls_colors.c \
+	ls_misc.c \
 	info/ls_getchars.c \
 	info/ls_get_properties.c \
 	info/ls_fill_properties.c \
-	info/ls_queuing.c \
+	info/ls_start.c \
 	sort/ls_sorting_comps.c \
 	sort/ls_sorting_routine.c \
 	display/ls_print_lst.c \
@@ -43,21 +43,21 @@ OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 PROJTEXT = \033[1;33mft_ls: \033[0;39m
 
-all: lib $(NAME)
+all: $(NAME)
 
 lib:
-	@make -C $(dir $(LIBFT))
+	@ make -C $(dir $(LIBFT))
 
-$(NAME): $(OBJS)
+$(NAME): lib $(OBJS)
 	@ printf "\r\033[K$(PROJTEXT)Compiling\n"
 	@ printf "$(PROJTEXT)Linking\n"
-	@ gcc -o $(NAME) $(LIB) $(OBJS)
+	@ gcc -o $(NAME) $(CC_LIB) $(OBJS)
 	@ printf "$(PROJTEXT)\033[1;32mProgram built at $(NAME)\033[0;39m\n"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@ if [ ! -z $@ ]; then mkdir -p $(dir $@); fi
+	@ if [ ! -d $(dir $@) ]; then mkdir -p $(dir $@); fi
 	@ printf "\033[K$(PROJTEXT)Compiling \033[1;33m$<\033[0;39m\r"
-	@ gcc $(CFLAGS) -c $< $(INCLUDES) -o $@
+	@ gcc $(CC_FLAGS) -c $< $(INCLUDES) -o $@
 
 clean:
 	@ make clean -C $(dir $(LIBFT))
