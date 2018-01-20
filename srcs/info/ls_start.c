@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/20 17:08:45 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 18:34:17 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ static int		print_groups(t_group *groups, int force_print, int add_nl)
 		if (((groups->next) || add_nl || force_print) && tmp->grp_name)
 			ft_lsprint("%s:\n", tmp->grp_name);
 		if (tmp->err >= 0)
+		{
 			ls_elem_err(tmp->grp_name, tmp->err);
+			err += 1;
+		}
 		reclst = print_group_props(tmp);
 		if (reclst)
 			err += list_dirs(&reclst, 1);
@@ -102,8 +105,8 @@ static int		get_group(t_group **dirs, t_group **files, char *path, int now)
 	if ((getd_ret = get_dir_content(new)) <= 0)
 	{
 		free_dir_content(&new->elems);
-		if ((tryf_err = try_file(files, path, getd_ret)) <= 0)
-			err += (err == 0);
+		tryf_err = try_file(files, path, getd_ret);
+		err = (tryf_err == -1) ? 2 : 1;
 		if (tryf_err == -1)
 			new->err = errno;
 		else
@@ -111,7 +114,7 @@ static int		get_group(t_group **dirs, t_group **files, char *path, int now)
 	}
 	if (now)
 	{
-		err += print_groups(new, 0, 1);
+		err = print_groups(new, 0, 1);
 		ft_group_del(&new);
 	}
 	ft_group_push(dirs, new);
@@ -121,6 +124,7 @@ static int		get_group(t_group **dirs, t_group **files, char *path, int now)
 int				list_dirs(t_list **paths, int add_nl)
 {
 	int			err;
+	int			aux_err;
 	t_list		*bw;
 	t_group		*groups;
 	t_group		*files;
@@ -133,8 +137,9 @@ int				list_dirs(t_list **paths, int add_nl)
 	err = 0;
 	while (bw)
 	{
-		if ((err += get_group(&groups, &files, bw->content, add_nl)) == -1)
+		if ((aux_err = get_group(&groups, &files, bw->content, add_nl)) == -1)
 			return (1);
+		err += (aux_err == 1);
 		bw = bw->next;
 	}
 	ft_group_add(&groups, files);
@@ -142,5 +147,5 @@ int				list_dirs(t_list **paths, int add_nl)
 		err += print_groups(groups, (err > 0), add_nl);
 	ft_group_delall(&groups);
 	ft_lstdel(paths, &ft_lstdelf);
-	return ((err > 0));
+	return ((err > 0 || aux_err > 0));
 }
