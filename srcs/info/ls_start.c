@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/20 15:51:21 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 16:08:25 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,13 @@ static int		print_groups(t_group *groups, int force_print, int add_nl)
 	return (err);
 }
 
-static int		try_file(t_group **files, char *path)
+static int		try_file(t_group **files, char *path, int getd_ret)
 {
 	int			get_ret;
 	int			errno_bak;
 
 	errno_bak = errno;
-	if (!files || (errno != ENOTDIR && errno != ENOENT && errno != 0))
+	if (!files || (errno != ENOTDIR && errno != ENOENT && getd_ret != -1))
 		return (-1);
 	if (!*files)
 		*files = ft_group_new(NULL);
@@ -92,16 +92,17 @@ static int		try_file(t_group **files, char *path)
 static int		get_group(t_group **dirs, t_group **files, char *path, int now)
 {
 	t_group		*new;
+	int			getd_ret;
 	int			tryf_err;
 	int			err;
 
 	err = 0;
 	if (!dirs || !files || !(new = ft_group_new(path)))
 		return (-1);
-	if (get_dir_content(new) <= 0)
+	if ((getd_ret = get_dir_content(new)) <= 0)
 	{
 		free_dir_content(&new->elems);
-		if ((tryf_err = try_file(files, path)) <= 0)
+		if ((tryf_err = try_file(files, path, getd_ret)) <= 0)
 			err += (err == 0);
 		if (tryf_err == -1)
 			new->err = errno;

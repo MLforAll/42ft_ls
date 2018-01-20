@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/20 15:01:29 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 16:18:12 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ static void		print_xattrs(t_elem *elem)
 		size = getxattr(elem->fpath, ptr, NULL, 0, 0, XATTR_NOFOLLOW);
 		ft_lsprint("\n\t%s\t", ptr);
 		if (optexists(A_HOPT))
-			print_human_fmt(size);
+			print_human_fmt((off_t)size);
 		else
-			ft_lsprint("%3i", size);
+			ft_lsprint("%4i", size);
 		ft_putchar(' ');
 		len = ft_strlen(ptr);
 		offset += len + 1;

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 02:33:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/20 14:59:52 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 16:38:54 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,16 @@ static int	get_float_digit(float n, int fdigit)
 
 void		print_human_fmt(off_t size)
 {
-	off_t	size_factor;
 	float	size_dup;
 	int		size_float;
 	char	*size_char;
 
-	size_factor = 1024;
 	size_dup = (float)size;
-	size_char = "BKGTP";
+	size_char = "BKMGTP";
 	while (size_dup >= 1000)
 	{
-		size_dup /= size_factor;
+		size_dup /= 1024;
 		size_char += (size_char + 1 != NULL);
-		size_factor *= 1024;
 	}
 	size_float = get_float_digit(size_dup, 1) \
 				+ (get_float_digit(size_dup, 2) > 4);
