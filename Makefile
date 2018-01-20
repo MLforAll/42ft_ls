@@ -6,17 +6,25 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2018/01/19 05:44:47 by kdumarai         ###   ########.fr        #
+#    Updated: 2018/01/20 17:32:39 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_ls
 
-CC_FLAGS = -Wall -Werror -Wextra
+CC_FLAGS = -Wall -Werror -Wextra -I includes -I libft
 CC_LIB = -L libft -lft
 
 LIBFT = libft/libft.a
-INCLUDES = -I includes -I libft
+
+INCDIR = includes
+INCFILES = ft_ls.h \
+			ls_data.h \
+			ft_lsprint.h \
+			ls_args.h \
+			ls_args_equivalence.h \
+			ls_lists.h
+INCLUDES = $(addprefix $(INCDIR)/, $(INCFILES))
 
 SRCDIR = srcs
 SRCFILES = ft_ls.c \
@@ -46,9 +54,7 @@ PROJTEXT = \033[1;33mft_ls: \033[0;39m
 
 all: $(NAME)
 
-
-
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(INCLUDES)
 	@ printf "\r\033[K$(PROJTEXT)Compiling\n"
 	@ make -C $(dir $(LIBFT))
 	@ printf "$(PROJTEXT)Linking\n"
@@ -58,7 +64,7 @@ $(NAME): $(OBJS)
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@ if [ ! -d $(dir $@) ]; then mkdir -p $(dir $@); fi
 	@ printf "\033[K$(PROJTEXT)Compiling \033[1;33m$<\033[0;39m\r"
-	@ gcc $(CC_FLAGS) -c $< $(INCLUDES) -o $@
+	@ gcc $(CC_FLAGS) -c $< -o $@
 
 clean:
 	@ make clean -C $(dir $(LIBFT))
@@ -72,4 +78,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all lib clean fclean re
+.PHONY: all clean fclean re
