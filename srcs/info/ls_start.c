@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/20 14:56:06 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 15:51:21 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static int		try_file(t_group **files, char *path)
 	int			errno_bak;
 
 	errno_bak = errno;
-	if (!files || (errno != ENOTDIR && errno != ENOENT))
+	if (!files || (errno != ENOTDIR && errno != ENOENT && errno != 0))
 		return (-1);
 	if (!*files)
 		*files = ft_group_new(NULL);
