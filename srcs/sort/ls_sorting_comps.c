@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:23:13 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/17 17:50:49 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 15:12:59 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 **	0 if swapping is not needed
 */
 
-int		sort_alpha(t_elem *a, t_elem *b, int rev)
+int			sort_alpha(t_elem *a, t_elem *b, int rev)
 {
 	int			diff;
 
@@ -30,9 +30,16 @@ int		sort_alpha(t_elem *a, t_elem *b, int rev)
 	return ((diff > 0) == !rev);
 }
 
-int		sort_mtime(t_elem *a, t_elem *b, int rev)
+static int	sort_mtimensec(t_elem *a, t_elem *b, int rev)
+{
+	if (a->st.st_mtimespec.tv_nsec == b->st.st_mtimespec.tv_nsec)
+		return (sort_alpha(a, b, rev));
+	return ((a->st.st_mtimespec.tv_nsec < b->st.st_mtimespec.tv_nsec) == !rev);
+}
+
+int			sort_mtime(t_elem *a, t_elem *b, int rev)
 {
 	if (a->st.st_mtime == b->st.st_mtime)
-		return (sort_alpha(a, b, rev));
+		return (sort_mtimensec(a, b, rev));
 	return ((a->st.st_mtime < b->st.st_mtime) == !rev);
 }

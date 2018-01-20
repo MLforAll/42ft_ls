@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/20 14:45:30 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 14:56:06 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ static int		get_group(t_group **dirs, t_group **files, char *path, int now)
 			err += (err == 0);
 		if (tryf_err == -1)
 			new->err = errno;
-		else if (!tryf_err)
+		else
 			ft_group_del(&new);
 	}
 	if (now)
