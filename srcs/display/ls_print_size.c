@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 02:33:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 18:21:34 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 09:54:28 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void		print_human_fmt(off_t size)
 		ft_lsprint("%4l%c", (off_t)size_dup + (size_float > 4), *size_char);
 	else
 		ft_lsprint("%2l.%i%c", (off_t)size_dup, size_float, *size_char);
+	ft_putchar(' ');
 }
 
 void		print_elem_size(t_elem *elm, t_group *grp)

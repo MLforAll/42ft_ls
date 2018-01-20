@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 05:28:30 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 14:23:53 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static int		try_file(t_group **files, char *path)
 	int			errno_bak;
 
 	errno_bak = errno;
-	if (!files)
+	if (!files && errno != ENOTDIR && errno != ENOENT)
 		return (0);
 	if (!*files)
 		*files = ft_group_new(NULL);
@@ -92,22 +92,19 @@ static int		try_file(t_group **files, char *path)
 static int		get_group(t_group **dirs, t_group **files, char *path, int now)
 {
 	t_group		*new;
-	int			getd_err;
 	int			err;
 
 	err = 0;
 	if (!dirs || !files || !(new = ft_group_new(path)))
 		return (-1);
-	if ((getd_err = get_dir_content(new)) <= 0)
+	if (get_dir_content(new) <= 0)
 	{
 		new->err = errno;
 		free_dir_content(&new->elems);
-		if (errno == ENOTDIR || errno == ENOENT || getd_err == -1)
-		{
+		if (!try_file(files, path))
+			err += (err == 0);
+		else
 			ft_group_del(&new);
-			if (!try_file(files, path))
-				err += (err == 0);
-		}
 	}
 	if (now)
 	{
