@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:23:13 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/20 20:01:47 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 22:00:34 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ int		ft_group_sortmtime(t_group *a, t_group *b, int rev)
 	t_stat	sta;
 	t_stat	stb;
 
-	lstat(a->grp_name, &sta);
-	lstat(b->grp_name, &stb);
+	if (lstat(a->grp_name, &sta) == -1
+		|| lstat(b->grp_name, &stb) == -1)
+		return (0);
 	if (sta.st_mtime == stb.st_mtime)
 	{
 		if (sta.st_mtimespec.tv_nsec == stb.st_mtimespec.tv_nsec)
