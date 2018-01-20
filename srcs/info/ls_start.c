@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/20 14:23:53 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 14:45:30 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ static int		try_file(t_group **files, char *path)
 	int			errno_bak;
 
 	errno_bak = errno;
-	if (!files && errno != ENOTDIR && errno != ENOENT)
-		return (0);
+	if (!files || (errno != ENOTDIR && errno != ENOENT))
+		return (-1);
 	if (!*files)
 		*files = ft_group_new(NULL);
 	if ((get_ret = get_file_content(*files, path)) <= 0)
@@ -92,6 +92,7 @@ static int		try_file(t_group **files, char *path)
 static int		get_group(t_group **dirs, t_group **files, char *path, int now)
 {
 	t_group		*new;
+	int			tryf_err;
 	int			err;
 
 	err = 0;
@@ -99,11 +100,12 @@ static int		get_group(t_group **dirs, t_group **files, char *path, int now)
 		return (-1);
 	if (get_dir_content(new) <= 0)
 	{
-		new->err = errno;
 		free_dir_content(&new->elems);
-		if (!try_file(files, path))
+		if ((tryf_err = try_file(files, path)) <= 0)
 			err += (err == 0);
-		else
+		if (tryf_err == -1)
+			new->err = errno;
+		else if (!tryf_err)
 			ft_group_del(&new);
 	}
 	if (now)
