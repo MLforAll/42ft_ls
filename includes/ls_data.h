@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:36:54 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 19:08:12 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 17:18:54 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@
 ** MACROS
 */
 
-# define HALFYRSEC			15552000
-
-/*
-** SYS TYPEDEFS
-*/
+# define HALFYRSEC			15778476
 
 # ifdef _DARWIN_FEATURE_64_BIT_INODE
 #  define BLKCTYPE			blkcnt_t
 # else
 #  define BLKCTYPE			quad_t
 # endif
+
+/*
+** SYS TYPEDEFS
+*/
 
 typedef BLKCTYPE			t_blkc;
 
