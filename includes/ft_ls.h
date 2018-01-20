@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 18:21:13 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 20:50:57 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,12 @@ char	get_acl_xattrs_char(t_elem *elem);
 /*
 ** DB SORTING
 */
+
+int		ft_group_sortalpha(t_group *a, t_group *b, int rev);
+int		ft_group_sortmtime(t_group *a, t_group *b, int rev);
+void	ft_group_mergesort(t_group **lst, int (*f)(t_group*, t_group*, int), \
+	int rev);
+void	launch_groups_sort(t_group **grps);
 
 int		sort_alpha(t_elem *a, t_elem *b, int rev);
 int		sort_mtime(t_elem *a, t_elem *b, int rev);

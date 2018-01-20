@@ -6,7 +6,7 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2018/01/20 17:32:39 by kdumarai         ###   ########.fr        #
+#    Updated: 2018/01/20 20:00:39 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,8 @@ SRCFILES = ft_ls.c \
 	info/ls_start.c \
 	sort/ls_sorting_comps.c \
 	sort/ls_sorting_routine.c \
+	sort/t_group_sorting_comps.c \
+	sort/t_group_sorting_routine.c \
 	display/ls_print_lst.c \
 	display/ls_print_size.c \
 	display/ls_columns.c \

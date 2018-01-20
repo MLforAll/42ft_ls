@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 02:04:52 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 05:29:46 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 19:52:18 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ int				main(int ac, char **av, char **env)
 		&& (lscolors_entry = get_env_ptr(env, "LSCOLORS")))
 		detect_colors(lscolors_entry);
 	paths = get_paths(idx, ac, av);
+	ft_lstmergesort(&paths, ft_lst_sortalpha, 0);
 	return (list_dirs(&paths, 0));
 }

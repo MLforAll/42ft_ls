@@ -6,13 +6,28 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/23 21:21:40 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/20 18:34:17 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/20 20:50:37 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <errno.h>
 #include <stdlib.h>
 #include "ft_ls.h"
+
+/*
+** my ft_ls works in the following fashion:
+**
+**	it tries to read every path.
+**		when reading a path, it assumes it's a folder
+**		if reading fails, it now assumes it's a file
+**		if errno is set to ENOENT or ENOTDIR
+**	upon completion, it caches the new folder (or group).
+**	if it is at 'lvl0', meaning it's the first iteration of those funcs.
+**	otherwise, it shows and frees directly.
+**
+**	if a sorting option such as -t and -r are found, the cached groups
+**	are sorted using a merge sort algorithm applied to linked list.
+*/
 
 static t_list	*print_group_props(t_group *grp)
 {
@@ -105,8 +120,8 @@ static int		get_group(t_group **dirs, t_group **files, char *path, int now)
 	if ((getd_ret = get_dir_content(new)) <= 0)
 	{
 		free_dir_content(&new->elems);
-		tryf_err = try_file(files, path, getd_ret);
-		err = (tryf_err == -1) ? 2 : 1;
+		if ((tryf_err = try_file(files, path, getd_ret)) <= 0)
+			err = (tryf_err == -1) ? 2 : 1;
 		if (tryf_err == -1)
 			new->err = errno;
 		else
@@ -131,8 +146,6 @@ int				list_dirs(t_list **paths, int add_nl)
 
 	groups = NULL;
 	files = NULL;
-	if (!add_nl)
-		ft_lstmergesort(paths, &ft_lst_sortalpha);
 	bw = *paths;
 	err = 0;
 	while (bw)
@@ -142,6 +155,8 @@ int				list_dirs(t_list **paths, int add_nl)
 		err += (aux_err == 1);
 		bw = bw->next;
 	}
+	if (!add_nl && !err)
+		launch_groups_sort(&groups);
 	ft_group_add(&groups, files);
 	if (!add_nl)
 		err += print_groups(groups, (err > 0), add_nl);
