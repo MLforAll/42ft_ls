@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/10 18:06:34 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 05:28:33 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/21 17:16:16 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ char		get_ifmt_char(mode_t mode, int bigf)
 	if (S_ISLNK(mode))
 		return (bigf ? '@' : 'l');
 	if (S_ISBLK(mode))
-		return ('b');
+		return (bigf ? 0 : 'b');
 	if (S_ISCHR(mode))
-		return ('c');
+		return (bigf ? 0 : 'c');
 	if (S_ISFIFO(mode))
 		return (bigf ? '|' : 'p');
 	if (S_ISSOCK(mode))

@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:43:21 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/18 18:53:14 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/21 17:34:00 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	is_option_valid(char c)
 
 static int	change_override(int optsb, int last)
 {
-	if (last == A_LOPT && optsb & A_1OPT)
+	if ((last == A_LOPT || last == A_NOPT) && optsb & A_1OPT)
 		return (optsb ^ A_1OPT);
 	if (last == A_1OPT && optsb & A_LOPT)
 		return (optsb ^ A_LOPT);
