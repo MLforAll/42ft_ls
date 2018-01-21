@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_LSPRINT_H
-# define FT_LSPRINT_H
-
 /*
 ** HEADER FOR FT_LSPRINT FUNCTION
 ** THIS IS A MINI-PRINTF
 */
+
+#ifndef FT_LSPRINT_H
+# define FT_LSPRINT_H
 
 /*
 ** Options Structure

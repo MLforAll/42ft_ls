@@ -12,6 +12,10 @@
 
 #include "ft_ls.h"
 
+/*
+** Prints sizes (in human as well)
+*/
+
 static int	get_float_digit(float n, int fdigit)
 {
 	long	factor;

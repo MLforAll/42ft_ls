@@ -16,6 +16,11 @@
 #include "libft.h"
 #include "ls_data.h"
 
+/*
+** Functions to get some chars based on values
+** Used for -F, permissions, and acl/xattrs
+*/
+
 char		get_ifmt_char(mode_t mode, int bigf)
 {
 	if (S_ISDIR(mode))

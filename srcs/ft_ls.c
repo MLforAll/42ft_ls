@@ -14,6 +14,11 @@
 #include <stdlib.h>
 #include "ft_ls.h"
 
+/*
+** 'main' file for ft_ls
+** ls_usage, main etc reside there
+*/
+
 static void		ls_usage(char *dyn_prname, char illopt)
 {
 	ft_lsprint_fd(2, "%s: illegal option -- %c\n", dyn_prname, illopt);

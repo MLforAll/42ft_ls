@@ -13,6 +13,11 @@
 #include <stdlib.h>
 #include "ft_ls.h"
 
+/*
+** t_group mgmt functions
+** like pushback, pushfront, new, del etc
+*/
+
 t_group		*ft_group_new(char *grp_name)
 {
 	t_group		*new;

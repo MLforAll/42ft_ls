@@ -16,6 +16,11 @@
 #include "libft.h"
 
 /*
+** t_list support functions
+** those are complement for sorting, del etc
+*/
+
+/*
 ** Sort
 */
 

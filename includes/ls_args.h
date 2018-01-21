@@ -10,6 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
+** This file describes the options
+** and declares options functions
+*/
+
 #ifndef LS_ARGS_H
 # define LS_ARGS_H
 

@@ -12,6 +12,13 @@
 
 #include "ft_ls.h"
 
+/*
+** merge sort for lists
+** it splits each 'side' of the list recursively
+** 'till it only gets pairs of 1.
+** at this point, it just changes the pointers to sort the list
+*/
+
 static t_elem	*get_middle(t_elem *lst)
 {
 	t_elem		*fast;

@@ -12,6 +12,11 @@
 
 #include "ft_ls.h"
 
+/*
+** The same as the other 'routine' file except it's for t_group
+**														a.k.a struct s_group
+*/
+
 static t_group	*get_middle(t_group *lst)
 {
 	t_group		*fast;

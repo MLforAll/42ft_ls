@@ -151,11 +151,11 @@ int				list_dirs(t_list **paths, int add_nl)
 	while (bw)
 	{
 		if ((aux_err = get_group(&groups, &files, bw->content, add_nl)) == -1)
-			return (1);
+			ls_elem_err(bw->content, errno);
 		err += (aux_err == 1);
 		bw = bw->next;
 	}
-	if (!add_nl && !err)
+	if (!add_nl)
 		launch_groups_sort(&groups);
 	ft_group_add(&groups, files);
 	if (!add_nl)

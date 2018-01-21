@@ -16,8 +16,7 @@
 #include "ft_ls.h"
 
 /*
-** Improvements: In case of err, it'd be nice to free stuff
-** before leaving...
+** Functions that create the linked lists
 */
 
 int				get_file_content(t_group *alst, char *d_name)

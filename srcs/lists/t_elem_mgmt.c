@@ -14,6 +14,11 @@
 #include "libft.h"
 #include "ls_data.h"
 
+/*
+** t_elem mgmt functions
+** like pushback, pushfront, new, del etc
+*/
+
 t_elem		*ft_elem_new(void)
 {
 	t_elem	*ret;

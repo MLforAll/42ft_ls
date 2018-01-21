@@ -18,6 +18,10 @@
 #include <pwd.h>
 #include "ft_ls.h"
 
+/*
+** Functions that fill the linked lists
+*/
+
 static char		*get_elem_path(char *path, char *d_name, char *fname)
 {
 	int			is_root;

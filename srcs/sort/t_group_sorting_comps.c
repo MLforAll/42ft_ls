@@ -12,6 +12,11 @@
 
 #include "ft_ls.h"
 
+/*
+** The same as the other 'comps' file except it's for t_group
+**														a.k.a struct s_group
+*/
+
 int		ft_group_sortalpha(t_group *a, t_group *b, int rev)
 {
 	int			diff;

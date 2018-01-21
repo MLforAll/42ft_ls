@@ -10,16 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
+** This file prevents an 'if' forest in ls_args.c
+*/
+
 #ifndef LS_ARGS_EQUIVALENCE_H
 # define LS_ARGS_EQUIVALENCE_H
 
 # include "ls_args.h"
+
+/*
+** Declaring the struct
+*/
 
 typedef struct	s_lsargs
 {
 	char	c;
 	int		bcode;
 }				t_lsargs;
+
+/*
+** Defining and initializing a global variable
+** containing the equivalences
+*/
 
 t_lsargs	g_lsargs_equi[] =
 {

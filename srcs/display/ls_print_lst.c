@@ -15,6 +15,10 @@
 #include <unistd.h>
 #include "ft_ls.h"
 
+/*
+** Let's print stuff!
+*/
+
 static void		print_elem_date(t_stat *st)
 {
 	time_t			time_n;
