@@ -27,7 +27,8 @@ static void		print_elem_date(t_stat *st)
 	char			*time_str;
 
 	time_n = st->st_mtime;
-	time_str = ctime(&time_n);
+	if (!(time_str = ctime(&time_n)))
+		return ;
 	time_now = time(NULL);
 	ft_putchar(' ');
 	if (time_n > time_now || time_now - time_n > HALFYRSEC)
