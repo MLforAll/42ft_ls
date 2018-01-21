@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 19:55:06 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/21 17:35:22 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/21 17:40:41 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 ** 0001 0000 0000: -1 (0x100)
 ** 0010 0000 0000: -@ (0x200)
 ** 0100 0000 0000: -h (0x400)
-** 1000 0000 0001: -n (0x801)
+** 1000 0000 0000: -n (0x800)
 */
 
 # define A_LOPT			0x1
@@ -40,7 +40,7 @@
 # define A_1OPT			0x100
 # define A_ATOPT		0x200
 # define A_HOPT			0x400
-# define A_NOPT			0x801
+# define A_NOPT			0x800
 
 # define ARGS_ERR_LST	"-FGR@ahlnrst1"
 

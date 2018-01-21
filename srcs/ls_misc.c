@@ -38,11 +38,6 @@ void		ls_elem_err(char *path, int err)
 	ft_lsprint_fd(2, "%s: %s: %s\n", PRGM_NAME, elem_name, strerror(err));
 }
 
-int			optexists(int opt)
-{
-	return (((g_opts & opt) != 0));
-}
-
 void		launch_groups_sort(t_group **grps)
 {
 	if (optexists(A_TOPT) || optexists(A_ROPT))
