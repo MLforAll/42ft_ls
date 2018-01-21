@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 01:58:49 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/20 20:50:57 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/21 16:54:34 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		list_dirs(t_list **paths, int add_nl);
 */
 
 int		get_file_content(t_group *alst, char *d_name);
-int		get_dir_content(t_group *alst);
+int		get_dir_content(t_group *alst, int chk_lnk);
 void	free_dir_elem_content(t_elem **alst);
 void	free_dir_content(t_elem **alst);
 

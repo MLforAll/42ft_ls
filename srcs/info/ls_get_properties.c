@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/19 05:28:35 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/21 16:52:18 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ static int		is_link(char *path)
 	return ((readlink(path, buff, 0) == 0));
 }
 
-int				get_dir_content(t_group *alst)
+int				get_dir_content(t_group *alst, int chk_lnk)
 {
 	DIR				*dirp;
 	t_dirent		*dird;
 
-	if (((optexists(A_LOPT) || optexists(A_FFOPT))
+	if (chk_lnk && ((optexists(A_LOPT) || optexists(A_FFOPT))
 		&& is_link(alst->grp_name)))
 		return (-1);
 	if (!(dirp = opendir(alst->grp_name)))

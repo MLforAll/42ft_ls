@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 21:36:00 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/20 22:37:04 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/21 16:53:29 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,14 @@ static void		print_elem_date(t_stat *st)
 {
 	time_t			time_n;
 	time_t			time_now;
-	time_t			time_diff;
 	size_t			tillnl;
 	char			*time_str;
 
 	time_n = st->st_mtime;
 	time_str = ctime(&time_n);
 	time_now = time(NULL);
-	time_diff = (time_now >= time_n) ? time_now - time_n : 0;
 	ft_putchar(' ');
-	if (time_n > time_now || time_diff >= HALFYRSEC)
+	if (time_n > time_now || time_now - time_n > HALFYRSEC)
 	{
 		ft_lsprint("%.6s  ", time_str + 4);
 		tillnl = 0;
