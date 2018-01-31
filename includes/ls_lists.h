@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 19:08:53 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/20 19:34:06 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/31 21:31:32 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ t_elem		*ft_elem_nnext(t_elem *alst, size_t len);
 */
 
 void		ft_lstdelf(void *data, size_t data_size);
-int			ft_lst_sortmtime(t_list *a, t_list *b, int rev);
-int			ft_lst_sortalpha(t_list *a, t_list *b, int rev);
+int			ft_lst_sortmtime(t_list *a, t_list *b);
+int			ft_lst_sortalpha(t_list *a, t_list *b);
 void		ft_lstpushback(t_list **alst, void *data, size_t data_content);
 
 #endif

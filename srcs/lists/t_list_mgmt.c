@@ -6,7 +6,7 @@
 /*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 14:32:09 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/20 19:38:33 by kdumarai         ###   ########.fr       */
+/*   Updated: 2018/01/31 21:31:56 by kdumarai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,17 @@
 ** Sort
 */
 
-int		ft_lst_sortalpha(t_list *a, t_list *b, int rev)
+int		ft_lst_sortalpha(t_list *a, t_list *b)
 {
 	int		diff;
 
 	diff = ft_strcmp((char*)a->content, (char*)b->content);
 	if (diff == 0)
 		return (0);
-	return ((diff > 0) == !rev);
+	return ((diff > 0));
 }
 
-int		ft_lst_sortmtime(t_list *a, t_list *b, int rev)
+int		ft_lst_sortmtime(t_list *a, t_list *b)
 {
 	t_stat	sta;
 	t_stat	stb;
@@ -44,10 +44,10 @@ int		ft_lst_sortmtime(t_list *a, t_list *b, int rev)
 	if (sta.st_mtime == stb.st_mtime)
 	{
 		if (sta.st_mtimespec.tv_nsec == stb.st_mtimespec.tv_nsec)
-			return (ft_lst_sortalpha(a, b, rev));
-		return ((sta.st_mtimespec.tv_nsec < stb.st_mtimespec.tv_nsec) == !rev);
+			return (ft_lst_sortalpha(a, b));
+		return ((sta.st_mtimespec.tv_nsec < stb.st_mtimespec.tv_nsec));
 	}
-	return ((sta.st_mtime < stb.st_mtime) == !rev);
+	return ((sta.st_mtime < stb.st_mtime));
 }
 
 /*
