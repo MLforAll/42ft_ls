@@ -6,13 +6,13 @@
 #    By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/20 21:41:19 by kdumarai          #+#    #+#              #
-#    Updated: 2018/01/20 20:00:39 by kdumarai         ###   ########.fr        #
+#    Updated: 2018/04/25 13:31:52 by kdumarai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_ls
 
-CC_FLAGS = -Wall -Werror -Wextra -I includes -I libft
+CC_FLAGS = -Wall -Werror -Wextra -I includes -I libft/includes
 CC_LIB = -L libft -lft
 
 LIBFT = libft/libft.a
