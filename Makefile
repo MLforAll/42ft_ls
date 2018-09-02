@@ -13,7 +13,7 @@
 NAME = ft_ls
 
 CC_FLAGS = -Wall -Werror -Wextra -I includes -I libft/includes
-CC_LIB = -L libft -lft
+CC_LIB = -Llibft -lft
 
 LIBFT = libft/libft.a
 
@@ -68,16 +68,22 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@ printf "\033[K$(PROJTEXT)Compiling \033[1;33m$<\033[0;39m\r"
 	@ gcc $(CC_FLAGS) -c $< -o $@
 
-clean:
+clean: cleanp
 	@ make clean -C $(dir $(LIBFT))
+
+cleanp:
 	@ rm -rf $(OBJDIR)
 	@ printf "$(PROJTEXT)Removed objects\n"
 
-fclean: clean
+fclean: fcleanp
 	@ make fclean -C $(dir $(LIBFT))
+
+fcleanp: cleanp
 	@ rm -f $(NAME)
 	@ printf "$(PROJTEXT)Removed $(NAME)\n"
 
 re: fclean all
 
-.PHONY: all clean fclean re
+rep: fcleanp all
+
+.PHONY: all clean fclean re cleanp fcleanp rep

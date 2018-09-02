@@ -28,12 +28,12 @@ static void		ls_usage(char *dyn_prname, char illopt)
 
 static char		*get_env_ptr(char **env, char *start)
 {
-	char	*ret;
+	const char	*ret;
 
 	while (*env)
 	{
 		if ((ret = ft_strstart(*env, start)))
-			return (ret + 1);
+			return ((char*)((t_uintptr)ret + 1));
 		env++;
 	}
 	return (NULL);

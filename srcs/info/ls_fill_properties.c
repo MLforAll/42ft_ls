@@ -22,7 +22,7 @@
 ** Functions that fill the linked lists
 */
 
-static char		*get_elem_path(char *path, char *d_name, char *fname)
+static char		*ls_get_elem_path(char *path, char *d_name, char *fname)
 {
 	int			is_root;
 	size_t		pathlen;
@@ -97,7 +97,7 @@ int				fill_elem(char *d_name, t_elem *elem, t_group *grp)
 {
 	if (!(elem->fname = ft_strdup(d_name)))
 		return (0);
-	elem->fpath = get_elem_path(grp->grp_name, d_name, elem->fname);
+	elem->fpath = ls_get_elem_path(grp->grp_name, d_name, elem->fname);
 	if (!elem->fpath || lstat(elem->fpath, &elem->st) == -1)
 		return (0);
 	elem->sympath = get_sym_path(elem);
