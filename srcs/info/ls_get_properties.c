@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ls_get_properties.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kdumarai <kdumarai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kelian <kelian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/17 00:48:01 by kdumarai          #+#    #+#             */
-/*   Updated: 2018/01/21 17:18:31 by kdumarai         ###   ########.fr       */
+/*   Updated: 2019/11/28 16:29:28 by kelian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,8 @@ int				get_dir_content(t_group *alst, int chk_lnk)
 	if (!(dirp = opendir(alst->grp_name)))
 		return (0);
 	while ((dird = readdir(dirp)))
-	{
 		if (*dird->d_name != '.' || optexists(A_AOPT))
 			get_file_content(alst, dird->d_name);
-	}
-	free(dird);
 	closedir(dirp);
 	return (1);
 }
